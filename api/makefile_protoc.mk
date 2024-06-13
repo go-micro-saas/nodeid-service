@@ -1,9 +1,9 @@
 # saas services
 SAAS_SERVICE_PROTO_FILES=$(shell cd $(PROJECT_PATH) && find api -name "*.proto")
-.PHONY: protoc-services-protobuf
-# protoc :-->: generate services protobuf
-protoc-services-protobuf:
-	@echo "# generate all services protobuf"
+.PHONY: protoc-service-protobuf
+# protoc :-->: generate service protobuf
+protoc-service-protobuf:
+	@echo "# generate service protobuf"
 	$(call protoc_protobuf,$(SAAS_SERVICE_PROTO_FILES))
 
 # specified server
