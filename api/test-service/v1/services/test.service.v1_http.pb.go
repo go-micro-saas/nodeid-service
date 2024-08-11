@@ -20,7 +20,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationSrvTestV1Ping = "/saas.api.node_id_test.servicev1.SrvTestV1/Ping"
+const OperationSrvTestV1Ping = "/saas.api.nodeid_test.servicev1.SrvTestV1/Ping"
 
 type SrvTestV1HTTPServer interface {
 	// Ping ping
@@ -29,7 +29,7 @@ type SrvTestV1HTTPServer interface {
 
 func RegisterSrvTestV1HTTPServer(s *http.Server, srv SrvTestV1HTTPServer) {
 	r := s.Route("/")
-	r.GET("/api/v1/snowflake-test/ping/{message}", _SrvTestV1_Ping0_HTTP_Handler(srv))
+	r.GET("/api/v1/nodeid-test/ping/{message}", _SrvTestV1_Ping0_HTTP_Handler(srv))
 }
 
 func _SrvTestV1_Ping0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
@@ -68,7 +68,7 @@ func NewSrvTestV1HTTPClient(client *http.Client) SrvTestV1HTTPClient {
 
 func (c *SrvTestV1HTTPClientImpl) Ping(ctx context.Context, in *resources.PingReq, opts ...http.CallOption) (*resources.PingResp, error) {
 	var out resources.PingResp
-	pattern := "/api/v1/snowflake-test/ping/{message}"
+	pattern := "/api/v1/nodeid-test/ping/{message}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationSrvTestV1Ping))
 	opts = append(opts, http.PathTemplate(pattern))

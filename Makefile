@@ -81,10 +81,29 @@ init:
 	go install github.com/golang/mock/mockgen@latest
 	go install golang.org/x/tools/cmd/goimports@latest
 
-# include
+.PHONY: generate
+# generate
+generate:
+	#go mod tidy
+	go generate ./...
+	wire ./testdata/ping-service/cmd/ping-service/export
+	wire ./testdata/ping-service/cmd/ping-service/run
+
+# ===== include =====
+# ===== include =====
+# ===== include =====
+
+# api
 include api/makefile_protoc.mk
-# servers
 include api/test-service/makefile_protoc.mk
+include api/test-service/v1/makefile_protoc.mk
+
+# run
+#include testdata/ping-service/cmd/makefile_run.mk
+
+# ===== include =====
+# ===== include =====
+# ===== include =====
 
 .PHONY: echo
 # echo test content

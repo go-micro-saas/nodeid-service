@@ -20,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SrvTestV1_Ping_FullMethodName = "/saas.api.node_id_test.servicev1.SrvTestV1/Ping"
+	SrvTestV1_Ping_FullMethodName = "/saas.api.nodeid_test.servicev1.SrvTestV1/Ping"
 )
 
 // SrvTestV1Client is the client API for SrvTestV1 service.
@@ -99,7 +99,7 @@ func _SrvTestV1_Ping_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SrvTestV1_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "saas.api.node_id_test.servicev1.SrvTestV1",
+	ServiceName: "saas.api.nodeid_test.servicev1.SrvTestV1",
 	HandlerType: (*SrvTestV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
