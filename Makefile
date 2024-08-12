@@ -4,13 +4,13 @@ GOPATH=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always)
 
 # 定义项目变量
-MAKE_FILE_PATH= $(abspath $(lastword $(MAKEFILE_LIST)))
-CURRENT_ABS_PATH=$(shell dirname $(MAKE_FILE_PATH))
-CURRENT_PATH=$(shell basename $(CURRENT_ABS_PATH))
-PROJECT_PATH=$(shell echo "../../")
-APP_RELATIVE_PATH=$(shell a=`basename $$PWD` && echo $${a})
-ifeq ($(APP_RELATIVE_PATH), $(CURRENT_PATH))
-	PROJECT_PATH=./
+PROJECT_MAKEFILE := $(abspath $(lastword $(MAKEFILE_LIST)))
+PROJECT_ABS_PATH := $(shell dirname $(PROJECT_MAKEFILE))
+PROJECT_PATH_NAME := $(shell basename $(PROJECT_ABS_PATH))
+PROJECT_REL_PATH := $(shell echo "../../")
+APP_RELATIVE_PATH := $(shell a=`basename $$PWD` && echo $${a})
+ifeq ($(APP_RELATIVE_PATH), $(PROJECT_PATH_NAME))
+	PROJECT_REL_PATH=./
 	APP_RELATIVE_PATH=
 endif
 
@@ -20,14 +20,14 @@ ifeq ($(GOHOSTOS), windows)
 	#to see https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/find.
 	#changed to use git-bash.exe to run find cli or other cli friendly, caused of every developer has a Git.
 	GIT_BASH= $(subst cmd\,bin\bash.exe,$(dir $(shell where git)))
-	COMMON_PROTO_FILES=$(shell $(GIT_BASH) -c "find $(PROJECT_PATH)api/common -name *.proto")
+	COMMON_PROTO_FILES=$(shell $(GIT_BASH) -c "find $(PROJECT_REL_PATH)api/common -name *.proto")
 else
 endif
 
 # 定义编译 protobuf
 define protoc_protobuf
     if [ "$1" != "" ]; then \
-		cd $(PROJECT_PATH); \
+		cd $(PROJECT_REL_PATH); \
 		protoc \
 			--proto_path=. \
 			--proto_path=$(GOPATH)/src \
@@ -111,8 +111,8 @@ echo:
 	@echo "==> GOHOSTOS: $(GOHOSTOS)"
 	@echo "==> GOPATH: $(GOPATH)"
 	@echo "==> VERSION: $(VERSION)"
-	@echo "==> MAKE_FILE_PATH: $(MAKE_FILE_PATH)"
-	@echo "==> CURRENT_ABS_PATH: $(CURRENT_ABS_PATH)"
-	@echo "==> CURRENT_PATH: $(CURRENT_PATH)"
-	@echo "==> PROJECT_PATH: $(PROJECT_PATH)"
+	@echo "==> PROJECT_MAKEFILE: $(PROJECT_MAKEFILE)"
+	@echo "==> PROJECT_ABS_PATH: $(PROJECT_ABS_PATH)"
+	@echo "==> PROJECT_PATH_NAME: $(PROJECT_PATH_NAME)"
+	@echo "==> PROJECT_REL_PATH: $(PROJECT_REL_PATH)"
 	@echo "==> APP_RELATIVE_PATH: $(APP_RELATIVE_PATH)"
