@@ -1,10 +1,11 @@
-ABSOLUTE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+override ABSOLUTE_MAKEFILE := $(abspath $(lastword $(MAKEFILE_LIST)))
+override ABSOLUTE_PATH := $(patsubst %/,%,$(dir $(ABSOLUTE_MAKEFILE)))
+override REL_PROJECT_PATH := $(subst $(PROJECT_ABS_PATH)/,,$(ABSOLUTE_PATH))
 
 # config
-SAAS_TEST_API_PROTO=$(shell cd $(PROJECT_PATH) && find api/test-service -name "*.proto")
-#SAAS_TEST_INTERNAL_PROTO=$(shell cd $(PROJECT_PATH) && find app/config/internal/conf -name "*.proto")
-SAAS_TEST_INTERNAL_PROTO=
-SAAS_TEST_PROTO_FILES=""
+SAAS_TEST_API_PROTO := $(shell find ./$(REL_PROJECT_PATH) -name "*.proto")
+SAAS_TEST_INTERNAL_PROTO :=
+SAAS_TEST_PROTO_FILES := ""
 ifneq ($(SAAS_TEST_INTERNAL_PROTO), "")
 	SAAS_TEST_PROTO_FILES=$(SAAS_TEST_API_PROTO) $(SAAS_TEST_INTERNAL_PROTO)
 else
@@ -14,5 +15,4 @@ endif
 # protoc :-->: generate test service protobuf
 protoc-test-protobuf:
 	@echo "# generate test service protobuf"
-	echo "ABSOLUTE_PATH $(ABSOLUTE_PATH)"
 	$(call protoc_protobuf,$(SAAS_TEST_PROTO_FILES))

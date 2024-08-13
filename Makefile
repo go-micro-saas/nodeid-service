@@ -1,18 +1,13 @@
 # 定义环境变量
-GOHOSTOS=$(shell go env GOHOSTOS)
-GOPATH=$(shell go env GOPATH)
-VERSION=$(shell git describe --tags --always)
+GOHOSTOS := $(shell go env GOHOSTOS)
+GOPATH := $(shell go env GOPATH)
+VERSION := $(shell git describe --tags --always)
 
 # 定义项目变量
 PROJECT_MAKEFILE := $(abspath $(lastword $(MAKEFILE_LIST)))
-PROJECT_ABS_PATH := $(shell dirname $(PROJECT_MAKEFILE))
-PROJECT_PATH_NAME := $(shell basename $(PROJECT_ABS_PATH))
-PROJECT_REL_PATH := $(shell echo "../../")
-APP_RELATIVE_PATH := $(shell a=`basename $$PWD` && echo $${a})
-ifeq ($(APP_RELATIVE_PATH), $(PROJECT_PATH_NAME))
-	PROJECT_REL_PATH=./
-	APP_RELATIVE_PATH=
-endif
+PROJECT_ABS_PATH := $(patsubst %/,%,$(dir $(PROJECT_MAKEFILE)))
+PROJECT_PATH_NAME := $(notdir $(PROJECT_ABS_PATH))
+PROJECT_REL_PATH := "./"
 
 # 示例
 ifeq ($(GOHOSTOS), windows)
@@ -20,7 +15,7 @@ ifeq ($(GOHOSTOS), windows)
 	#to see https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/find.
 	#changed to use git-bash.exe to run find cli or other cli friendly, caused of every developer has a Git.
 	GIT_BASH= $(subst cmd\,bin\bash.exe,$(dir $(shell where git)))
-	COMMON_PROTO_FILES=$(shell $(GIT_BASH) -c "find $(PROJECT_REL_PATH)api/common -name *.proto")
+	COMMON_PROTO_FILES=$(shell $(GIT_BASH) -c "find $(PROJECT_REL_PATH)api -name *.proto")
 else
 endif
 
@@ -86,8 +81,7 @@ init:
 generate:
 	#go mod tidy
 	go generate ./...
-	wire ./testdata/ping-service/cmd/ping-service/export
-	wire ./testdata/ping-service/cmd/ping-service/run
+	wire ./testdata/ping-service/cmd/nodeid-service/export
 
 # ===== include =====
 # ===== include =====
@@ -115,4 +109,3 @@ echo:
 	@echo "==> PROJECT_ABS_PATH: $(PROJECT_ABS_PATH)"
 	@echo "==> PROJECT_PATH_NAME: $(PROJECT_PATH_NAME)"
 	@echo "==> PROJECT_REL_PATH: $(PROJECT_REL_PATH)"
-	@echo "==> APP_RELATIVE_PATH: $(APP_RELATIVE_PATH)"
