@@ -22,7 +22,6 @@ endif
 # 定义编译 protobuf
 define protoc_protobuf
     if [ "$1" != "" ]; then \
-		cd $(PROJECT_REL_PATH); \
 		protoc \
 			--proto_path=. \
 			--proto_path=$(GOPATH)/src \
