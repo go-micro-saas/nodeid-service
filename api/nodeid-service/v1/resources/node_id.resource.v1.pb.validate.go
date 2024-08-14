@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	enumv1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/enums"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = enumv1.NodeIDStatusEnum_Status(0)
 )
 
 // Validate checks the field values on PingReq with the rules defined in the
@@ -157,7 +161,42 @@ func (m *PingResp) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Code
+
+	// no validation rules for Reason
+
 	// no validation rules for Message
+
+	// no validation rules for Metadata
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PingRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PingRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PingRespValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return PingRespMultiError(errors)
@@ -235,3 +274,1675 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = PingRespValidationError{}
+
+// Validate checks the field values on PingRespData with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PingRespData) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PingRespData with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PingRespDataMultiError, or
+// nil if none found.
+func (m *PingRespData) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PingRespData) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Message
+
+	if len(errors) > 0 {
+		return PingRespDataMultiError(errors)
+	}
+
+	return nil
+}
+
+// PingRespDataMultiError is an error wrapping multiple validation errors
+// returned by PingRespData.ValidateAll() if the designated constraints aren't met.
+type PingRespDataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PingRespDataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PingRespDataMultiError) AllErrors() []error { return m }
+
+// PingRespDataValidationError is the validation error returned by
+// PingRespData.Validate if the designated constraints aren't met.
+type PingRespDataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PingRespDataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PingRespDataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PingRespDataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PingRespDataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PingRespDataValidationError) ErrorName() string { return "PingRespDataValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PingRespDataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPingRespData.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PingRespDataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PingRespDataValidationError{}
+
+// Validate checks the field values on GetServiceInfoReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *GetServiceInfoReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetServiceInfoReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetServiceInfoReqMultiError, or nil if none found.
+func (m *GetServiceInfoReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetServiceInfoReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return GetServiceInfoReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetServiceInfoReqMultiError is an error wrapping multiple validation errors
+// returned by GetServiceInfoReq.ValidateAll() if the designated constraints
+// aren't met.
+type GetServiceInfoReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetServiceInfoReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetServiceInfoReqMultiError) AllErrors() []error { return m }
+
+// GetServiceInfoReqValidationError is the validation error returned by
+// GetServiceInfoReq.Validate if the designated constraints aren't met.
+type GetServiceInfoReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetServiceInfoReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetServiceInfoReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetServiceInfoReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetServiceInfoReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetServiceInfoReqValidationError) ErrorName() string {
+	return "GetServiceInfoReqValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetServiceInfoReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetServiceInfoReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetServiceInfoReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetServiceInfoReqValidationError{}
+
+// Validate checks the field values on GetServiceInfoResp with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetServiceInfoResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetServiceInfoResp with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetServiceInfoRespMultiError, or nil if none found.
+func (m *GetServiceInfoResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetServiceInfoResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Reason
+
+	// no validation rules for Message
+
+	// no validation rules for Metadata
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetServiceInfoRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetServiceInfoRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetServiceInfoRespValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetServiceInfoRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetServiceInfoRespMultiError is an error wrapping multiple validation errors
+// returned by GetServiceInfoResp.ValidateAll() if the designated constraints
+// aren't met.
+type GetServiceInfoRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetServiceInfoRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetServiceInfoRespMultiError) AllErrors() []error { return m }
+
+// GetServiceInfoRespValidationError is the validation error returned by
+// GetServiceInfoResp.Validate if the designated constraints aren't met.
+type GetServiceInfoRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetServiceInfoRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetServiceInfoRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetServiceInfoRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetServiceInfoRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetServiceInfoRespValidationError) ErrorName() string {
+	return "GetServiceInfoRespValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetServiceInfoRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetServiceInfoResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetServiceInfoRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetServiceInfoRespValidationError{}
+
+// Validate checks the field values on GetServiceInfoRespData with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetServiceInfoRespData) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetServiceInfoRespData with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetServiceInfoRespDataMultiError, or nil if none found.
+func (m *GetServiceInfoRespData) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetServiceInfoRespData) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for MinNodeId
+
+	// no validation rules for MaxNodeId
+
+	if all {
+		switch v := interface{}(m.GetIdleDuration()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetServiceInfoRespDataValidationError{
+					field:  "IdleDuration",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetServiceInfoRespDataValidationError{
+					field:  "IdleDuration",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIdleDuration()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetServiceInfoRespDataValidationError{
+				field:  "IdleDuration",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetHeartbeatDuration()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetServiceInfoRespDataValidationError{
+					field:  "HeartbeatDuration",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetServiceInfoRespDataValidationError{
+					field:  "HeartbeatDuration",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetHeartbeatDuration()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetServiceInfoRespDataValidationError{
+				field:  "HeartbeatDuration",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetServiceInfoRespDataMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetServiceInfoRespDataMultiError is an error wrapping multiple validation
+// errors returned by GetServiceInfoRespData.ValidateAll() if the designated
+// constraints aren't met.
+type GetServiceInfoRespDataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetServiceInfoRespDataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetServiceInfoRespDataMultiError) AllErrors() []error { return m }
+
+// GetServiceInfoRespDataValidationError is the validation error returned by
+// GetServiceInfoRespData.Validate if the designated constraints aren't met.
+type GetServiceInfoRespDataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetServiceInfoRespDataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetServiceInfoRespDataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetServiceInfoRespDataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetServiceInfoRespDataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetServiceInfoRespDataValidationError) ErrorName() string {
+	return "GetServiceInfoRespDataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetServiceInfoRespDataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetServiceInfoRespData.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetServiceInfoRespDataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetServiceInfoRespDataValidationError{}
+
+// Validate checks the field values on GetNodeIdReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetNodeIdReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetNodeIdReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetNodeIdReqMultiError, or
+// nil if none found.
+func (m *GetNodeIdReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetNodeIdReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for InstanceId
+
+	// no validation rules for InstanceName
+
+	// no validation rules for Metadata
+
+	if len(errors) > 0 {
+		return GetNodeIdReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetNodeIdReqMultiError is an error wrapping multiple validation errors
+// returned by GetNodeIdReq.ValidateAll() if the designated constraints aren't met.
+type GetNodeIdReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetNodeIdReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetNodeIdReqMultiError) AllErrors() []error { return m }
+
+// GetNodeIdReqValidationError is the validation error returned by
+// GetNodeIdReq.Validate if the designated constraints aren't met.
+type GetNodeIdReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetNodeIdReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetNodeIdReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetNodeIdReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetNodeIdReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetNodeIdReqValidationError) ErrorName() string { return "GetNodeIdReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetNodeIdReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetNodeIdReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetNodeIdReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetNodeIdReqValidationError{}
+
+// Validate checks the field values on GetNodeIdResp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetNodeIdResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetNodeIdResp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetNodeIdRespMultiError, or
+// nil if none found.
+func (m *GetNodeIdResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetNodeIdResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Reason
+
+	// no validation rules for Message
+
+	// no validation rules for Metadata
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetNodeIdRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetNodeIdRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetNodeIdRespValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetNodeIdRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetNodeIdRespMultiError is an error wrapping multiple validation errors
+// returned by GetNodeIdResp.ValidateAll() if the designated constraints
+// aren't met.
+type GetNodeIdRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetNodeIdRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetNodeIdRespMultiError) AllErrors() []error { return m }
+
+// GetNodeIdRespValidationError is the validation error returned by
+// GetNodeIdResp.Validate if the designated constraints aren't met.
+type GetNodeIdRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetNodeIdRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetNodeIdRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetNodeIdRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetNodeIdRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetNodeIdRespValidationError) ErrorName() string { return "GetNodeIdRespValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetNodeIdRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetNodeIdResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetNodeIdRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetNodeIdRespValidationError{}
+
+// Validate checks the field values on GetNodeIdRespData with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *GetNodeIdRespData) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetNodeIdRespData with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetNodeIdRespDataMultiError, or nil if none found.
+func (m *GetNodeIdRespData) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetNodeIdRespData) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for InstanceId
+
+	// no validation rules for NodeId
+
+	// no validation rules for Status
+
+	if all {
+		switch v := interface{}(m.GetExpiredAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetNodeIdRespDataValidationError{
+					field:  "ExpiredAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetNodeIdRespDataValidationError{
+					field:  "ExpiredAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetExpiredAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetNodeIdRespDataValidationError{
+				field:  "ExpiredAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetIntervalHeartbeat()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetNodeIdRespDataValidationError{
+					field:  "IntervalHeartbeat",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetNodeIdRespDataValidationError{
+					field:  "IntervalHeartbeat",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIntervalHeartbeat()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetNodeIdRespDataValidationError{
+				field:  "IntervalHeartbeat",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetNodeIdRespDataMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetNodeIdRespDataMultiError is an error wrapping multiple validation errors
+// returned by GetNodeIdRespData.ValidateAll() if the designated constraints
+// aren't met.
+type GetNodeIdRespDataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetNodeIdRespDataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetNodeIdRespDataMultiError) AllErrors() []error { return m }
+
+// GetNodeIdRespDataValidationError is the validation error returned by
+// GetNodeIdRespData.Validate if the designated constraints aren't met.
+type GetNodeIdRespDataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetNodeIdRespDataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetNodeIdRespDataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetNodeIdRespDataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetNodeIdRespDataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetNodeIdRespDataValidationError) ErrorName() string {
+	return "GetNodeIdRespDataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetNodeIdRespDataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetNodeIdRespData.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetNodeIdRespDataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetNodeIdRespDataValidationError{}
+
+// Validate checks the field values on RenewalNodeIdReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *RenewalNodeIdReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RenewalNodeIdReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RenewalNodeIdReqMultiError, or nil if none found.
+func (m *RenewalNodeIdReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RenewalNodeIdReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for InstanceId
+
+	// no validation rules for NodeId
+
+	if len(errors) > 0 {
+		return RenewalNodeIdReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// RenewalNodeIdReqMultiError is an error wrapping multiple validation errors
+// returned by RenewalNodeIdReq.ValidateAll() if the designated constraints
+// aren't met.
+type RenewalNodeIdReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RenewalNodeIdReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RenewalNodeIdReqMultiError) AllErrors() []error { return m }
+
+// RenewalNodeIdReqValidationError is the validation error returned by
+// RenewalNodeIdReq.Validate if the designated constraints aren't met.
+type RenewalNodeIdReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RenewalNodeIdReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RenewalNodeIdReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RenewalNodeIdReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RenewalNodeIdReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RenewalNodeIdReqValidationError) ErrorName() string { return "RenewalNodeIdReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RenewalNodeIdReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRenewalNodeIdReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RenewalNodeIdReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RenewalNodeIdReqValidationError{}
+
+// Validate checks the field values on RenewalNodeIdResp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *RenewalNodeIdResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RenewalNodeIdResp with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RenewalNodeIdRespMultiError, or nil if none found.
+func (m *RenewalNodeIdResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RenewalNodeIdResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Reason
+
+	// no validation rules for Message
+
+	// no validation rules for Metadata
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RenewalNodeIdRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RenewalNodeIdRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RenewalNodeIdRespValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return RenewalNodeIdRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// RenewalNodeIdRespMultiError is an error wrapping multiple validation errors
+// returned by RenewalNodeIdResp.ValidateAll() if the designated constraints
+// aren't met.
+type RenewalNodeIdRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RenewalNodeIdRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RenewalNodeIdRespMultiError) AllErrors() []error { return m }
+
+// RenewalNodeIdRespValidationError is the validation error returned by
+// RenewalNodeIdResp.Validate if the designated constraints aren't met.
+type RenewalNodeIdRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RenewalNodeIdRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RenewalNodeIdRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RenewalNodeIdRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RenewalNodeIdRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RenewalNodeIdRespValidationError) ErrorName() string {
+	return "RenewalNodeIdRespValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RenewalNodeIdRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRenewalNodeIdResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RenewalNodeIdRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RenewalNodeIdRespValidationError{}
+
+// Validate checks the field values on RenewalNodeIdRespData with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *RenewalNodeIdRespData) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RenewalNodeIdRespData with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RenewalNodeIdRespDataMultiError, or nil if none found.
+func (m *RenewalNodeIdRespData) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RenewalNodeIdRespData) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Status
+
+	if all {
+		switch v := interface{}(m.GetExpiredAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RenewalNodeIdRespDataValidationError{
+					field:  "ExpiredAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RenewalNodeIdRespDataValidationError{
+					field:  "ExpiredAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetExpiredAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RenewalNodeIdRespDataValidationError{
+				field:  "ExpiredAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return RenewalNodeIdRespDataMultiError(errors)
+	}
+
+	return nil
+}
+
+// RenewalNodeIdRespDataMultiError is an error wrapping multiple validation
+// errors returned by RenewalNodeIdRespData.ValidateAll() if the designated
+// constraints aren't met.
+type RenewalNodeIdRespDataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RenewalNodeIdRespDataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RenewalNodeIdRespDataMultiError) AllErrors() []error { return m }
+
+// RenewalNodeIdRespDataValidationError is the validation error returned by
+// RenewalNodeIdRespData.Validate if the designated constraints aren't met.
+type RenewalNodeIdRespDataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RenewalNodeIdRespDataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RenewalNodeIdRespDataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RenewalNodeIdRespDataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RenewalNodeIdRespDataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RenewalNodeIdRespDataValidationError) ErrorName() string {
+	return "RenewalNodeIdRespDataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RenewalNodeIdRespDataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRenewalNodeIdRespData.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RenewalNodeIdRespDataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RenewalNodeIdRespDataValidationError{}
+
+// Validate checks the field values on ReleaseNodeIdReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ReleaseNodeIdReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ReleaseNodeIdReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ReleaseNodeIdReqMultiError, or nil if none found.
+func (m *ReleaseNodeIdReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ReleaseNodeIdReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for InstanceId
+
+	// no validation rules for NodeId
+
+	if len(errors) > 0 {
+		return ReleaseNodeIdReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// ReleaseNodeIdReqMultiError is an error wrapping multiple validation errors
+// returned by ReleaseNodeIdReq.ValidateAll() if the designated constraints
+// aren't met.
+type ReleaseNodeIdReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReleaseNodeIdReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReleaseNodeIdReqMultiError) AllErrors() []error { return m }
+
+// ReleaseNodeIdReqValidationError is the validation error returned by
+// ReleaseNodeIdReq.Validate if the designated constraints aren't met.
+type ReleaseNodeIdReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ReleaseNodeIdReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ReleaseNodeIdReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ReleaseNodeIdReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ReleaseNodeIdReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ReleaseNodeIdReqValidationError) ErrorName() string { return "ReleaseNodeIdReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ReleaseNodeIdReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sReleaseNodeIdReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ReleaseNodeIdReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ReleaseNodeIdReqValidationError{}
+
+// Validate checks the field values on ReleaseNodeIdResp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ReleaseNodeIdResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ReleaseNodeIdResp with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ReleaseNodeIdRespMultiError, or nil if none found.
+func (m *ReleaseNodeIdResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ReleaseNodeIdResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Reason
+
+	// no validation rules for Message
+
+	// no validation rules for Metadata
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ReleaseNodeIdRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ReleaseNodeIdRespValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ReleaseNodeIdRespValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ReleaseNodeIdRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// ReleaseNodeIdRespMultiError is an error wrapping multiple validation errors
+// returned by ReleaseNodeIdResp.ValidateAll() if the designated constraints
+// aren't met.
+type ReleaseNodeIdRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReleaseNodeIdRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReleaseNodeIdRespMultiError) AllErrors() []error { return m }
+
+// ReleaseNodeIdRespValidationError is the validation error returned by
+// ReleaseNodeIdResp.Validate if the designated constraints aren't met.
+type ReleaseNodeIdRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ReleaseNodeIdRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ReleaseNodeIdRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ReleaseNodeIdRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ReleaseNodeIdRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ReleaseNodeIdRespValidationError) ErrorName() string {
+	return "ReleaseNodeIdRespValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ReleaseNodeIdRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sReleaseNodeIdResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ReleaseNodeIdRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ReleaseNodeIdRespValidationError{}
+
+// Validate checks the field values on ReleaseNodeIdRespData with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ReleaseNodeIdRespData) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ReleaseNodeIdRespData with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ReleaseNodeIdRespDataMultiError, or nil if none found.
+func (m *ReleaseNodeIdRespData) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ReleaseNodeIdRespData) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Status
+
+	if all {
+		switch v := interface{}(m.GetExpiredAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ReleaseNodeIdRespDataValidationError{
+					field:  "ExpiredAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ReleaseNodeIdRespDataValidationError{
+					field:  "ExpiredAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetExpiredAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ReleaseNodeIdRespDataValidationError{
+				field:  "ExpiredAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ReleaseNodeIdRespDataMultiError(errors)
+	}
+
+	return nil
+}
+
+// ReleaseNodeIdRespDataMultiError is an error wrapping multiple validation
+// errors returned by ReleaseNodeIdRespData.ValidateAll() if the designated
+// constraints aren't met.
+type ReleaseNodeIdRespDataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReleaseNodeIdRespDataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReleaseNodeIdRespDataMultiError) AllErrors() []error { return m }
+
+// ReleaseNodeIdRespDataValidationError is the validation error returned by
+// ReleaseNodeIdRespData.Validate if the designated constraints aren't met.
+type ReleaseNodeIdRespDataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ReleaseNodeIdRespDataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ReleaseNodeIdRespDataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ReleaseNodeIdRespDataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ReleaseNodeIdRespDataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ReleaseNodeIdRespDataValidationError) ErrorName() string {
+	return "ReleaseNodeIdRespDataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ReleaseNodeIdRespDataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sReleaseNodeIdRespData.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ReleaseNodeIdRespDataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ReleaseNodeIdRespDataValidationError{}

@@ -20,7 +20,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SrvTestV1_Ping_FullMethodName = "/saas.api.nodeid.servicev1.SrvTestV1/Ping"
+	SrvTestV1_Ping_FullMethodName           = "/saas.api.nodeid.servicev1.SrvTestV1/Ping"
+	SrvTestV1_GetServiceInfo_FullMethodName = "/saas.api.nodeid.servicev1.SrvTestV1/GetServiceInfo"
+	SrvTestV1_GetNodeId_FullMethodName      = "/saas.api.nodeid.servicev1.SrvTestV1/GetNodeId"
+	SrvTestV1_RenewalNodeId_FullMethodName  = "/saas.api.nodeid.servicev1.SrvTestV1/RenewalNodeId"
+	SrvTestV1_ReleaseNodeId_FullMethodName  = "/saas.api.nodeid.servicev1.SrvTestV1/ReleaseNodeId"
 )
 
 // SrvTestV1Client is the client API for SrvTestV1 service.
@@ -29,6 +33,14 @@ const (
 type SrvTestV1Client interface {
 	// ping
 	Ping(ctx context.Context, in *resources.PingReq, opts ...grpc.CallOption) (*resources.PingResp, error)
+	// 获取服务信息
+	GetServiceInfo(ctx context.Context, in *resources.GetServiceInfoReq, opts ...grpc.CallOption) (*resources.GetServiceInfoResp, error)
+	// 获取节点id
+	GetNodeId(ctx context.Context, in *resources.GetNodeIdReq, opts ...grpc.CallOption) (*resources.GetNodeIdResp, error)
+	// 续订节点id
+	RenewalNodeId(ctx context.Context, in *resources.RenewalNodeIdReq, opts ...grpc.CallOption) (*resources.RenewalNodeIdResp, error)
+	// 释放节点id
+	ReleaseNodeId(ctx context.Context, in *resources.ReleaseNodeIdReq, opts ...grpc.CallOption) (*resources.ReleaseNodeIdResp, error)
 }
 
 type srvTestV1Client struct {
@@ -48,12 +60,56 @@ func (c *srvTestV1Client) Ping(ctx context.Context, in *resources.PingReq, opts 
 	return out, nil
 }
 
+func (c *srvTestV1Client) GetServiceInfo(ctx context.Context, in *resources.GetServiceInfoReq, opts ...grpc.CallOption) (*resources.GetServiceInfoResp, error) {
+	out := new(resources.GetServiceInfoResp)
+	err := c.cc.Invoke(ctx, SrvTestV1_GetServiceInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvTestV1Client) GetNodeId(ctx context.Context, in *resources.GetNodeIdReq, opts ...grpc.CallOption) (*resources.GetNodeIdResp, error) {
+	out := new(resources.GetNodeIdResp)
+	err := c.cc.Invoke(ctx, SrvTestV1_GetNodeId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvTestV1Client) RenewalNodeId(ctx context.Context, in *resources.RenewalNodeIdReq, opts ...grpc.CallOption) (*resources.RenewalNodeIdResp, error) {
+	out := new(resources.RenewalNodeIdResp)
+	err := c.cc.Invoke(ctx, SrvTestV1_RenewalNodeId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvTestV1Client) ReleaseNodeId(ctx context.Context, in *resources.ReleaseNodeIdReq, opts ...grpc.CallOption) (*resources.ReleaseNodeIdResp, error) {
+	out := new(resources.ReleaseNodeIdResp)
+	err := c.cc.Invoke(ctx, SrvTestV1_ReleaseNodeId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SrvTestV1Server is the server API for SrvTestV1 service.
 // All implementations must embed UnimplementedSrvTestV1Server
 // for forward compatibility
 type SrvTestV1Server interface {
 	// ping
 	Ping(context.Context, *resources.PingReq) (*resources.PingResp, error)
+	// 获取服务信息
+	GetServiceInfo(context.Context, *resources.GetServiceInfoReq) (*resources.GetServiceInfoResp, error)
+	// 获取节点id
+	GetNodeId(context.Context, *resources.GetNodeIdReq) (*resources.GetNodeIdResp, error)
+	// 续订节点id
+	RenewalNodeId(context.Context, *resources.RenewalNodeIdReq) (*resources.RenewalNodeIdResp, error)
+	// 释放节点id
+	ReleaseNodeId(context.Context, *resources.ReleaseNodeIdReq) (*resources.ReleaseNodeIdResp, error)
 	mustEmbedUnimplementedSrvTestV1Server()
 }
 
@@ -63,6 +119,18 @@ type UnimplementedSrvTestV1Server struct {
 
 func (UnimplementedSrvTestV1Server) Ping(context.Context, *resources.PingReq) (*resources.PingResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
+func (UnimplementedSrvTestV1Server) GetServiceInfo(context.Context, *resources.GetServiceInfoReq) (*resources.GetServiceInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetServiceInfo not implemented")
+}
+func (UnimplementedSrvTestV1Server) GetNodeId(context.Context, *resources.GetNodeIdReq) (*resources.GetNodeIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNodeId not implemented")
+}
+func (UnimplementedSrvTestV1Server) RenewalNodeId(context.Context, *resources.RenewalNodeIdReq) (*resources.RenewalNodeIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RenewalNodeId not implemented")
+}
+func (UnimplementedSrvTestV1Server) ReleaseNodeId(context.Context, *resources.ReleaseNodeIdReq) (*resources.ReleaseNodeIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReleaseNodeId not implemented")
 }
 func (UnimplementedSrvTestV1Server) mustEmbedUnimplementedSrvTestV1Server() {}
 
@@ -95,6 +163,78 @@ func _SrvTestV1_Ping_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SrvTestV1_GetServiceInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(resources.GetServiceInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvTestV1Server).GetServiceInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SrvTestV1_GetServiceInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvTestV1Server).GetServiceInfo(ctx, req.(*resources.GetServiceInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvTestV1_GetNodeId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(resources.GetNodeIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvTestV1Server).GetNodeId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SrvTestV1_GetNodeId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvTestV1Server).GetNodeId(ctx, req.(*resources.GetNodeIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvTestV1_RenewalNodeId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(resources.RenewalNodeIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvTestV1Server).RenewalNodeId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SrvTestV1_RenewalNodeId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvTestV1Server).RenewalNodeId(ctx, req.(*resources.RenewalNodeIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvTestV1_ReleaseNodeId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(resources.ReleaseNodeIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvTestV1Server).ReleaseNodeId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SrvTestV1_ReleaseNodeId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvTestV1Server).ReleaseNodeId(ctx, req.(*resources.ReleaseNodeIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SrvTestV1_ServiceDesc is the grpc.ServiceDesc for SrvTestV1 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -105,6 +245,22 @@ var SrvTestV1_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Ping",
 			Handler:    _SrvTestV1_Ping_Handler,
+		},
+		{
+			MethodName: "GetServiceInfo",
+			Handler:    _SrvTestV1_GetServiceInfo_Handler,
+		},
+		{
+			MethodName: "GetNodeId",
+			Handler:    _SrvTestV1_GetNodeId_Handler,
+		},
+		{
+			MethodName: "RenewalNodeId",
+			Handler:    _SrvTestV1_RenewalNodeId_Handler,
+		},
+		{
+			MethodName: "ReleaseNodeId",
+			Handler:    _SrvTestV1_ReleaseNodeId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

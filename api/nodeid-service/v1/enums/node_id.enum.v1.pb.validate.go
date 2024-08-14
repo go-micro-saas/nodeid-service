@@ -35,22 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on TestInitEnum with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *TestInitEnum) Validate() error {
+// Validate checks the field values on NodeIDStatusEnum with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *NodeIDStatusEnum) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on TestInitEnum with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in TestInitEnumMultiError, or
-// nil if none found.
-func (m *TestInitEnum) ValidateAll() error {
+// ValidateAll checks the field values on NodeIDStatusEnum with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NodeIDStatusEnumMultiError, or nil if none found.
+func (m *NodeIDStatusEnum) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *TestInitEnum) validate(all bool) error {
+func (m *NodeIDStatusEnum) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -58,18 +58,19 @@ func (m *TestInitEnum) validate(all bool) error {
 	var errors []error
 
 	if len(errors) > 0 {
-		return TestInitEnumMultiError(errors)
+		return NodeIDStatusEnumMultiError(errors)
 	}
 
 	return nil
 }
 
-// TestInitEnumMultiError is an error wrapping multiple validation errors
-// returned by TestInitEnum.ValidateAll() if the designated constraints aren't met.
-type TestInitEnumMultiError []error
+// NodeIDStatusEnumMultiError is an error wrapping multiple validation errors
+// returned by NodeIDStatusEnum.ValidateAll() if the designated constraints
+// aren't met.
+type NodeIDStatusEnumMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m TestInitEnumMultiError) Error() string {
+func (m NodeIDStatusEnumMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -78,11 +79,11 @@ func (m TestInitEnumMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m TestInitEnumMultiError) AllErrors() []error { return m }
+func (m NodeIDStatusEnumMultiError) AllErrors() []error { return m }
 
-// TestInitEnumValidationError is the validation error returned by
-// TestInitEnum.Validate if the designated constraints aren't met.
-type TestInitEnumValidationError struct {
+// NodeIDStatusEnumValidationError is the validation error returned by
+// NodeIDStatusEnum.Validate if the designated constraints aren't met.
+type NodeIDStatusEnumValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -90,22 +91,22 @@ type TestInitEnumValidationError struct {
 }
 
 // Field function returns field value.
-func (e TestInitEnumValidationError) Field() string { return e.field }
+func (e NodeIDStatusEnumValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e TestInitEnumValidationError) Reason() string { return e.reason }
+func (e NodeIDStatusEnumValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e TestInitEnumValidationError) Cause() error { return e.cause }
+func (e NodeIDStatusEnumValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e TestInitEnumValidationError) Key() bool { return e.key }
+func (e NodeIDStatusEnumValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e TestInitEnumValidationError) ErrorName() string { return "TestInitEnumValidationError" }
+func (e NodeIDStatusEnumValidationError) ErrorName() string { return "NodeIDStatusEnumValidationError" }
 
 // Error satisfies the builtin error interface
-func (e TestInitEnumValidationError) Error() string {
+func (e NodeIDStatusEnumValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -117,14 +118,14 @@ func (e TestInitEnumValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sTestInitEnum.%s: %s%s",
+		"invalid %sNodeIDStatusEnum.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = TestInitEnumValidationError{}
+var _ error = NodeIDStatusEnumValidationError{}
 
 var _ interface {
 	Field() string
@@ -132,4 +133,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = TestInitEnumValidationError{}
+} = NodeIDStatusEnumValidationError{}
