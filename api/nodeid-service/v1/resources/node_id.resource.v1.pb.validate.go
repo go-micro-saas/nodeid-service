@@ -1078,6 +1078,8 @@ func (m *GetNodeIdRespData) validate(all bool) error {
 
 	// no validation rules for InstanceId
 
+	// no validation rules for InstanceName
+
 	// no validation rules for NodeId
 
 	// no validation rules for Status

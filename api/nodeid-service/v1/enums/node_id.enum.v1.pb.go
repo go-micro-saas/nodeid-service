@@ -69,7 +69,7 @@ func (NodeIDStatusEnum_Status) EnumDescriptor() ([]byte, []int) {
 	return file_api_nodeid_service_v1_enums_node_id_enum_v1_proto_rawDescGZIP(), []int{0, 0}
 }
 
-// NodeIDStatusEnum ...
+// NodeIDStatusEnum 节点状态
 type NodeIDStatusEnum struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
