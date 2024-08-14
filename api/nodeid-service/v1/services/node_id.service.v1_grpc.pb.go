@@ -2,13 +2,13 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.21.6
-// source: api/test-service/v1/services/test.service.v1.proto
+// source: api/nodeid-service/v1/services/node_id.service.v1.proto
 
 package servicev1
 
 import (
 	context "context"
-	resources "github.com/go-micro-saas/nodeid-service/api/test-service/v1/resources"
+	resources "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SrvTestV1_Ping_FullMethodName = "/saas.api.nodeid_test.servicev1.SrvTestV1/Ping"
+	SrvTestV1_Ping_FullMethodName = "/saas.api.nodeid.servicev1.SrvTestV1/Ping"
 )
 
 // SrvTestV1Client is the client API for SrvTestV1 service.
@@ -99,7 +99,7 @@ func _SrvTestV1_Ping_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SrvTestV1_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "saas.api.nodeid_test.servicev1.SrvTestV1",
+	ServiceName: "saas.api.nodeid.servicev1.SrvTestV1",
 	HandlerType: (*SrvTestV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -108,5 +108,5 @@ var SrvTestV1_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/test-service/v1/services/test.service.v1.proto",
+	Metadata: "api/nodeid-service/v1/services/node_id.service.v1.proto",
 }

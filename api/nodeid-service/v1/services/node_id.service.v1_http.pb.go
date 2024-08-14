@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.3
 // - protoc             v3.21.6
-// source: api/test-service/v1/services/test.service.v1.proto
+// source: api/nodeid-service/v1/services/node_id.service.v1.proto
 
 package servicev1
 
@@ -10,7 +10,7 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	resources "github.com/go-micro-saas/nodeid-service/api/test-service/v1/resources"
+	resources "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,7 +20,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationSrvTestV1Ping = "/saas.api.nodeid_test.servicev1.SrvTestV1/Ping"
+const OperationSrvTestV1Ping = "/saas.api.nodeid.servicev1.SrvTestV1/Ping"
 
 type SrvTestV1HTTPServer interface {
 	// Ping ping
@@ -29,10 +29,10 @@ type SrvTestV1HTTPServer interface {
 
 func RegisterSrvTestV1HTTPServer(s *http.Server, srv SrvTestV1HTTPServer) {
 	r := s.Route("/")
-	r.GET("/api/v1/nodeid-test/ping/{message}", _SrvTestV1_Ping1_HTTP_Handler(srv))
+	r.GET("/api/v1/nodeid/ping/{message}", _SrvTestV1_Ping0_HTTP_Handler(srv))
 }
 
-func _SrvTestV1_Ping1_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
+func _SrvTestV1_Ping0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in resources.PingReq
 		if err := ctx.BindQuery(&in); err != nil {
@@ -68,7 +68,7 @@ func NewSrvTestV1HTTPClient(client *http.Client) SrvTestV1HTTPClient {
 
 func (c *SrvTestV1HTTPClientImpl) Ping(ctx context.Context, in *resources.PingReq, opts ...http.CallOption) (*resources.PingResp, error) {
 	var out resources.PingResp
-	pattern := "/api/v1/nodeid-test/ping/{message}"
+	pattern := "/api/v1/nodeid/ping/{message}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationSrvTestV1Ping))
 	opts = append(opts, http.PathTemplate(pattern))
