@@ -60,7 +60,16 @@ func (m *PingReq) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Message
+	if utf8.RuneCountInString(m.GetMessage()) < 1 {
+		err := PingReqValidationError{
+			field:  "Message",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return PingReqMultiError(errors)
@@ -803,11 +812,31 @@ func (m *GetNodeIdReq) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for InstanceId
+	if utf8.RuneCountInString(m.GetInstanceId()) > 255 {
+		err := GetNodeIdReqValidationError{
+			field:  "InstanceId",
+			reason: "value length must be at most 255 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for InstanceName
+	if utf8.RuneCountInString(m.GetInstanceName()) > 255 {
+		err := GetNodeIdReqValidationError{
+			field:  "InstanceName",
+			reason: "value length must be at most 255 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Metadata
+	if len(m.GetMetadata()) > 0 {
+
+	}
 
 	if len(errors) > 0 {
 		return GetNodeIdReqMultiError(errors)
@@ -1213,11 +1242,31 @@ func (m *RenewalNodeIdReq) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if m.GetId() <= 0 {
+		err := RenewalNodeIdReqValidationError{
+			field:  "Id",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for InstanceId
+	if utf8.RuneCountInString(m.GetInstanceId()) > 255 {
+		err := RenewalNodeIdReqValidationError{
+			field:  "InstanceId",
+			reason: "value length must be at most 255 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for NodeId
+	if m.GetNodeId() != 0 {
+
+	}
 
 	if len(errors) > 0 {
 		return RenewalNodeIdReqMultiError(errors)
@@ -1591,11 +1640,31 @@ func (m *ReleaseNodeIdReq) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if m.GetId() <= 0 {
+		err := ReleaseNodeIdReqValidationError{
+			field:  "Id",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for InstanceId
+	if utf8.RuneCountInString(m.GetInstanceId()) > 255 {
+		err := ReleaseNodeIdReqValidationError{
+			field:  "InstanceId",
+			reason: "value length must be at most 255 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for NodeId
+	if m.GetNodeId() != 0 {
+
+	}
 
 	if len(errors) > 0 {
 		return ReleaseNodeIdReqMultiError(errors)

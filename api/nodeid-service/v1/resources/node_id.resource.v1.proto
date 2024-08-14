@@ -10,12 +10,13 @@ option java_outer_classname = "SaasApiNodeidResourceV1";
 import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
 
 import "api/nodeid-service/v1/enums/node_id.enum.v1.proto";
 
 message PingReq {
   // message
-  string message = 1 [(google.api.field_behavior) = REQUIRED];
+  string message = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).string = { min_len: 1 }];
 }
 
 message PingResp {
@@ -51,9 +52,9 @@ message GetServiceInfoRespData {
 }
 
 message GetNodeIdReq {
-  string instance_id           = 1;  // 实例ID
-  string instance_name         = 2;  // 实例名称
-  map<string, string> metadata = 3;  // 实例元数据
+  string instance_id           = 1 [(validate.rules).string = { max_len: 255 }];     // 实例ID
+  string instance_name         = 2 [(validate.rules).string = { max_len: 255 }];     // 实例名称
+  map<string, string> metadata = 3 [(validate.rules).map = { ignore_empty: true }];  // 实例元数据
 }
 
 message GetNodeIdResp {
@@ -75,9 +76,9 @@ message GetNodeIdRespData {
 }
 
 message RenewalNodeIdReq {
-  uint64 id          = 1;  // ID；用于验证指定ID节点
-  string instance_id = 2;  // 实例ID
-  int64 node_id      = 3;  // 节点id
+  uint64 id          = 1 [(validate.rules).uint64 = { gt: 0 }];              // ID；用于验证指定ID节点
+  string instance_id = 2 [(validate.rules).string = { max_len: 255 }];       // 实例ID
+  int64 node_id      = 3 [(validate.rules).int64 = { ignore_empty: true }];  // 节点id
 }
 
 message RenewalNodeIdResp {
@@ -95,9 +96,9 @@ message RenewalNodeIdRespData {
 }
 
 message ReleaseNodeIdReq {
-  uint64 id          = 1;  // ID；用于验证指定ID节点
-  string instance_id = 2;  // 实例ID
-  int64 node_id      = 3;  // 节点id
+  uint64 id          = 1 [(validate.rules).uint64 = { gt: 0 }];              // ID；用于验证指定ID节点
+  string instance_id = 2 [(validate.rules).string = { max_len: 255 }];       // 实例ID
+  int64 node_id      = 3 [(validate.rules).int64 = { ignore_empty: true }];  // 节点id
 }
 
 message ReleaseNodeIdResp {
