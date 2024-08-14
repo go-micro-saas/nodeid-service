@@ -7,7 +7,7 @@ option java_multiple_files  = true;
 option java_package         = "saas.api.nodeid.enumv1";
 option java_outer_classname = "SaasApiNodeidEnumV1";
 
-// NodeIDStatusEnum ...
+// NodeIDStatusEnum 节点状态
 message NodeIDStatusEnum {
   enum Status {
     UNSPECIFIED = 0;  // 未指定

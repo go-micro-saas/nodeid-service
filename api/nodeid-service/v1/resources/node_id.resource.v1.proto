@@ -69,10 +69,11 @@ message GetNodeIdResp {
 message GetNodeIdRespData {
   uint64 id                                             = 1;  // ID
   string instance_id                                    = 2;  // 实例ID
-  int64 node_id                                         = 3;  // 节点id
-  saas.api.nodeid.enumv1.NodeIDStatusEnum.Status status = 4;  // 节点状态
-  google.protobuf.Timestamp expired_at                  = 5;  // 失效时间；默认：now()+100s
-  google.protobuf.Duration interval_heartbeat           = 6;  // 心跳续订间隔时间；默认：30s
+  string instance_name                                  = 3;  // 实例名称
+  int64 node_id                                         = 4;  // 节点id
+  saas.api.nodeid.enumv1.NodeIDStatusEnum.Status status = 5;  // 节点状态
+  google.protobuf.Timestamp expired_at                  = 6;  // 失效时间；默认：now()+100s
+  google.protobuf.Duration interval_heartbeat           = 7;  // 心跳续订间隔时间；默认：30s
 }
 
 message RenewalNodeIdReq {
