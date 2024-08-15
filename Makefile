@@ -92,7 +92,7 @@ include api/test-service/makefile_protoc.mk
 include api/test-service/v1/makefile_protoc.mk
 
 # run
-#include testdata/ping-service/cmd/makefile_run.mk
+include app/nodeid-service/cmd/makefile_run.mk
 
 # ===== include =====
 # ===== include =====
