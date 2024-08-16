@@ -3,6 +3,6 @@ nodeid_service_business:
   min_node_id: 1
   max_node_id: 1023
   # 空闲释放时间；默认：100s。
-  idle_duration: 30s
+  idle_duration: 100s
   # 心跳续订延长的时间；默认：30s。范围：[1, idle_duration]；延长有效期：now()+idle_duration
-  heartbeat_duration: 100s
+  heartbeat_interval: 30s

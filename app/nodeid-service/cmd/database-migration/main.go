@@ -20,7 +20,7 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
 
-// go run ./cmd/migration/... -conf=./configs
+// go run ./cmd/store-configuration/... -conf=./configs
 func main() {
 	if !flag.Parsed() {
 		flag.Parse()

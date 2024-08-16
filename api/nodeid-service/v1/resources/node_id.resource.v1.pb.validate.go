@@ -682,11 +682,11 @@ func (m *GetServiceInfoRespData) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetHeartbeatDuration()).(type) {
+		switch v := interface{}(m.GetHeartbeatInterval()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, GetServiceInfoRespDataValidationError{
-					field:  "HeartbeatDuration",
+					field:  "HeartbeatInterval",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -694,16 +694,16 @@ func (m *GetServiceInfoRespData) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, GetServiceInfoRespDataValidationError{
-					field:  "HeartbeatDuration",
+					field:  "HeartbeatInterval",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetHeartbeatDuration()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetHeartbeatInterval()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetServiceInfoRespDataValidationError{
-				field:  "HeartbeatDuration",
+				field:  "HeartbeatInterval",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1114,11 +1114,11 @@ func (m *GetNodeIdRespData) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetIntervalHeartbeat()).(type) {
+		switch v := interface{}(m.GetHeartbeatInterval()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, GetNodeIdRespDataValidationError{
-					field:  "IntervalHeartbeat",
+					field:  "HeartbeatInterval",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -1126,16 +1126,16 @@ func (m *GetNodeIdRespData) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, GetNodeIdRespDataValidationError{
-					field:  "IntervalHeartbeat",
+					field:  "HeartbeatInterval",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetIntervalHeartbeat()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetHeartbeatInterval()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetNodeIdRespDataValidationError{
-				field:  "IntervalHeartbeat",
+				field:  "HeartbeatInterval",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
