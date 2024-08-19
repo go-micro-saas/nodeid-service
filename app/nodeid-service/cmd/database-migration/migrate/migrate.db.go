@@ -37,11 +37,11 @@ func Run(launcherManager setuputil.LauncherManager, opts ...Option) {
 
 	// 初始化迁移记录
 	if err = migrateRepo.InitializeSchema(ctx); err != nil {
-		logpkg.Fatalw("migrateHandler.InitializeSchema failed", err)
+		logpkg.Fatalf("migrateHandler.InitializeSchema failed: %+v", err)
 	}
 
 	// v1.0.0
 	if err = dbv1_0_0.Upgrade(ctx, dbConn, migrateRepo); err != nil {
-		logpkg.Fatalw("dbv1_0_0.Upgrade failed", err)
+		logpkg.Fatalf("dbv1_0_0.Upgrade failed: %+v", err)
 	}
 }
