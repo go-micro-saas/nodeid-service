@@ -1,6 +1,12 @@
 package main
 
-import "flag"
+import (
+	"flag"
+	apputil "github.com/go-micro-saas/service-kit/app"
+	configutil "github.com/go-micro-saas/service-kit/config"
+	consulutil "github.com/go-micro-saas/service-kit/consul"
+	storeutil "github.com/go-micro-saas/service-kit/store"
+)
 
 // go build -ldflags "-X main.Version=x.y.z"
 var (
@@ -23,5 +29,28 @@ func init() {
 func main() {
 	if !flag.Parsed() {
 		flag.Parse()
+	}
+
+	bootstrap, err := configutil.LoadingFile(flagconf)
+	if err != nil {
+		panic(err)
+	}
+
+	consulManager, err := consulutil.NewConsulManager(bootstrap.GetConsul())
+	if err != nil {
+		panic(err)
+	}
+	defer func() { _ = consulManager.Close() }()
+	consulClient, err := consulManager.GetClient()
+	if err != nil {
+		panic(err)
+	}
+
+	if storeDir == "" {
+		storeDir = apputil.Path(bootstrap.GetApp())
+	}
+	err = storeutil.StoreInConsul(consulClient, flagconf, storeDir)
+	if err != nil {
+		panic(err)
 	}
 }
