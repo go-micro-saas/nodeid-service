@@ -34,8 +34,8 @@ const (
 // NodeSerial ENGINE InnoDB CHARSET utf8mb4 COMMENT '节点系列号'
 type NodeSerial struct {
 	Id            int64     `gorm:"column:id;primaryKey;type:int;autoIncrement;not null;default:;comment:ID" json:"id"`
-	CreatedTime   time.Time `gorm:"column:created_time;type:time;not null;default:current_timestamp();comment:创建时间" json:"created_time"`
-	UpdatedTime   time.Time `gorm:"column:updated_time;type:time;not null;default:current_timestamp();comment:更新时间" json:"updated_time"`
+	CreatedTime   time.Time `gorm:"column:created_time;type:time;not null;comment:创建时间" json:"created_time"`
+	UpdatedTime   time.Time `gorm:"column:updated_time;type:time;not null;comment:更新时间" json:"updated_time"`
 	InstanceId    string    `gorm:"column:instance_id;unique;type:string;size:255;not null;default:'';comment:实例ID" json:"instance_id"`
 	CurrentNodeId int64     `gorm:"column:current_node_id;type:int;not null;default:0;comment:当前节点id" json:"current_node_id"`
 }
@@ -53,4 +53,21 @@ func (s *NodeSerial) CreateTableMigrator(migrator gorm.Migrator) migrationuitl.M
 // DropTableMigrator create table migrator
 func (s *NodeSerial) DropTableMigrator(migrator gorm.Migrator) migrationuitl.MigrationInterface {
 	return migrationuitl.NewDropTable(migrator, migrationuitl.Version, s)
+}
+
+// TableSQL table SQL
+func (s *NodeSerial) TableSQL() string {
+	return `
+CREATE TABLE IF NOT EXISTS nid_node_serial (
+	id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+	created_time datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
+	updated_time datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP() COMMENT '更新时间',
+	instance_id varchar(255) NOT NULL DEFAULT '' COMMENT '实例ID',
+	current_node_id bigint NOT NULL DEFAULT 0 COMMENT '当前节点id',
+	PRIMARY KEY (id),
+	UNIQUE KEY (instance_id)
+) ENGINE InnoDB,
+  CHARSET utf8mb4,
+  COMMENT '节点系列号'
+`
 }

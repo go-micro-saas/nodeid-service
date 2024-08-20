@@ -22,7 +22,7 @@ func Run(launcherManager setuputil.LauncherManager, opts ...Option) {
 	}
 
 	// 数据库链接
-	//dbConn, err := setuputil.GetMysqlDBConn(launcher)
+	//dbConn, err := setuputil.GetMysqlDBConn(launcherManager)
 	dbConn, err := setuputil.GetPostgresDBConn(launcherManager)
 	if err != nil {
 		stdlog.Fatalf("%+v\n", err)
