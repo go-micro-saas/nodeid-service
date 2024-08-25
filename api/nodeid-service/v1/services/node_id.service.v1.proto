@@ -10,8 +10,8 @@ option java_outer_classname = "SaasApiNodeidServiceV1";
 import "google/api/annotations.proto";
 import "api/nodeid-service/v1/resources/node_id.resource.v1.proto";
 
-// SrvTestV1 service
-service SrvTestV1 {
+// SrvNodeIDV1 service
+service SrvNodeIDV1 {
   // ping
   rpc Ping(saas.api.nodeid.resourcev1.PingReq) returns (saas.api.nodeid.resourcev1.PingResp) {
     option (google.api.http) = {

@@ -20,13 +20,13 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationSrvTestV1GetNodeId = "/saas.api.nodeid.servicev1.SrvTestV1/GetNodeId"
-const OperationSrvTestV1GetServiceInfo = "/saas.api.nodeid.servicev1.SrvTestV1/GetServiceInfo"
-const OperationSrvTestV1Ping = "/saas.api.nodeid.servicev1.SrvTestV1/Ping"
-const OperationSrvTestV1ReleaseNodeId = "/saas.api.nodeid.servicev1.SrvTestV1/ReleaseNodeId"
-const OperationSrvTestV1RenewalNodeId = "/saas.api.nodeid.servicev1.SrvTestV1/RenewalNodeId"
+const OperationSrvNodeIDV1GetNodeId = "/saas.api.nodeid.servicev1.SrvNodeIDV1/GetNodeId"
+const OperationSrvNodeIDV1GetServiceInfo = "/saas.api.nodeid.servicev1.SrvNodeIDV1/GetServiceInfo"
+const OperationSrvNodeIDV1Ping = "/saas.api.nodeid.servicev1.SrvNodeIDV1/Ping"
+const OperationSrvNodeIDV1ReleaseNodeId = "/saas.api.nodeid.servicev1.SrvNodeIDV1/ReleaseNodeId"
+const OperationSrvNodeIDV1RenewalNodeId = "/saas.api.nodeid.servicev1.SrvNodeIDV1/RenewalNodeId"
 
-type SrvTestV1HTTPServer interface {
+type SrvNodeIDV1HTTPServer interface {
 	// GetNodeId 获取节点id
 	GetNodeId(context.Context, *resources.GetNodeIdReq) (*resources.GetNodeIdResp, error)
 	// GetServiceInfo 获取服务信息
@@ -39,16 +39,16 @@ type SrvTestV1HTTPServer interface {
 	RenewalNodeId(context.Context, *resources.RenewalNodeIdReq) (*resources.RenewalNodeIdResp, error)
 }
 
-func RegisterSrvTestV1HTTPServer(s *http.Server, srv SrvTestV1HTTPServer) {
+func RegisterSrvNodeIDV1HTTPServer(s *http.Server, srv SrvNodeIDV1HTTPServer) {
 	r := s.Route("/")
-	r.GET("/api/v1/nodeid/ping/{message}", _SrvTestV1_Ping0_HTTP_Handler(srv))
-	r.GET("/api/v1/nodeid/get-service-info", _SrvTestV1_GetServiceInfo0_HTTP_Handler(srv))
-	r.GET("/api/v1/nodeid/get-one-node-id", _SrvTestV1_GetNodeId0_HTTP_Handler(srv))
-	r.POST("/api/v1/nodeid/renewal-node-id", _SrvTestV1_RenewalNodeId0_HTTP_Handler(srv))
-	r.PUT("/api/v1/nodeid/release-node-id", _SrvTestV1_ReleaseNodeId0_HTTP_Handler(srv))
+	r.GET("/api/v1/nodeid/ping/{message}", _SrvNodeIDV1_Ping1_HTTP_Handler(srv))
+	r.GET("/api/v1/nodeid/get-service-info", _SrvNodeIDV1_GetServiceInfo0_HTTP_Handler(srv))
+	r.GET("/api/v1/nodeid/get-one-node-id", _SrvNodeIDV1_GetNodeId0_HTTP_Handler(srv))
+	r.POST("/api/v1/nodeid/renewal-node-id", _SrvNodeIDV1_RenewalNodeId0_HTTP_Handler(srv))
+	r.PUT("/api/v1/nodeid/release-node-id", _SrvNodeIDV1_ReleaseNodeId0_HTTP_Handler(srv))
 }
 
-func _SrvTestV1_Ping0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
+func _SrvNodeIDV1_Ping1_HTTP_Handler(srv SrvNodeIDV1HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in resources.PingReq
 		if err := ctx.BindQuery(&in); err != nil {
@@ -57,7 +57,7 @@ func _SrvTestV1_Ping0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Contex
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSrvTestV1Ping)
+		http.SetOperation(ctx, OperationSrvNodeIDV1Ping)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Ping(ctx, req.(*resources.PingReq))
 		})
@@ -70,13 +70,13 @@ func _SrvTestV1_Ping0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Contex
 	}
 }
 
-func _SrvTestV1_GetServiceInfo0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
+func _SrvNodeIDV1_GetServiceInfo0_HTTP_Handler(srv SrvNodeIDV1HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in resources.GetServiceInfoReq
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSrvTestV1GetServiceInfo)
+		http.SetOperation(ctx, OperationSrvNodeIDV1GetServiceInfo)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetServiceInfo(ctx, req.(*resources.GetServiceInfoReq))
 		})
@@ -89,13 +89,13 @@ func _SrvTestV1_GetServiceInfo0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx h
 	}
 }
 
-func _SrvTestV1_GetNodeId0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
+func _SrvNodeIDV1_GetNodeId0_HTTP_Handler(srv SrvNodeIDV1HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in resources.GetNodeIdReq
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSrvTestV1GetNodeId)
+		http.SetOperation(ctx, OperationSrvNodeIDV1GetNodeId)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetNodeId(ctx, req.(*resources.GetNodeIdReq))
 		})
@@ -108,7 +108,7 @@ func _SrvTestV1_GetNodeId0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.C
 	}
 }
 
-func _SrvTestV1_RenewalNodeId0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
+func _SrvNodeIDV1_RenewalNodeId0_HTTP_Handler(srv SrvNodeIDV1HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in resources.RenewalNodeIdReq
 		if err := ctx.Bind(&in); err != nil {
@@ -117,7 +117,7 @@ func _SrvTestV1_RenewalNodeId0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx ht
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSrvTestV1RenewalNodeId)
+		http.SetOperation(ctx, OperationSrvNodeIDV1RenewalNodeId)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.RenewalNodeId(ctx, req.(*resources.RenewalNodeIdReq))
 		})
@@ -130,7 +130,7 @@ func _SrvTestV1_RenewalNodeId0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx ht
 	}
 }
 
-func _SrvTestV1_ReleaseNodeId0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
+func _SrvNodeIDV1_ReleaseNodeId0_HTTP_Handler(srv SrvNodeIDV1HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in resources.ReleaseNodeIdReq
 		if err := ctx.Bind(&in); err != nil {
@@ -139,7 +139,7 @@ func _SrvTestV1_ReleaseNodeId0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx ht
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSrvTestV1ReleaseNodeId)
+		http.SetOperation(ctx, OperationSrvNodeIDV1ReleaseNodeId)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.ReleaseNodeId(ctx, req.(*resources.ReleaseNodeIdReq))
 		})
@@ -152,7 +152,7 @@ func _SrvTestV1_ReleaseNodeId0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx ht
 	}
 }
 
-type SrvTestV1HTTPClient interface {
+type SrvNodeIDV1HTTPClient interface {
 	GetNodeId(ctx context.Context, req *resources.GetNodeIdReq, opts ...http.CallOption) (rsp *resources.GetNodeIdResp, err error)
 	GetServiceInfo(ctx context.Context, req *resources.GetServiceInfoReq, opts ...http.CallOption) (rsp *resources.GetServiceInfoResp, err error)
 	Ping(ctx context.Context, req *resources.PingReq, opts ...http.CallOption) (rsp *resources.PingResp, err error)
@@ -160,19 +160,19 @@ type SrvTestV1HTTPClient interface {
 	RenewalNodeId(ctx context.Context, req *resources.RenewalNodeIdReq, opts ...http.CallOption) (rsp *resources.RenewalNodeIdResp, err error)
 }
 
-type SrvTestV1HTTPClientImpl struct {
+type SrvNodeIDV1HTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewSrvTestV1HTTPClient(client *http.Client) SrvTestV1HTTPClient {
-	return &SrvTestV1HTTPClientImpl{client}
+func NewSrvNodeIDV1HTTPClient(client *http.Client) SrvNodeIDV1HTTPClient {
+	return &SrvNodeIDV1HTTPClientImpl{client}
 }
 
-func (c *SrvTestV1HTTPClientImpl) GetNodeId(ctx context.Context, in *resources.GetNodeIdReq, opts ...http.CallOption) (*resources.GetNodeIdResp, error) {
+func (c *SrvNodeIDV1HTTPClientImpl) GetNodeId(ctx context.Context, in *resources.GetNodeIdReq, opts ...http.CallOption) (*resources.GetNodeIdResp, error) {
 	var out resources.GetNodeIdResp
 	pattern := "/api/v1/nodeid/get-one-node-id"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationSrvTestV1GetNodeId))
+	opts = append(opts, http.Operation(OperationSrvNodeIDV1GetNodeId))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -181,11 +181,11 @@ func (c *SrvTestV1HTTPClientImpl) GetNodeId(ctx context.Context, in *resources.G
 	return &out, nil
 }
 
-func (c *SrvTestV1HTTPClientImpl) GetServiceInfo(ctx context.Context, in *resources.GetServiceInfoReq, opts ...http.CallOption) (*resources.GetServiceInfoResp, error) {
+func (c *SrvNodeIDV1HTTPClientImpl) GetServiceInfo(ctx context.Context, in *resources.GetServiceInfoReq, opts ...http.CallOption) (*resources.GetServiceInfoResp, error) {
 	var out resources.GetServiceInfoResp
 	pattern := "/api/v1/nodeid/get-service-info"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationSrvTestV1GetServiceInfo))
+	opts = append(opts, http.Operation(OperationSrvNodeIDV1GetServiceInfo))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -194,11 +194,11 @@ func (c *SrvTestV1HTTPClientImpl) GetServiceInfo(ctx context.Context, in *resour
 	return &out, nil
 }
 
-func (c *SrvTestV1HTTPClientImpl) Ping(ctx context.Context, in *resources.PingReq, opts ...http.CallOption) (*resources.PingResp, error) {
+func (c *SrvNodeIDV1HTTPClientImpl) Ping(ctx context.Context, in *resources.PingReq, opts ...http.CallOption) (*resources.PingResp, error) {
 	var out resources.PingResp
 	pattern := "/api/v1/nodeid/ping/{message}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationSrvTestV1Ping))
+	opts = append(opts, http.Operation(OperationSrvNodeIDV1Ping))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -207,11 +207,11 @@ func (c *SrvTestV1HTTPClientImpl) Ping(ctx context.Context, in *resources.PingRe
 	return &out, nil
 }
 
-func (c *SrvTestV1HTTPClientImpl) ReleaseNodeId(ctx context.Context, in *resources.ReleaseNodeIdReq, opts ...http.CallOption) (*resources.ReleaseNodeIdResp, error) {
+func (c *SrvNodeIDV1HTTPClientImpl) ReleaseNodeId(ctx context.Context, in *resources.ReleaseNodeIdReq, opts ...http.CallOption) (*resources.ReleaseNodeIdResp, error) {
 	var out resources.ReleaseNodeIdResp
 	pattern := "/api/v1/nodeid/release-node-id"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationSrvTestV1ReleaseNodeId))
+	opts = append(opts, http.Operation(OperationSrvNodeIDV1ReleaseNodeId))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
@@ -220,11 +220,11 @@ func (c *SrvTestV1HTTPClientImpl) ReleaseNodeId(ctx context.Context, in *resourc
 	return &out, nil
 }
 
-func (c *SrvTestV1HTTPClientImpl) RenewalNodeId(ctx context.Context, in *resources.RenewalNodeIdReq, opts ...http.CallOption) (*resources.RenewalNodeIdResp, error) {
+func (c *SrvNodeIDV1HTTPClientImpl) RenewalNodeId(ctx context.Context, in *resources.RenewalNodeIdReq, opts ...http.CallOption) (*resources.RenewalNodeIdResp, error) {
 	var out resources.RenewalNodeIdResp
 	pattern := "/api/v1/nodeid/renewal-node-id"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationSrvTestV1RenewalNodeId))
+	opts = append(opts, http.Operation(OperationSrvNodeIDV1RenewalNodeId))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
