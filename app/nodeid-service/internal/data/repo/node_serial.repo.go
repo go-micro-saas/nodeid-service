@@ -16,6 +16,7 @@ type NodeSerialDataRepo interface {
 	Insert(ctx context.Context, dataModels []*po.NodeSerial) error
 	Update(ctx context.Context, dataModel *po.NodeSerial) error
 	ExistUpdate(ctx context.Context, dataModel *po.NodeSerial) (anotherModel *po.NodeSerial, isNotFound bool, err error)
+	FirstOrCreate(ctx context.Context, dataModel *po.NodeSerial) (*po.NodeSerial, error)
 	QueryOneById(ctx context.Context, id interface{}) (dataModel *po.NodeSerial, isNotFound bool, err error)
 	QueryOneByConditions(ctx context.Context, conditions map[string]interface{}) (dataModel *po.NodeSerial, isNotFound bool, err error)
 	QueryAllByConditions(ctx context.Context, conditions map[string]interface{}) (dataModels []*po.NodeSerial, err error)

@@ -59,7 +59,7 @@ func (s *nodeIdRepo) existCreate(ctx context.Context, dbConn *gorm.DB, dataModel
 		Where(schemas.FieldId+" = ?", dataModel.Id).
 		First(anotherModel).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if gormpkg.IsErrRecordNotFound(err) {
 			isNotFound = true
 			err = nil
 		} else {
@@ -137,7 +137,7 @@ func (s *nodeIdRepo) existUpdate(ctx context.Context, dbConn *gorm.DB, dataModel
 		Where(schemas.FieldId+" != ?", dataModel.Id).
 		First(anotherModel).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if gormpkg.IsErrRecordNotFound(err) {
 			isNotFound = true
 			err = nil
 		} else {
@@ -169,7 +169,7 @@ func (s *nodeIdRepo) queryOneById(ctx context.Context, dbConn *gorm.DB, id inter
 		Where(schemas.FieldId+" = ?", id).
 		First(dataModel).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if gormpkg.IsErrRecordNotFound(err) {
 			err = nil
 			isNotFound = true
 		} else {
@@ -198,7 +198,7 @@ func (s *nodeIdRepo) queryOneByConditions(ctx context.Context, dbConn *gorm.DB, 
 	err = s.WhereConditions(dbConn, conditions).
 		First(dataModel).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if gormpkg.IsErrRecordNotFound(err) {
 			err = nil
 			isNotFound = true
 		} else {

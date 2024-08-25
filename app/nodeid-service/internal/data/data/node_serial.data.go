@@ -51,6 +51,36 @@ func (s *nodeSerialRepo) CreateWithDBConn(ctx context.Context, dbConn *gorm.DB, 
 	return s.create(ctx, dbConn, dataModel)
 }
 
+// FirstOrCreate ...
+func (s *nodeSerialRepo) FirstOrCreate(ctx context.Context, dataModel *po.NodeSerial) (*po.NodeSerial, error) {
+	err := s.dbConn.WithContext(ctx).
+		Table(s.NodeSerialSchema.TableName()).
+		Where(schemas.FieldInstanceId+" = ?", dataModel.InstanceId).
+		FirstOrCreate(dataModel).Error
+	if err != nil {
+		if gormpkg.IsErrDuplicatedKey(err) {
+			err = nil
+			goto getExistData
+		}
+		e := errorpkg.ErrorInternalServer("")
+		return nil, errorpkg.Wrap(e, err)
+	}
+	return dataModel, nil
+getExistData:
+	err = s.dbConn.WithContext(ctx).
+		Table(s.NodeSerialSchema.TableName()).
+		Where(schemas.FieldInstanceId+" = ?", dataModel.InstanceId).
+		First(dataModel).Error
+	if err != nil {
+		if gormpkg.IsErrDuplicatedKey(err) {
+			err = nil
+		}
+		e := errorpkg.ErrorInternalServer("")
+		return nil, errorpkg.Wrap(e, err)
+	}
+	return dataModel, nil
+}
+
 // existCreate exist create
 func (s *nodeSerialRepo) existCreate(ctx context.Context, dbConn *gorm.DB, dataModel *po.NodeSerial) (anotherModel *po.NodeSerial, isNotFound bool, err error) {
 	anotherModel = new(po.NodeSerial)
@@ -59,7 +89,7 @@ func (s *nodeSerialRepo) existCreate(ctx context.Context, dbConn *gorm.DB, dataM
 		Where(schemas.FieldId+" = ?", dataModel.Id).
 		First(anotherModel).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if gormpkg.IsErrRecordNotFound(err) {
 			isNotFound = true
 			err = nil
 		} else {
@@ -137,7 +167,7 @@ func (s *nodeSerialRepo) existUpdate(ctx context.Context, dbConn *gorm.DB, dataM
 		Where(schemas.FieldId+" != ?", dataModel.Id).
 		First(anotherModel).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if gormpkg.IsErrRecordNotFound(err) {
 			isNotFound = true
 			err = nil
 		} else {
@@ -169,7 +199,7 @@ func (s *nodeSerialRepo) queryOneById(ctx context.Context, dbConn *gorm.DB, id i
 		Where(schemas.FieldId+" = ?", id).
 		First(dataModel).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if gormpkg.IsErrRecordNotFound(err) {
 			err = nil
 			isNotFound = true
 		} else {
@@ -198,7 +228,7 @@ func (s *nodeSerialRepo) queryOneByConditions(ctx context.Context, dbConn *gorm.
 	err = s.WhereConditions(dbConn, conditions).
 		First(dataModel).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if gormpkg.IsErrRecordNotFound(err) {
 			err = nil
 			isNotFound = true
 		} else {
