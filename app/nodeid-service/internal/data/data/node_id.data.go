@@ -357,10 +357,9 @@ func (s *NodeIdSlice) InsertColumns() (columnList []string, placeholder string) 
 	// columns
 	columnList = []string{
 		schemas.FieldCreatedTime, schemas.FieldUpdatedTime,
-		schemas.FieldUuid, schemas.FieldInstanceId,
-		schemas.FieldInstanceName, schemas.FieldInstanceMetadata,
+		schemas.FieldInstanceName, schemas.FieldInstanceId,
 		schemas.FieldNodeId, schemas.FieldNodeIdStatus,
-		schemas.FieldExpiredAt,
+		schemas.FieldInstanceMetadata, schemas.FieldExpiredAt,
 	}
 
 	// placeholders
@@ -380,12 +379,11 @@ func (s *NodeIdSlice) InsertValues(args *gormpkg.BatchInsertValueArgs) (prepareD
 		// prepare data
 		prepareData = append(prepareData, dataModels[index].CreatedTime)
 		prepareData = append(prepareData, dataModels[index].UpdatedTime)
-		prepareData = append(prepareData, dataModels[index].Uuid)
-		prepareData = append(prepareData, dataModels[index].InstanceId)
 		prepareData = append(prepareData, dataModels[index].InstanceName)
-		prepareData = append(prepareData, dataModels[index].InstanceMetadata)
+		prepareData = append(prepareData, dataModels[index].InstanceId)
 		prepareData = append(prepareData, dataModels[index].NodeId)
 		prepareData = append(prepareData, dataModels[index].NodeIdStatus)
+		prepareData = append(prepareData, dataModels[index].InstanceMetadata)
 		prepareData = append(prepareData, dataModels[index].ExpiredAt)
 	}
 	return prepareData, placeholderSlice
@@ -397,12 +395,11 @@ func (s *NodeIdSlice) UpdateColumns() (columnList []string) {
 	columnList = []string{
 		schemas.FieldCreatedTime + "=excluded." + schemas.FieldCreatedTime,
 		schemas.FieldUpdatedTime + "=excluded." + schemas.FieldUpdatedTime,
-		schemas.FieldUuid + "=excluded." + schemas.FieldUuid,
-		schemas.FieldInstanceId + "=excluded." + schemas.FieldInstanceId,
 		schemas.FieldInstanceName + "=excluded." + schemas.FieldInstanceName,
-		schemas.FieldInstanceMetadata + "=excluded." + schemas.FieldInstanceMetadata,
+		schemas.FieldInstanceId + "=excluded." + schemas.FieldInstanceId,
 		schemas.FieldNodeId + "=excluded." + schemas.FieldNodeId,
 		schemas.FieldNodeIdStatus + "=excluded." + schemas.FieldNodeIdStatus,
+		schemas.FieldInstanceMetadata + "=excluded." + schemas.FieldInstanceMetadata,
 		schemas.FieldExpiredAt + "=excluded." + schemas.FieldExpiredAt,
 	}
 	return columnList
@@ -476,24 +473,14 @@ func (s *nodeIdRepo) WhereConditions(dbConn *gorm.DB, conditions map[string]inte
 	// 	   dbConn = dbConn.Where(tableName+"."+schemas.FieldUpdatedTime+" = ?", data)
 	// }
 
-	// uuid
-	// if data, ok := conditions[schemas.FieldUuid]; ok {
-	// 	   dbConn = dbConn.Where(tableName+"."+schemas.FieldUuid+" = ?", data)
-	// }
-
-	// instance_id
-	// if data, ok := conditions[schemas.FieldInstanceId]; ok {
-	// 	   dbConn = dbConn.Where(tableName+"."+schemas.FieldInstanceId+" = ?", data)
-	// }
-
 	// instance_name
 	// if data, ok := conditions[schemas.FieldInstanceName]; ok {
 	// 	   dbConn = dbConn.Where(tableName+"."+schemas.FieldInstanceName+" = ?", data)
 	// }
 
-	// instance_metadata
-	// if data, ok := conditions[schemas.FieldInstanceMetadata]; ok {
-	// 	   dbConn = dbConn.Where(tableName+"."+schemas.FieldInstanceMetadata+" = ?", data)
+	// instance_id
+	// if data, ok := conditions[schemas.FieldInstanceId]; ok {
+	// 	   dbConn = dbConn.Where(tableName+"."+schemas.FieldInstanceId+" = ?", data)
 	// }
 
 	// node_id
@@ -504,6 +491,11 @@ func (s *nodeIdRepo) WhereConditions(dbConn *gorm.DB, conditions map[string]inte
 	// node_id_status
 	// if data, ok := conditions[schemas.FieldNodeIdStatus]; ok {
 	// 	   dbConn = dbConn.Where(tableName+"."+schemas.FieldNodeIdStatus+" = ?", data)
+	// }
+
+	// instance_metadata
+	// if data, ok := conditions[schemas.FieldInstanceMetadata]; ok {
+	// 	   dbConn = dbConn.Where(tableName+"."+schemas.FieldInstanceMetadata+" = ?", data)
 	// }
 
 	// expired_at
@@ -537,24 +529,14 @@ func (s *nodeIdRepo) UpdateColumns(conditions map[string]interface{}) map[string
 	//	updateColumns[schemas.FieldUpdatedTime] = data
 	//}
 
-	// uuid
-	//if data, ok := conditions[schemas.FieldUuid]; ok {
-	//	updateColumns[schemas.FieldUuid] = data
-	//}
-
-	// instance_id
-	//if data, ok := conditions[schemas.FieldInstanceId]; ok {
-	//	updateColumns[schemas.FieldInstanceId] = data
-	//}
-
 	// instance_name
 	//if data, ok := conditions[schemas.FieldInstanceName]; ok {
 	//	updateColumns[schemas.FieldInstanceName] = data
 	//}
 
-	// instance_metadata
-	//if data, ok := conditions[schemas.FieldInstanceMetadata]; ok {
-	//	updateColumns[schemas.FieldInstanceMetadata] = data
+	// instance_id
+	//if data, ok := conditions[schemas.FieldInstanceId]; ok {
+	//	updateColumns[schemas.FieldInstanceId] = data
 	//}
 
 	// node_id
@@ -565,6 +547,11 @@ func (s *nodeIdRepo) UpdateColumns(conditions map[string]interface{}) map[string
 	// node_id_status
 	//if data, ok := conditions[schemas.FieldNodeIdStatus]; ok {
 	//	updateColumns[schemas.FieldNodeIdStatus] = data
+	//}
+
+	// instance_metadata
+	//if data, ok := conditions[schemas.FieldInstanceMetadata]; ok {
+	//	updateColumns[schemas.FieldInstanceMetadata] = data
 	//}
 
 	// expired_at

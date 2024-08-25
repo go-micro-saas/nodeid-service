@@ -27,26 +27,24 @@ const (
 	FieldId               = "id"
 	FieldCreatedTime      = "created_time"
 	FieldUpdatedTime      = "updated_time"
-	FieldUuid             = "uuid"
-	FieldInstanceId       = "instance_id"
 	FieldInstanceName     = "instance_name"
-	FieldInstanceMetadata = "instance_metadata"
+	FieldInstanceId       = "instance_id"
 	FieldNodeId           = "node_id"
 	FieldNodeIdStatus     = "node_id_status"
+	FieldInstanceMetadata = "instance_metadata"
 	FieldExpiredAt        = "expired_at"
 )
 
 // NodeId ENGINE InnoDB CHARSET utf8mb4 COMMENT '节点'
 type NodeId struct {
-	Id               int64          `gorm:"column:id;primaryKey;type:int;autoIncrement;not null;default:;comment:ID" json:"id"`
+	Id               uint64         `gorm:"column:id;primaryKey;type:uint;autoIncrement;not null;default:;comment:ID" json:"id"`
 	CreatedTime      time.Time      `gorm:"column:created_time;type:time;not null;comment:创建时间" json:"created_time"`
 	UpdatedTime      time.Time      `gorm:"column:updated_time;type:time;not null;comment:更新时间" json:"updated_time"`
-	Uuid             string         `gorm:"column:uuid;unique;type:string;size:36;not null;default:'';comment:UUID" json:"uuid"`
-	InstanceId       string         `gorm:"column:instance_id;index;type:string;size:255;not null;default:'';comment:实例ID" json:"instance_id"`
 	InstanceName     string         `gorm:"column:instance_name;type:string;size:255;not null;default:'';comment:实例名称" json:"instance_name"`
-	InstanceMetadata datatypes.JSON `gorm:"column:instance_metadata;type:json;not null;comment:实例元数据" json:"instance_metadata"`
-	NodeId           int64          `gorm:"column:node_id;index;type:int;not null;default:0;comment:节点id" json:"node_id"`
+	InstanceId       string         `gorm:"column:instance_id;type:string;size:255;not null;default:'';comment:实例ID" json:"instance_id"`
+	NodeId           int64          `gorm:"column:node_id;type:int;not null;default:0;comment:节点id" json:"node_id"`
 	NodeIdStatus     int32          `gorm:"column:node_id_status;type:int;not null;default:0;comment:节点状态" json:"node_id_status"`
+	InstanceMetadata datatypes.JSON `gorm:"column:instance_metadata;type:json;not null;comment:实例元数据" json:"instance_metadata"`
 	ExpiredAt        time.Time      `gorm:"column:expired_at;type:time;not null;comment:失效时间" json:"expired_at"`
 }
 
@@ -68,20 +66,18 @@ func (s *NodeId) DropTableMigrator(migrator gorm.Migrator) migrationuitl.Migrati
 // TableSQL table SQL
 func (s *NodeId) TableSQL() string {
 	return `
-CREATE TABLE IF NOT EXISTS nid_node_id (
-	id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
-	created_time datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
-	updated_time datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP() COMMENT '更新时间',
-	uuid varchar(36) NOT NULL DEFAULT '' COMMENT 'UUID',
-	instance_id varchar(255) NOT NULL DEFAULT '' COMMENT '实例ID',
-	instance_name varchar(255) NOT NULL DEFAULT '' COMMENT '实例名称',
-	instance_metadata json NOT NULL COMMENT '实例元数据',
-	node_id bigint NOT NULL DEFAULT 0 COMMENT '节点id',
-	node_id_status mediumint NOT NULL DEFAULT 0 COMMENT '节点状态',
-	expired_at datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '失效时间',
+CREATE TABLE if NOT EXISTS nid_node_id (
+	id bigint unsigned NOT NULL auto_increment comment 'ID',
+	created_time datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() comment '创建时间',
+	updated_time datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP() comment '更新时间',
+	instance_name VARCHAR(255) NOT NULL DEFAULT '' comment '实例名称',
+	instance_id VARCHAR(255) NOT NULL DEFAULT '' comment '实例ID',
+	node_id bigint NOT NULL DEFAULT 0 comment '节点id',
+	node_id_status mediumint NOT NULL DEFAULT 0 comment '节点状态',
+	instance_metadata json NOT NULL comment '实例元数据',
+	expired_at datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() comment '失效时间',
 	PRIMARY KEY (id),
-	UNIQUE KEY (uuid),
-	KEY (instance_id, node_id)
+	UNIQUE KEY (instance_id, node_id)
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COMMENT '节点'
