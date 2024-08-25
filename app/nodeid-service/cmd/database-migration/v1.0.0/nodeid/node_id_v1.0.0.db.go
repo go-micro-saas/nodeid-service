@@ -36,6 +36,12 @@ func (s *Migrate) Upgrade(ctx context.Context) error {
 		e := errorpkg.ErrorInternalError("")
 		return errorpkg.Wrap(e, err)
 	}
+	// 创建索引
+	mr = nodeidschemas.NodeIdSchema.CreateUniqueIndexForInstanceIDAndNodeID(migrator)
+	if err := s.migrateRepo.RunMigratorUp(ctx, mr); err != nil {
+		e := errorpkg.ErrorInternalError("")
+		return errorpkg.Wrap(e, err)
+	}
 	// 创建表
 	mr = nodeserialschemas.NodeSerialSchema.CreateTableMigrator(migrator)
 	if err := s.migrateRepo.RunMigratorUp(ctx, mr); err != nil {

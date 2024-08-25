@@ -3,7 +3,7 @@
 package schemas
 
 import (
-	migrationuitl "github.com/ikaiguang/go-srv-kit/data/migration"
+	migrationpkg "github.com/ikaiguang/go-srv-kit/data/migration"
 	datatypes "gorm.io/datatypes"
 	gorm "gorm.io/gorm"
 	time "time"
@@ -46,13 +46,13 @@ func (s *NodeSerial) TableName() string {
 }
 
 // CreateTableMigrator create table migrator
-func (s *NodeSerial) CreateTableMigrator(migrator gorm.Migrator) migrationuitl.MigrationInterface {
-	return migrationuitl.NewCreateTable(migrator, migrationuitl.Version, s)
+func (s *NodeSerial) CreateTableMigrator(migrator gorm.Migrator) migrationpkg.MigrationInterface {
+	return migrationpkg.NewCreateTable(migrator, migrationpkg.Version, s)
 }
 
 // DropTableMigrator create table migrator
-func (s *NodeSerial) DropTableMigrator(migrator gorm.Migrator) migrationuitl.MigrationInterface {
-	return migrationuitl.NewDropTable(migrator, migrationuitl.Version, s)
+func (s *NodeSerial) DropTableMigrator(migrator gorm.Migrator) migrationpkg.MigrationInterface {
+	return migrationpkg.NewDropTable(migrator, migrationpkg.Version, s)
 }
 
 // TableSQL table SQL
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS nid_node_serial (
 	id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
 	created_time datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
 	updated_time datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP() COMMENT '更新时间',
-	instance_id varchar(255) NOT NULL DEFAULT '' COMMENT '实例ID',
+	instance_id VARCHAR(255) NOT NULL DEFAULT '' COMMENT '实例ID',
 	current_node_id bigint NOT NULL DEFAULT 0 COMMENT '当前节点id',
 	PRIMARY KEY (id),
 	UNIQUE KEY (instance_id)

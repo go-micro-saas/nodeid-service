@@ -3,7 +3,7 @@
 package schemas
 
 import (
-	migrationuitl "github.com/ikaiguang/go-srv-kit/data/migration"
+	migrationpkg "github.com/ikaiguang/go-srv-kit/data/migration"
 	datatypes "gorm.io/datatypes"
 	gorm "gorm.io/gorm"
 	time "time"
@@ -54,13 +54,57 @@ func (s *NodeId) TableName() string {
 }
 
 // CreateTableMigrator create table migrator
-func (s *NodeId) CreateTableMigrator(migrator gorm.Migrator) migrationuitl.MigrationInterface {
-	return migrationuitl.NewCreateTable(migrator, migrationuitl.Version, s)
+func (s *NodeId) CreateTableMigrator(migrator gorm.Migrator) migrationpkg.MigrationInterface {
+	return migrationpkg.NewCreateTable(migrator, migrationpkg.Version, s)
 }
 
 // DropTableMigrator create table migrator
-func (s *NodeId) DropTableMigrator(migrator gorm.Migrator) migrationuitl.MigrationInterface {
-	return migrationuitl.NewDropTable(migrator, migrationuitl.Version, s)
+func (s *NodeId) DropTableMigrator(migrator gorm.Migrator) migrationpkg.MigrationInterface {
+	return migrationpkg.NewDropTable(migrator, migrationpkg.Version, s)
+}
+
+// InstanceNodeUniqueIndex ...
+type InstanceNodeUniqueIndex struct {
+	InstanceId string `gorm:"column:instance_id;uniqueIndex:idx_node_id_instance_id_node_id;type:string;size:255;not null;default:'';comment:实例ID" json:"instance_id"`
+	NodeId     int64  `gorm:"column:node_id;;uniqueIndex:idx_node_id_instance_id_node_id;type:int;not null;default:0;comment:节点id" json:"node_id"`
+}
+
+// TableName table name
+func (s *InstanceNodeUniqueIndex) TableName() string {
+	return NodeIdSchema.TableName()
+}
+
+func (s *InstanceNodeUniqueIndex) IndexName() string {
+	return "idx_node_id_instance_id_node_id"
+}
+
+// CreateUniqueIndexForInstanceIDAndNodeID 创建唯一索引
+func (s *NodeId) CreateUniqueIndexForInstanceIDAndNodeID(migrator gorm.Migrator) migrationpkg.MigrationInterface {
+	var (
+		dataModel           = &InstanceNodeUniqueIndex{}
+		indexName           = dataModel.IndexName()
+		migrationVersion    = migrationpkg.Version
+		migrationIdentifier = migrationVersion + ":" + s.TableName() + ":create_unique_index:" + indexName
+	)
+	migrationUp := func() error {
+		if migrator.HasIndex(dataModel, indexName) {
+			return nil
+		}
+		return migrator.CreateIndex(dataModel, indexName)
+	}
+	migrationDown := func() error {
+		if !migrator.HasIndex(dataModel, indexName) {
+			return nil
+		}
+		return migrator.DropIndex(dataModel, indexName)
+	}
+
+	return migrationpkg.NewAnyMigrator(
+		migrationVersion,
+		migrationIdentifier,
+		migrationUp,
+		migrationDown,
+	)
 }
 
 // TableSQL table SQL
