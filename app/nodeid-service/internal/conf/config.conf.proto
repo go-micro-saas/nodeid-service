@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package saas.api.nodeid.conf;
+
+option go_package           = "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf;conf";
+option java_multiple_files  = true;
+option java_package         = "saas.api.nodeid.conf";
+option java_outer_classname = "SaasApiNodeidConf";
+
+import "google/protobuf/duration.proto";
+import "validate/validate.proto";
+
+message BusinessConfig {
+  message Business {
+    int64 min_node_id                           = 1 [(validate.rules).int64 = { gte: 0 }];  // 最小节点默认值：1
+    int64 max_node_id                           = 2 [(validate.rules).int64 = { gte: 0 }];  // 最大节点默认值：1023；
+    google.protobuf.Duration idle_duration      = 3;                                        // 空闲释放时间；默认：100s。
+    google.protobuf.Duration heartbeat_interval = 4;                                        // 心跳续订延长的时间；默认：30s。范围：[1, idle_duration]；延长有效期：now()+idle_duration
+  }
+  Business business = 1;
+}

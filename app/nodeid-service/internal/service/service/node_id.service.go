@@ -4,10 +4,20 @@ import (
 	"context"
 	resourcev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
 )
 
 type nodeIDV1Service struct {
 	servicev1.UnimplementedSrvNodeIDV1Server
+
+	conf *bo.NodeIDConfig
+}
+
+func NewNodeIDV1Service(conf *bo.NodeIDConfig) servicev1.SrvNodeIDV1Server {
+	conf.Initialization()
+	return &nodeIDV1Service{
+		conf: conf,
+	}
 }
 
 // Ping ping
