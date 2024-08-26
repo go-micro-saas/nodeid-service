@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/v2 v2.8.0
-	github.com/go-micro-saas/service-kit v0.0.6
+	github.com/go-micro-saas/service-kit v0.0.7
 	github.com/ikaiguang/go-srv-kit v0.3.3
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240814211410-ddb44dafa142
