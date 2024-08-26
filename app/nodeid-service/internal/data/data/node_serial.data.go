@@ -5,6 +5,7 @@ package daos
 import (
 	"bytes"
 	context "context"
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
 	schemas "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/schema/node_serial"
@@ -16,13 +17,16 @@ import (
 
 // nodeSerialRepo repo
 type nodeSerialRepo struct {
+	log              *log.Helper
 	dbConn           *gorm.DB           // *gorm.DB
 	NodeSerialSchema schemas.NodeSerial // NodeSerial
 }
 
 // NewNodeSerialRepo new data repo
-func NewNodeSerialRepo(dbConn *gorm.DB) repos.NodeSerialDataRepo {
+func NewNodeSerialRepo(logger log.Logger, dbConn *gorm.DB) datarepos.NodeSerialDataRepo {
+	logHelper := log.NewHelper(log.With(logger, "module", "nodeid-service/data/data"))
 	return &nodeSerialRepo{
+		log:    logHelper,
 		dbConn: dbConn,
 	}
 }

@@ -2,21 +2,25 @@ package service
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/log"
 	resourcev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
-	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
+	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 )
 
 type nodeIDV1Service struct {
 	servicev1.UnimplementedSrvNodeIDV1Server
 
-	conf *bo.NodeIDConfig
+	log       *log.Helper
+	nodeIDBiz bizrepos.NodeIdBizRepo
 }
 
-func NewNodeIDV1Service(conf *bo.NodeIDConfig) servicev1.SrvNodeIDV1Server {
-	conf.Initialization()
+func NewNodeIDV1Service(logger log.Logger, nodeIDBiz bizrepos.NodeIdBizRepo) servicev1.SrvNodeIDV1Server {
+	logHelper := log.NewHelper(log.With(logger, "module", "nodeid-service/service/service"))
 	return &nodeIDV1Service{
-		conf: conf,
+		log:       logHelper,
+		nodeIDBiz: nodeIDBiz,
 	}
 }
 
@@ -29,7 +33,11 @@ func (s *nodeIDV1Service) Ping(ctx context.Context, req *resourcev1.PingReq) (*r
 
 // GetServiceInfo 获取服务信息
 func (s *nodeIDV1Service) GetServiceInfo(ctx context.Context, req *resourcev1.GetServiceInfoReq) (*resourcev1.GetServiceInfoResp, error) {
-	return &resourcev1.GetServiceInfoResp{}, nil
+	cfg := s.nodeIDBiz.GetConfig()
+
+	return &resourcev1.GetServiceInfoResp{
+		Data: dto.NodeIDDto.ToPbGetServiceInfoRespData(cfg),
+	}, nil
 }
 
 // GetNodeId 获取节点id

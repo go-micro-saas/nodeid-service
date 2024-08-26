@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package saas.api.testing.conf;
+
+option go_package           = "github.com/go-micro-saas/nodeid-service/app/test-service/internal/conf;conf";
+option java_multiple_files  = true;
+option java_package         = "saas.api.testing.conf";
+option java_outer_classname = "SaasApiTestingConf";
+
+import "validate/validate.proto";
+
+message BusinessConfig {
+  message Business {
+    string key = 1 [(validate.rules).string = { ignore_empty: true }];
+  }
+  Business business = 1;
+}
