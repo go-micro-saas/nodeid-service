@@ -5,6 +5,7 @@ package daos
 import (
 	"bytes"
 	context "context"
+	"database/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
@@ -29,6 +30,10 @@ func NewNodeSerialRepo(logger log.Logger, dbConn *gorm.DB) datarepos.NodeSerialD
 		log:    logHelper,
 		dbConn: dbConn,
 	}
+}
+
+func (s *nodeSerialRepo) NewTransaction(ctx context.Context, opts ...*sql.TxOptions) gormpkg.TransactionInterface {
+	return gormpkg.NewTransaction(ctx, s.dbConn, opts...)
 }
 
 // =============== 创建 ===============
@@ -76,9 +81,6 @@ getExistData:
 		Where(schemas.FieldInstanceId+" = ?", dataModel.InstanceId).
 		First(dataModel).Error
 	if err != nil {
-		if gormpkg.IsErrDuplicatedKey(err) {
-			err = nil
-		}
 		e := errorpkg.ErrorInternalServer("")
 		return nil, errorpkg.Wrap(e, err)
 	}
@@ -223,6 +225,28 @@ func (s *nodeSerialRepo) QueryOneById(ctx context.Context, id interface{}) (data
 // QueryOneByIdWithDBConn query one by id
 func (s *nodeSerialRepo) QueryOneByIdWithDBConn(ctx context.Context, dbConn *gorm.DB, id interface{}) (dataModel *po.NodeSerial, isNotFound bool, err error) {
 	return s.queryOneById(ctx, dbConn, id)
+}
+
+func (s *nodeSerialRepo) QueryOneByIdForUpdate(ctx context.Context, tx gormpkg.TransactionInterface, id uint64) (dataModel *po.NodeSerial, err error) {
+	dataModel = new(po.NodeSerial)
+	fc := func(ctx context.Context, dbConn *gorm.DB) error {
+		dbConn = dbConn.WithContext(ctx).
+			Table(s.NodeSerialSchema.TableName()).
+			Where(schemas.FieldId+" = ?", id)
+
+		return gormpkg.ForUpdate(dbConn).First(dataModel).Error
+	}
+	err = tx.Do(ctx, fc)
+	if err != nil {
+		//if gormpkg.IsErrRecordNotFound(err) {
+		//	err = nil
+		//	isNotFound = true
+		//} else {
+		e := errorpkg.ErrorInternalServer("")
+		err = errorpkg.Wrap(e, err)
+		return
+	}
+	return
 }
 
 // queryOneByConditions query one by conditions

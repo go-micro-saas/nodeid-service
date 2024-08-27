@@ -52,9 +52,9 @@ message GetServiceInfoRespData {
 }
 
 message GetNodeIdReq {
-  string instance_id           = 1 [(validate.rules).string = { max_len: 255 }];     // 实例ID
-  string instance_name         = 2 [(validate.rules).string = { max_len: 255 }];     // 实例名称
-  map<string, string> metadata = 3 [(validate.rules).map = { ignore_empty: true }];  // 实例元数据
+  string instance_id           = 1 [(validate.rules).string = { min_len: 1, max_len: 255 }];  // 实例ID
+  string instance_name         = 2 [(validate.rules).string = { max_len: 255 }];              // 实例名称
+  map<string, string> metadata = 3 [(validate.rules).map = { ignore_empty: true }];           // 实例元数据
 }
 
 message GetNodeIdResp {
@@ -77,9 +77,9 @@ message GetNodeIdRespData {
 }
 
 message RenewalNodeIdReq {
-  uint64 id          = 1 [(validate.rules).uint64 = { gt: 0 }];              // ID；用于验证指定ID节点
-  string instance_id = 2 [(validate.rules).string = { max_len: 255 }];       // 实例ID
-  int64 node_id      = 3 [(validate.rules).int64 = { ignore_empty: true }];  // 节点id
+  uint64 id          = 1 [(validate.rules).uint64 = { gt: 0 }];                     // ID；用于验证指定ID节点
+  string instance_id = 2 [(validate.rules).string = { min_len: 1, max_len: 255 }];  // 实例ID
+  int64 node_id      = 3 [(validate.rules).int64 = { gt: 0 }];                      // 节点id
 }
 
 message RenewalNodeIdResp {
@@ -97,9 +97,9 @@ message RenewalNodeIdRespData {
 }
 
 message ReleaseNodeIdReq {
-  uint64 id          = 1 [(validate.rules).uint64 = { gt: 0 }];              // ID；用于验证指定ID节点
-  string instance_id = 2 [(validate.rules).string = { max_len: 255 }];       // 实例ID
-  int64 node_id      = 3 [(validate.rules).int64 = { ignore_empty: true }];  // 节点id
+  uint64 id          = 1 [(validate.rules).uint64 = { gt: 0 }];                     // ID；用于验证指定ID节点
+  string instance_id = 2 [(validate.rules).string = { min_len: 1, max_len: 255 }];  // 实例ID
+  int64 node_id      = 3 [(validate.rules).int64 = { gt: 0 }];                      // 节点id
 }
 
 message ReleaseNodeIdResp {

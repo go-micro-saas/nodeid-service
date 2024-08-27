@@ -4,7 +4,9 @@ import (
 	resourcev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var (
@@ -34,5 +36,28 @@ func (s *nodeIDDto) ToPbGetServiceInfoRespData(dataModel *bo.NodeIDConfig) *reso
 		HeartbeatInterval: durationpb.New(dataModel.HeartbeatInterval),
 	}
 
+	return res
+}
+
+func (s *nodeIDDto) ToBoGetNodeIdParam(req *resourcev1.GetNodeIdReq) *bo.GetNodeIdParam {
+	res := &bo.GetNodeIdParam{
+		InstanceId:   req.GetInstanceId(),
+		InstanceName: req.GetInstanceName(),
+		Metadata:     req.GetMetadata(),
+	}
+
+	return res
+}
+
+func (s *nodeIDDto) ToPbGetNodeIdRespData(cfg *bo.NodeIDConfig, dataModel *po.NodeId) *resourcev1.GetNodeIdRespData {
+	res := &resourcev1.GetNodeIdRespData{
+		Id:                dataModel.Id,
+		InstanceId:        dataModel.InstanceId,
+		InstanceName:      dataModel.InstanceName,
+		NodeId:            dataModel.NodeId,
+		Status:            dataModel.NodeIdStatus,
+		ExpiredAt:         timestamppb.New(dataModel.ExpiredAt),
+		HeartbeatInterval: durationpb.New(cfg.HeartbeatInterval),
+	}
 	return res
 }

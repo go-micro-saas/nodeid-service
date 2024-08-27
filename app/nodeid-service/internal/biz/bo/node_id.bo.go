@@ -1,6 +1,8 @@
 package bo
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	DefaultMinNodeID         = 1
@@ -14,6 +16,11 @@ type NodeIDConfig struct {
 	MaxNodeID         int64
 	IdleDuration      time.Duration
 	HeartbeatInterval time.Duration
+}
+
+func (s *NodeIDConfig) Clone() *NodeIDConfig {
+	res := *s
+	return &res
 }
 
 // Initialization 初始化
@@ -36,4 +43,10 @@ func (s *NodeIDConfig) Initialization() {
 	if s.HeartbeatInterval < s.IdleDuration {
 		s.HeartbeatInterval = s.IdleDuration
 	}
+}
+
+type GetNodeIdParam struct {
+	InstanceId   string            // 实例ID
+	InstanceName string            // 实例名称
+	Metadata     map[string]string // 实例元数据
 }

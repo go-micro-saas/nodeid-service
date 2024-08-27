@@ -812,10 +812,10 @@ func (m *GetNodeIdReq) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetInstanceId()) > 255 {
+	if l := utf8.RuneCountInString(m.GetInstanceId()); l < 1 || l > 255 {
 		err := GetNodeIdReqValidationError{
 			field:  "InstanceId",
-			reason: "value length must be at most 255 runes",
+			reason: "value length must be between 1 and 255 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -1255,10 +1255,10 @@ func (m *RenewalNodeIdReq) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetInstanceId()) > 255 {
+	if l := utf8.RuneCountInString(m.GetInstanceId()); l < 1 || l > 255 {
 		err := RenewalNodeIdReqValidationError{
 			field:  "InstanceId",
-			reason: "value length must be at most 255 runes",
+			reason: "value length must be between 1 and 255 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -1266,8 +1266,15 @@ func (m *RenewalNodeIdReq) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetNodeId() != 0 {
-
+	if m.GetNodeId() <= 0 {
+		err := RenewalNodeIdReqValidationError{
+			field:  "NodeId",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
@@ -1653,10 +1660,10 @@ func (m *ReleaseNodeIdReq) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetInstanceId()) > 255 {
+	if l := utf8.RuneCountInString(m.GetInstanceId()); l < 1 || l > 255 {
 		err := ReleaseNodeIdReqValidationError{
 			field:  "InstanceId",
-			reason: "value length must be at most 255 runes",
+			reason: "value length must be between 1 and 255 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -1664,8 +1671,15 @@ func (m *ReleaseNodeIdReq) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetNodeId() != 0 {
-
+	if m.GetNodeId() <= 0 {
+		err := ReleaseNodeIdReqValidationError{
+			field:  "NodeId",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {

@@ -5,6 +5,7 @@ package daos
 import (
 	"bytes"
 	context "context"
+	"database/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
@@ -29,6 +30,10 @@ func NewNodeIdRepo(logger log.Logger, dbConn *gorm.DB) datarepos.NodeIdDataRepo 
 		log:    logHelper,
 		dbConn: dbConn,
 	}
+}
+
+func (s *nodeIdRepo) NewTransaction(ctx context.Context, opts ...*sql.TxOptions) gormpkg.TransactionInterface {
+	return gormpkg.NewTransaction(ctx, s.dbConn, opts...)
 }
 
 // =============== 创建 ===============

@@ -33,7 +33,7 @@ const (
 
 // NodeSerial ENGINE InnoDB CHARSET utf8mb4 COMMENT '节点系列号'
 type NodeSerial struct {
-	Id            int64     `gorm:"column:id;primaryKey;type:int;autoIncrement;not null;default:;comment:ID" json:"id"`
+	Id            uint64    `gorm:"column:id;primaryKey;type:uint;autoIncrement;not null;default:;comment:ID" json:"id"`
 	CreatedTime   time.Time `gorm:"column:created_time;type:time;not null;comment:创建时间" json:"created_time"`
 	UpdatedTime   time.Time `gorm:"column:updated_time;type:time;not null;comment:更新时间" json:"updated_time"`
 	InstanceId    string    `gorm:"column:instance_id;unique;type:string;size:255;not null;default:'';comment:实例ID" json:"instance_id"`

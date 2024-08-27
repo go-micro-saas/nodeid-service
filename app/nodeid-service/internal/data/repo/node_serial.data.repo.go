@@ -4,12 +4,14 @@ package datarepos
 
 import (
 	context "context"
+	"database/sql"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	gormpkg "github.com/ikaiguang/go-srv-kit/data/gorm"
 )
 
 // NodeSerialDataRepo repo
 type NodeSerialDataRepo interface {
+	NewTransaction(ctx context.Context, opts ...*sql.TxOptions) gormpkg.TransactionInterface
 	Create(ctx context.Context, dataModel *po.NodeSerial) error
 	ExistCreate(ctx context.Context, dataModel *po.NodeSerial) (anotherModel *po.NodeSerial, isNotFound bool, err error)
 	CreateInBatches(ctx context.Context, dataModels []*po.NodeSerial, batchSize int) error
@@ -18,6 +20,7 @@ type NodeSerialDataRepo interface {
 	ExistUpdate(ctx context.Context, dataModel *po.NodeSerial) (anotherModel *po.NodeSerial, isNotFound bool, err error)
 	FirstOrCreate(ctx context.Context, dataModel *po.NodeSerial) (*po.NodeSerial, error)
 	QueryOneById(ctx context.Context, id interface{}) (dataModel *po.NodeSerial, isNotFound bool, err error)
+	QueryOneByIdForUpdate(ctx context.Context, tx gormpkg.TransactionInterface, id uint64) (dataModel *po.NodeSerial, err error)
 	QueryOneByConditions(ctx context.Context, conditions map[string]interface{}) (dataModel *po.NodeSerial, isNotFound bool, err error)
 	QueryAllByConditions(ctx context.Context, conditions map[string]interface{}) (dataModels []*po.NodeSerial, err error)
 	List(ctx context.Context, conditions map[string]interface{}, paginatorArgs *gormpkg.PaginatorArgs) (dataModels []*po.NodeSerial, totalNumber int64, err error)

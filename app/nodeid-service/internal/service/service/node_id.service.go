@@ -42,7 +42,16 @@ func (s *nodeIDV1Service) GetServiceInfo(ctx context.Context, req *resourcev1.Ge
 
 // GetNodeId 获取节点id
 func (s *nodeIDV1Service) GetNodeId(ctx context.Context, req *resourcev1.GetNodeIdReq) (*resourcev1.GetNodeIdResp, error) {
-	return &resourcev1.GetNodeIdResp{}, nil
+	param := dto.NodeIDDto.ToBoGetNodeIdParam(req)
+	dataModel, err := s.nodeIDBiz.GetNodeId(ctx, param)
+	if err != nil {
+		return nil, err
+	}
+
+	cfg := s.nodeIDBiz.GetConfig()
+	return &resourcev1.GetNodeIdResp{
+		Data: dto.NodeIDDto.ToPbGetNodeIdRespData(cfg, dataModel),
+	}, nil
 }
 
 // RenewalNodeId 续订节点id

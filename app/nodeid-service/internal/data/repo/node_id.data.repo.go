@@ -4,12 +4,14 @@ package datarepos
 
 import (
 	context "context"
+	"database/sql"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	gormpkg "github.com/ikaiguang/go-srv-kit/data/gorm"
 )
 
 // NodeIdDataRepo repo
 type NodeIdDataRepo interface {
+	NewTransaction(ctx context.Context, opts ...*sql.TxOptions) gormpkg.TransactionInterface
 	Create(ctx context.Context, dataModel *po.NodeId) error
 	ExistCreate(ctx context.Context, dataModel *po.NodeId) (anotherModel *po.NodeId, isNotFound bool, err error)
 	CreateInBatches(ctx context.Context, dataModels []*po.NodeId, batchSize int) error
