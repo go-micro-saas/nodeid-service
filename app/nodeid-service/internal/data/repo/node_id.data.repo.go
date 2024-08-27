@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	gormpkg "github.com/ikaiguang/go-srv-kit/data/gorm"
+	"time"
 )
 
 // NodeIdDataRepo repo
@@ -19,6 +20,8 @@ type NodeIdDataRepo interface {
 	Update(ctx context.Context, dataModel *po.NodeId) error
 	ExistUpdate(ctx context.Context, dataModel *po.NodeId) (anotherModel *po.NodeId, isNotFound bool, err error)
 	QueryOneById(ctx context.Context, id interface{}) (dataModel *po.NodeId, isNotFound bool, err error)
+	QueryOneIdleNodeIdByInstanceId(ctx context.Context, instanceID string) (dataModel *po.NodeId, isNotFound bool, err error)
+	QueryOneExpiredNodeIdByInstanceId(ctx context.Context, instanceID string, expiredTime time.Time) (dataModel *po.NodeId, isNotFound bool, err error)
 	QueryOneByConditions(ctx context.Context, conditions map[string]interface{}) (dataModel *po.NodeId, isNotFound bool, err error)
 	QueryAllByConditions(ctx context.Context, conditions map[string]interface{}) (dataModels []*po.NodeId, err error)
 	List(ctx context.Context, conditions map[string]interface{}, paginatorArgs *gormpkg.PaginatorArgs) (dataModels []*po.NodeId, totalNumber int64, err error)

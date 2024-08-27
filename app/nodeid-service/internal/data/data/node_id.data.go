@@ -7,6 +7,7 @@ import (
 	context "context"
 	"database/sql"
 	"github.com/go-kratos/kratos/v2/log"
+	enumv1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/enums"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
 	schemas "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/schema/node_id"
@@ -14,6 +15,7 @@ import (
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	gorm "gorm.io/gorm"
 	"strings"
+	"time"
 )
 
 // nodeIdRepo repo
@@ -198,6 +200,48 @@ func (s *nodeIdRepo) QueryOneById(ctx context.Context, id interface{}) (dataMode
 // QueryOneByIdWithDBConn query one by id
 func (s *nodeIdRepo) QueryOneByIdWithDBConn(ctx context.Context, dbConn *gorm.DB, id interface{}) (dataModel *po.NodeId, isNotFound bool, err error) {
 	return s.queryOneById(ctx, dbConn, id)
+}
+
+func (s *nodeIdRepo) QueryOneIdleNodeIdByInstanceId(ctx context.Context, instanceID string) (dataModel *po.NodeId, isNotFound bool, err error) {
+	dataModel = new(po.NodeId)
+	err = s.dbConn.WithContext(ctx).
+		Table(s.NodeIdSchema.TableName()).
+		Where(schemas.FieldInstanceId+" = ?", instanceID).
+		Where(schemas.FieldNodeIdStatus+" = ?", enumv1.NodeIDStatusEnum_IDLE).
+		Order(schemas.FieldId).
+		First(dataModel).Error
+	if err != nil {
+		if gormpkg.IsErrRecordNotFound(err) {
+			err = nil
+			isNotFound = true
+		} else {
+			e := errorpkg.ErrorInternalServer("")
+			err = errorpkg.Wrap(e, err)
+		}
+		return
+	}
+	return
+}
+
+func (s *nodeIdRepo) QueryOneExpiredNodeIdByInstanceId(ctx context.Context, instanceID string, expiredTime time.Time) (dataModel *po.NodeId, isNotFound bool, err error) {
+	dataModel = new(po.NodeId)
+	err = s.dbConn.WithContext(ctx).
+		Table(s.NodeIdSchema.TableName()).
+		Where(schemas.FieldInstanceId+" = ?", instanceID).
+		Where(schemas.FieldExpiredAt+" <= ?", expiredTime).
+		Order(schemas.FieldExpiredAt).
+		First(dataModel).Error
+	if err != nil {
+		if gormpkg.IsErrRecordNotFound(err) {
+			err = nil
+			isNotFound = true
+		} else {
+			e := errorpkg.ErrorInternalServer("")
+			err = errorpkg.Wrap(e, err)
+		}
+		return
+	}
+	return
 }
 
 // queryOneByConditions query one by conditions

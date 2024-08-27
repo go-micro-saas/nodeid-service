@@ -40,19 +40,23 @@ func (s *nodeIDBiz) GetConfig() *bo.NodeIDConfig {
 }
 
 func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (dataModel *po.NodeId, err error) {
-	initSerialModel := &po.NodeSerial{
-		Id:            0,
-		CreatedTime:   time.Now(),
-		UpdatedTime:   time.Now(),
-		InstanceId:    param.InstanceId,
-		CurrentNodeId: 0,
-	}
+	var (
+		now             = time.Now()
+		initSerialModel = &po.NodeSerial{
+			Id:            0,
+			CreatedTime:   now,
+			UpdatedTime:   now,
+			InstanceId:    param.InstanceId,
+			CurrentNodeId: 0,
+		}
+	)
+
 	serialModel, err := s.nodeSerialData.FirstOrCreate(ctx, initSerialModel)
 	if err != nil {
 		return dataModel, err
 	}
 
-	// 锁行：排队获取
+	// 线程
 	tx := s.nodeSerialData.NewTransaction(ctx)
 	defer func() {
 		commitErr := tx.CommitAndErrRollback(ctx, err)
@@ -61,9 +65,28 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 			err = errorpkg.Wrap(e, commitErr)
 		}
 	}()
+	// 锁行：排队获取
 	serialModel, err = s.nodeSerialData.QueryOneByIdForUpdate(ctx, tx, serialModel.Id)
 	if err != nil {
 		return dataModel, err
 	}
+	// 获取一个已释放的闲置ID
+	dataModel, isNotFound, err := s.nodeIDData.QueryOneIdleNodeIdByInstanceId(ctx, serialModel.InstanceId)
+	if err != nil {
+		return dataModel, err
+	}
+	if !isNotFound && dataModel != nil {
+		return dataModel, err
+	}
+	// 获取一个已过期的ID
+	expiredTime := s.conf.PreviousExpiredTime(now)
+	dataModel, isNotFound, err = s.nodeIDData.QueryOneExpiredNodeIdByInstanceId(ctx, serialModel.InstanceId, expiredTime)
+	if err != nil {
+		return dataModel, err
+	}
+	if !isNotFound && dataModel != nil {
+		return dataModel, err
+	}
+	// 实例化一个ID
 	return dataModel, err
 }

@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS nid_node_id
     instance_metadata json            NOT NULL COMMENT '实例元数据',
     expired_at        datetime(3)     NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '失效时间',
     PRIMARY KEY (id),
-    UNIQUE INDEX (instance_id, node_id)
+    UNIQUE INDEX (instance_id, node_id),
+    INDEX (expired_at)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
     COMMENT = '节点';

@@ -45,7 +45,7 @@ type NodeId struct {
 	NodeId           int64          `gorm:"column:node_id;type:int;not null;default:0;comment:节点id" json:"node_id"`
 	NodeIdStatus     int32          `gorm:"column:node_id_status;type:int;not null;default:0;comment:节点状态" json:"node_id_status"`
 	InstanceMetadata datatypes.JSON `gorm:"column:instance_metadata;type:json;not null;comment:实例元数据" json:"instance_metadata"`
-	ExpiredAt        time.Time      `gorm:"column:expired_at;type:time;not null;comment:失效时间" json:"expired_at"`
+	ExpiredAt        time.Time      `gorm:"column:expired_at;index;type:time;not null;comment:失效时间" json:"expired_at"`
 }
 
 // TableName table name
@@ -121,7 +121,8 @@ CREATE TABLE if NOT EXISTS nid_node_id (
 	instance_metadata json NOT NULL comment '实例元数据',
 	expired_at datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP() comment '失效时间',
 	PRIMARY KEY (id),
-	UNIQUE KEY (instance_id, node_id)
+	UNIQUE KEY (instance_id, node_id),
+	KEY (expired_at)
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COMMENT '节点'

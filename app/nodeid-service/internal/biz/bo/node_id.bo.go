@@ -45,6 +45,14 @@ func (s *NodeIDConfig) Initialization() {
 	}
 }
 
+func (s *NodeIDConfig) NextExpireTime(t time.Time) time.Time {
+	return t.Add(s.IdleDuration)
+}
+
+func (s *NodeIDConfig) PreviousExpiredTime(t time.Time) time.Time {
+	return t.Add(-s.IdleDuration)
+}
+
 type GetNodeIdParam struct {
 	InstanceId   string            // 实例ID
 	InstanceName string            // 实例名称
