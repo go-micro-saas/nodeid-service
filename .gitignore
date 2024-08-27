@@ -103,10 +103,12 @@ dist
 
 # PROJECT
 /bin
-!runtime/README.md
 /runtime
+!runtime/README.md
 openapi.yaml
 *.swagger.json
+!/docs/api/*.swagger.json
+!/docs/api/openapi.yaml
 
 # test
 _output

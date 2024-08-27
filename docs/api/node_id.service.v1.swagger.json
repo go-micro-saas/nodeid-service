@@ -1,0 +1,481 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/nodeid-service/v1/services/node_id.service.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "SrvNodeIDV1"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/nodeid/get-one-node-id": {
+      "get": {
+        "summary": "获取节点id",
+        "operationId": "SrvNodeIDV1_GetNodeId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/resourcev1GetNodeIdResp"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "instance_id",
+            "description": "实例ID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "instance_name",
+            "description": "实例名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "metadata[string]",
+            "description": "实例元数据\n\nThis is a request variable of the map type. The query format is \"map_name[key]=value\", e.g. If the map name is Age, the key type is string, and the value type is integer, the query parameter is expressed as Age[\"bob\"]=18",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "SrvNodeIDV1"
+        ]
+      }
+    },
+    "/api/v1/nodeid/get-service-info": {
+      "get": {
+        "summary": "获取服务信息",
+        "operationId": "SrvNodeIDV1_GetServiceInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/resourcev1GetServiceInfoResp"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SrvNodeIDV1"
+        ]
+      }
+    },
+    "/api/v1/nodeid/ping/{message}": {
+      "get": {
+        "summary": "ping",
+        "operationId": "SrvNodeIDV1_Ping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/resourcev1PingResp"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "message",
+            "description": "message",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "SrvNodeIDV1"
+        ]
+      }
+    },
+    "/api/v1/nodeid/release-node-id": {
+      "put": {
+        "summary": "释放节点id",
+        "operationId": "SrvNodeIDV1_ReleaseNodeId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/resourcev1ReleaseNodeIdResp"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/resourcev1ReleaseNodeIdReq"
+            }
+          }
+        ],
+        "tags": [
+          "SrvNodeIDV1"
+        ]
+      }
+    },
+    "/api/v1/nodeid/renewal-node-id": {
+      "post": {
+        "summary": "续订节点id",
+        "operationId": "SrvNodeIDV1_RenewalNodeId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/resourcev1RenewalNodeIdResp"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/resourcev1RenewalNodeIdReq"
+            }
+          }
+        ],
+        "tags": [
+          "SrvNodeIDV1"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "enumv1NodeIDStatusEnumStatus": {
+      "type": "integer",
+      "format": "int32",
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "default": 0,
+      "title": "- 0: 未指定\n - 1: 闲置\n - 2: 使用中"
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "resourcev1GetNodeIdResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "$ref": "#/definitions/resourcev1GetNodeIdRespData"
+        }
+      }
+    },
+    "resourcev1GetNodeIdRespData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64",
+          "title": "ID"
+        },
+        "instance_id": {
+          "type": "string",
+          "title": "实例ID"
+        },
+        "instance_name": {
+          "type": "string",
+          "title": "实例名称"
+        },
+        "node_id": {
+          "type": "string",
+          "format": "int64",
+          "title": "节点id"
+        },
+        "status": {
+          "$ref": "#/definitions/enumv1NodeIDStatusEnumStatus",
+          "title": "节点状态"
+        },
+        "expired_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "失效时间；默认：now()+100s"
+        },
+        "heartbeat_interval": {
+          "type": "string",
+          "title": "心跳续订间隔时间；默认：30s"
+        }
+      }
+    },
+    "resourcev1GetServiceInfoResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "$ref": "#/definitions/resourcev1GetServiceInfoRespData"
+        }
+      }
+    },
+    "resourcev1GetServiceInfoRespData": {
+      "type": "object",
+      "properties": {
+        "min_node_id": {
+          "type": "string",
+          "format": "uint64",
+          "title": "最小节点；默认：1"
+        },
+        "max_node_id": {
+          "type": "string",
+          "format": "uint64",
+          "title": "最大节点；默认：1023"
+        },
+        "idle_duration": {
+          "type": "string",
+          "title": "空闲释放时间；默认：100s。"
+        },
+        "heartbeat_interval": {
+          "type": "string",
+          "title": "心跳续订延长的时间；默认：30s。范围：[1, idle_duration]；延长有效期：now()+idle_duration"
+        }
+      }
+    },
+    "resourcev1PingResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "$ref": "#/definitions/resourcev1PingRespData"
+        }
+      }
+    },
+    "resourcev1PingRespData": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "resourcev1ReleaseNodeIdReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64",
+          "title": "ID；用于验证指定ID节点"
+        },
+        "instance_id": {
+          "type": "string",
+          "title": "实例ID"
+        },
+        "node_id": {
+          "type": "string",
+          "format": "int64",
+          "title": "节点id"
+        }
+      }
+    },
+    "resourcev1ReleaseNodeIdResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "$ref": "#/definitions/resourcev1ReleaseNodeIdRespData"
+        }
+      }
+    },
+    "resourcev1ReleaseNodeIdRespData": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/enumv1NodeIDStatusEnumStatus",
+          "title": "节点状态"
+        },
+        "expired_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "失效时间；默认：now()+100s"
+        }
+      }
+    },
+    "resourcev1RenewalNodeIdReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64",
+          "title": "ID；用于验证指定ID节点"
+        },
+        "instance_id": {
+          "type": "string",
+          "title": "实例ID"
+        },
+        "node_id": {
+          "type": "string",
+          "format": "int64",
+          "title": "节点id"
+        }
+      }
+    },
+    "resourcev1RenewalNodeIdResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "$ref": "#/definitions/resourcev1RenewalNodeIdRespData"
+        }
+      }
+    },
+    "resourcev1RenewalNodeIdRespData": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/enumv1NodeIDStatusEnumStatus",
+          "title": "节点状态"
+        },
+        "expired_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "失效时间；默认：now()+100s"
+        }
+      }
+    }
+  }
+}
