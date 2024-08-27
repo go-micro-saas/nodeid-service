@@ -18,11 +18,6 @@ type NodeIDConfig struct {
 	HeartbeatInterval time.Duration
 }
 
-func (s *NodeIDConfig) Clone() *NodeIDConfig {
-	res := *s
-	return &res
-}
-
 // Initialization 初始化
 func (s *NodeIDConfig) Initialization() {
 	if s.MinNodeID < DefaultMinNodeID {
@@ -43,6 +38,15 @@ func (s *NodeIDConfig) Initialization() {
 	if s.HeartbeatInterval < s.IdleDuration {
 		s.HeartbeatInterval = s.IdleDuration
 	}
+}
+
+func (s *NodeIDConfig) Clone() *NodeIDConfig {
+	res := *s
+	return &res
+}
+
+func (s *NodeIDConfig) IsValidNodeID(nodeID int64) bool {
+	return nodeID >= s.MinNodeID && nodeID <= s.MaxNodeID
 }
 
 func (s *NodeIDConfig) NextExpireTime(t time.Time) time.Time {

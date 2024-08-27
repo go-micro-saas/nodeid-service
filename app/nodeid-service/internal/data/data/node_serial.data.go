@@ -164,6 +164,26 @@ func (s *nodeSerialRepo) UpdateWithDBConn(ctx context.Context, dbConn *gorm.DB, 
 	return s.update(ctx, dbConn, dataModel)
 }
 
+func (s *nodeSerialRepo) UpdateNodeIDWithTransaction(ctx context.Context, tx gormpkg.TransactionInterface, dataModel *po.NodeSerial) (err error) {
+	fc := func(ctx context.Context, tx *gorm.DB) error {
+		updates := map[string]interface{}{
+			schemas.FieldCurrentNodeId: dataModel.CurrentNodeId,
+			schemas.FieldUpdatedTime:   dataModel.UpdatedTime,
+		}
+		err = tx.WithContext(ctx).
+			Table(s.NodeSerialSchema.TableName()).
+			Where(schemas.FieldInstanceId+" = ?", dataModel.InstanceId).
+			UpdateColumns(updates).Error
+		return err
+	}
+	err = tx.Do(ctx, fc)
+	if err != nil {
+		e := errorpkg.ErrorInternalServer("")
+		return errorpkg.Wrap(e, err)
+	}
+	return
+}
+
 // existUpdate exist update
 func (s *nodeSerialRepo) existUpdate(ctx context.Context, dbConn *gorm.DB, dataModel *po.NodeSerial) (anotherModel *po.NodeSerial, isNotFound bool, err error) {
 	anotherModel = new(po.NodeSerial)
@@ -229,12 +249,12 @@ func (s *nodeSerialRepo) QueryOneByIdWithDBConn(ctx context.Context, dbConn *gor
 
 func (s *nodeSerialRepo) QueryOneByIdForUpdate(ctx context.Context, tx gormpkg.TransactionInterface, id uint64) (dataModel *po.NodeSerial, err error) {
 	dataModel = new(po.NodeSerial)
-	fc := func(ctx context.Context, dbConn *gorm.DB) error {
-		dbConn = dbConn.WithContext(ctx).
+	fc := func(ctx context.Context, tx *gorm.DB) error {
+		tx = tx.WithContext(ctx).
 			Table(s.NodeSerialSchema.TableName()).
 			Where(schemas.FieldId+" = ?", id)
 
-		return gormpkg.ForUpdate(dbConn).First(dataModel).Error
+		return gormpkg.ForUpdate(tx).First(dataModel).Error
 	}
 	err = tx.Do(ctx, fc)
 	if err != nil {

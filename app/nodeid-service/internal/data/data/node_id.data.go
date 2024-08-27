@@ -62,6 +62,22 @@ func (s *nodeIdRepo) CreateWithDBConn(ctx context.Context, dbConn *gorm.DB, data
 	return s.create(ctx, dbConn, dataModel)
 }
 
+func (s *nodeIdRepo) CreateWithTransaction(ctx context.Context, tx gormpkg.TransactionInterface, dataModel *po.NodeId) (err error) {
+	fc := func(ctx context.Context, tx *gorm.DB) error {
+		err = tx.WithContext(ctx).
+			Table(s.NodeIdSchema.TableName()).
+			Create(dataModel).Error
+
+		return err
+	}
+	err = tx.Do(ctx, fc)
+	if err != nil {
+		e := errorpkg.ErrorInternalServer("")
+		return errorpkg.Wrap(e, err)
+	}
+	return
+}
+
 // existCreate exist create
 func (s *nodeIdRepo) existCreate(ctx context.Context, dbConn *gorm.DB, dataModel *po.NodeId) (anotherModel *po.NodeId, isNotFound bool, err error) {
 	anotherModel = new(po.NodeId)

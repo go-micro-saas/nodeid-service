@@ -14,6 +14,7 @@ import (
 type NodeIdDataRepo interface {
 	NewTransaction(ctx context.Context, opts ...*sql.TxOptions) gormpkg.TransactionInterface
 	Create(ctx context.Context, dataModel *po.NodeId) error
+	CreateWithTransaction(ctx context.Context, tx gormpkg.TransactionInterface, dataModel *po.NodeId) (err error)
 	ExistCreate(ctx context.Context, dataModel *po.NodeId) (anotherModel *po.NodeId, isNotFound bool, err error)
 	CreateInBatches(ctx context.Context, dataModels []*po.NodeId, batchSize int) error
 	Insert(ctx context.Context, dataModels []*po.NodeId) error

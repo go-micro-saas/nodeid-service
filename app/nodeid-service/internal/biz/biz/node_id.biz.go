@@ -2,7 +2,10 @@ package biz
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/go-kratos/kratos/v2/log"
+	enumv1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/enums"
+	errorv1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/errors"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
 	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
@@ -65,7 +68,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 			err = errorpkg.Wrap(e, commitErr)
 		}
 	}()
-	// 锁行：排队获取
+	// 锁行：排队获取；覆盖变量：serialModel
 	serialModel, err = s.nodeSerialData.QueryOneByIdForUpdate(ctx, tx, serialModel.Id)
 	if err != nil {
 		return dataModel, err
@@ -88,5 +91,54 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 		return dataModel, err
 	}
 	// 实例化一个ID
+	dataModel, err = s.GenerateNextID(serialModel, param)
+	if err != nil {
+		return dataModel, err
+	}
+	// 创建
+	err = s.nodeIDData.CreateWithTransaction(ctx, tx, dataModel)
+	if err != nil {
+		return dataModel, err
+	}
+	// 更新当前ID
+	serialModel.CurrentNodeId = dataModel.NodeId
+	serialModel.UpdatedTime = now
+	err = s.nodeSerialData.UpdateNodeIDWithTransaction(ctx, tx, serialModel)
+	if err != nil {
+		return dataModel, err
+	}
 	return dataModel, err
+}
+
+func (s *nodeIDBiz) GenerateNextID(serialModel *po.NodeSerial, param *bo.GetNodeIdParam) (*po.NodeId, error) {
+	var nextID = serialModel.CurrentNodeId + 1
+	if !s.conf.IsValidNodeID(nextID) {
+		e := errorv1.DefaultErrorS102NoAvailableId()
+		return nil, errorpkg.WithStack(e)
+	}
+
+	var (
+		now = time.Now()
+	)
+	dataModel := &po.NodeId{
+		Id:               0,
+		CreatedTime:      now,
+		UpdatedTime:      now,
+		InstanceName:     param.InstanceName,
+		InstanceId:       param.InstanceName,
+		NodeId:           nextID,
+		NodeIdStatus:     enumv1.NodeIDStatusEnum_USING,
+		InstanceMetadata: nil,
+		ExpiredAt:        s.conf.NextExpireTime(now),
+	}
+	if param.Metadata == nil {
+		param.Metadata = make(map[string]string)
+	}
+	metadataBuf, err := json.Marshal(param.Metadata)
+	if err != nil {
+		e := errorpkg.ErrorInternalServer("")
+		return dataModel, errorpkg.Wrap(e, err)
+	}
+	dataModel.InstanceMetadata = metadataBuf
+	return dataModel, nil
 }

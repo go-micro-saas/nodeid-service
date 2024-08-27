@@ -17,6 +17,7 @@ type NodeSerialDataRepo interface {
 	CreateInBatches(ctx context.Context, dataModels []*po.NodeSerial, batchSize int) error
 	Insert(ctx context.Context, dataModels []*po.NodeSerial) error
 	Update(ctx context.Context, dataModel *po.NodeSerial) error
+	UpdateNodeIDWithTransaction(ctx context.Context, tx gormpkg.TransactionInterface, dataModel *po.NodeSerial) (err error)
 	ExistUpdate(ctx context.Context, dataModel *po.NodeSerial) (anotherModel *po.NodeSerial, isNotFound bool, err error)
 	FirstOrCreate(ctx context.Context, dataModel *po.NodeSerial) (*po.NodeSerial, error)
 	QueryOneById(ctx context.Context, id interface{}) (dataModel *po.NodeSerial, isNotFound bool, err error)
