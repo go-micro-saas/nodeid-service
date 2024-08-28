@@ -1,4 +1,4 @@
-package daos
+package data
 
 import (
 	setuputil "github.com/go-micro-saas/service-kit/setup"
@@ -10,8 +10,8 @@ import (
 
 var (
 	dbConnection      *gorm.DB
-	nodeIdHandler     *nodeIdRepo
-	nodeSerialHandler *nodeSerialRepo
+	nodeIdHandler     *nodeIdData
+	nodeSerialHandler *nodeSerialData
 )
 
 func TestMain(m *testing.M) {
@@ -28,9 +28,15 @@ func TestMain(m *testing.M) {
 		return
 	}
 
+	logger, err := launcher.GetLogger()
+	if err != nil {
+		stdlog.Fatalf("%+v\n", err)
+		return
+	}
+
 	dbConnection = db
-	nodeIdHandler = NewNodeIdRepo(db).(*nodeIdRepo)
-	nodeSerialHandler = NewNodeSerialRepo(db).(*nodeSerialRepo)
+	nodeIdHandler = NewNodeIdData(logger, db).(*nodeIdData)
+	nodeSerialHandler = NewNodeSerialData(logger, db).(*nodeSerialData)
 
 	os.Exit(m.Run())
 }
