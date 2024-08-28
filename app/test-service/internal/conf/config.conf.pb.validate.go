@@ -35,22 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on BusinessConfig with the rules defined in
+// Validate checks the field values on ServiceConfig with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *BusinessConfig) Validate() error {
+func (m *ServiceConfig) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on BusinessConfig with the rules defined
+// ValidateAll checks the field values on ServiceConfig with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in BusinessConfigMultiError,
-// or nil if none found.
-func (m *BusinessConfig) ValidateAll() error {
+// result is a list of violation errors wrapped in ServiceConfigMultiError, or
+// nil if none found.
+func (m *ServiceConfig) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *BusinessConfig) validate(all bool) error {
+func (m *ServiceConfig) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -61,7 +61,7 @@ func (m *BusinessConfig) validate(all bool) error {
 		switch v := interface{}(m.GetBusiness()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, BusinessConfigValidationError{
+				errors = append(errors, ServiceConfigValidationError{
 					field:  "Business",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -69,7 +69,7 @@ func (m *BusinessConfig) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, BusinessConfigValidationError{
+				errors = append(errors, ServiceConfigValidationError{
 					field:  "Business",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -78,7 +78,7 @@ func (m *BusinessConfig) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetBusiness()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return BusinessConfigValidationError{
+			return ServiceConfigValidationError{
 				field:  "Business",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -87,19 +87,19 @@ func (m *BusinessConfig) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return BusinessConfigMultiError(errors)
+		return ServiceConfigMultiError(errors)
 	}
 
 	return nil
 }
 
-// BusinessConfigMultiError is an error wrapping multiple validation errors
-// returned by BusinessConfig.ValidateAll() if the designated constraints
+// ServiceConfigMultiError is an error wrapping multiple validation errors
+// returned by ServiceConfig.ValidateAll() if the designated constraints
 // aren't met.
-type BusinessConfigMultiError []error
+type ServiceConfigMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m BusinessConfigMultiError) Error() string {
+func (m ServiceConfigMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -108,11 +108,11 @@ func (m BusinessConfigMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m BusinessConfigMultiError) AllErrors() []error { return m }
+func (m ServiceConfigMultiError) AllErrors() []error { return m }
 
-// BusinessConfigValidationError is the validation error returned by
-// BusinessConfig.Validate if the designated constraints aren't met.
-type BusinessConfigValidationError struct {
+// ServiceConfigValidationError is the validation error returned by
+// ServiceConfig.Validate if the designated constraints aren't met.
+type ServiceConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -120,22 +120,22 @@ type BusinessConfigValidationError struct {
 }
 
 // Field function returns field value.
-func (e BusinessConfigValidationError) Field() string { return e.field }
+func (e ServiceConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e BusinessConfigValidationError) Reason() string { return e.reason }
+func (e ServiceConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e BusinessConfigValidationError) Cause() error { return e.cause }
+func (e ServiceConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e BusinessConfigValidationError) Key() bool { return e.key }
+func (e ServiceConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e BusinessConfigValidationError) ErrorName() string { return "BusinessConfigValidationError" }
+func (e ServiceConfigValidationError) ErrorName() string { return "ServiceConfigValidationError" }
 
 // Error satisfies the builtin error interface
-func (e BusinessConfigValidationError) Error() string {
+func (e ServiceConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -147,14 +147,14 @@ func (e BusinessConfigValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sBusinessConfig.%s: %s%s",
+		"invalid %sServiceConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = BusinessConfigValidationError{}
+var _ error = ServiceConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -162,24 +162,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = BusinessConfigValidationError{}
+} = ServiceConfigValidationError{}
 
-// Validate checks the field values on BusinessConfig_Business with the rules
+// Validate checks the field values on ServiceConfig_Business with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *BusinessConfig_Business) Validate() error {
+func (m *ServiceConfig_Business) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on BusinessConfig_Business with the
-// rules defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on ServiceConfig_Business with the rules
+// defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// BusinessConfig_BusinessMultiError, or nil if none found.
-func (m *BusinessConfig_Business) ValidateAll() error {
+// ServiceConfig_BusinessMultiError, or nil if none found.
+func (m *ServiceConfig_Business) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *BusinessConfig_Business) validate(all bool) error {
+func (m *ServiceConfig_Business) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -191,19 +191,19 @@ func (m *BusinessConfig_Business) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return BusinessConfig_BusinessMultiError(errors)
+		return ServiceConfig_BusinessMultiError(errors)
 	}
 
 	return nil
 }
 
-// BusinessConfig_BusinessMultiError is an error wrapping multiple validation
-// errors returned by BusinessConfig_Business.ValidateAll() if the designated
+// ServiceConfig_BusinessMultiError is an error wrapping multiple validation
+// errors returned by ServiceConfig_Business.ValidateAll() if the designated
 // constraints aren't met.
-type BusinessConfig_BusinessMultiError []error
+type ServiceConfig_BusinessMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m BusinessConfig_BusinessMultiError) Error() string {
+func (m ServiceConfig_BusinessMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -212,11 +212,11 @@ func (m BusinessConfig_BusinessMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m BusinessConfig_BusinessMultiError) AllErrors() []error { return m }
+func (m ServiceConfig_BusinessMultiError) AllErrors() []error { return m }
 
-// BusinessConfig_BusinessValidationError is the validation error returned by
-// BusinessConfig_Business.Validate if the designated constraints aren't met.
-type BusinessConfig_BusinessValidationError struct {
+// ServiceConfig_BusinessValidationError is the validation error returned by
+// ServiceConfig_Business.Validate if the designated constraints aren't met.
+type ServiceConfig_BusinessValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -224,24 +224,24 @@ type BusinessConfig_BusinessValidationError struct {
 }
 
 // Field function returns field value.
-func (e BusinessConfig_BusinessValidationError) Field() string { return e.field }
+func (e ServiceConfig_BusinessValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e BusinessConfig_BusinessValidationError) Reason() string { return e.reason }
+func (e ServiceConfig_BusinessValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e BusinessConfig_BusinessValidationError) Cause() error { return e.cause }
+func (e ServiceConfig_BusinessValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e BusinessConfig_BusinessValidationError) Key() bool { return e.key }
+func (e ServiceConfig_BusinessValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e BusinessConfig_BusinessValidationError) ErrorName() string {
-	return "BusinessConfig_BusinessValidationError"
+func (e ServiceConfig_BusinessValidationError) ErrorName() string {
+	return "ServiceConfig_BusinessValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e BusinessConfig_BusinessValidationError) Error() string {
+func (e ServiceConfig_BusinessValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -253,14 +253,14 @@ func (e BusinessConfig_BusinessValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sBusinessConfig_Business.%s: %s%s",
+		"invalid %sServiceConfig_Business.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = BusinessConfig_BusinessValidationError{}
+var _ error = ServiceConfig_BusinessValidationError{}
 
 var _ interface {
 	Field() string
@@ -268,4 +268,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = BusinessConfig_BusinessValidationError{}
+} = ServiceConfig_BusinessValidationError{}

@@ -10,7 +10,7 @@ option java_outer_classname = "SaasApiNodeidConf";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
 
-message BusinessConfig {
+message ServiceConfig {
   message Business {
     int64 min_node_id                           = 1 [(validate.rules).int64 = { gte: 0 }];  // 最小节点默认值：1
     int64 max_node_id                           = 2 [(validate.rules).int64 = { gte: 0 }];  // 最大节点默认值：1023；

@@ -5,7 +5,6 @@ package errorv1
 import (
 	fmt "fmt"
 	errors "github.com/go-kratos/kratos/v2/errors"
-	strconv "strconv"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,9 +22,7 @@ func IsUnknown(err error) bool {
 
 // 未知错误
 func ErrorUnknown(format string, args ...interface{}) *errors.Error {
-	e := errors.New(500, ERROR_UNKNOWN.String(), fmt.Sprintf(format, args...))
-	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_UNKNOWN.Number()))}
-	return e
+	return errors.New(500, ERROR_UNKNOWN.String(), fmt.Sprintf(format, args...))
 }
 
 // 内容不能为空
@@ -39,9 +36,7 @@ func IsContentMissing(err error) bool {
 
 // 内容不能为空
 func ErrorContentMissing(format string, args ...interface{}) *errors.Error {
-	e := errors.New(400, ERROR_CONTENT_MISSING.String(), fmt.Sprintf(format, args...))
-	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_CONTENT_MISSING.Number()))}
-	return e
+	return errors.New(400, ERROR_CONTENT_MISSING.String(), fmt.Sprintf(format, args...))
 }
 
 // 内容不正确
@@ -55,7 +50,5 @@ func IsContentError(err error) bool {
 
 // 内容不正确
 func ErrorContentError(format string, args ...interface{}) *errors.Error {
-	e := errors.New(400, ERROR_CONTENT_ERROR.String(), fmt.Sprintf(format, args...))
-	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_CONTENT_ERROR.Number()))}
-	return e
+	return errors.New(400, ERROR_CONTENT_ERROR.String(), fmt.Sprintf(format, args...))
 }
