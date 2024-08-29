@@ -21,7 +21,7 @@ type NodeIDConfig struct {
 // Initialization 初始化
 func (s *NodeIDConfig) Initialization() {
 	if s.MinNodeID < DefaultMinNodeID {
-		s.MaxNodeID = DefaultMinNodeID
+		s.MinNodeID = DefaultMinNodeID
 	}
 	if s.MaxNodeID <= 0 {
 		s.MaxNodeID = DefaultMaxNodeID
@@ -29,14 +29,14 @@ func (s *NodeIDConfig) Initialization() {
 	if s.MaxNodeID < s.MinNodeID {
 		s.MaxNodeID = s.MinNodeID
 	}
-	if s.IdleDuration <= 0 {
+	if s.IdleDuration <= time.Second {
 		s.IdleDuration = DefaultIdleDuration
 	}
-	if s.HeartbeatInterval <= 0 {
+	if s.HeartbeatInterval <= time.Second {
 		s.HeartbeatInterval = DefaultHeartbeatDuration
 	}
 	if s.HeartbeatInterval < s.IdleDuration {
-		s.HeartbeatInterval = s.IdleDuration
+		s.HeartbeatInterval = s.IdleDuration - time.Second/2
 	}
 }
 
