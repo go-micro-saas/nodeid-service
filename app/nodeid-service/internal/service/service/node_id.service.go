@@ -68,5 +68,12 @@ func (s *nodeIDV1Service) RenewalNodeId(ctx context.Context, req *resourcev1.Ren
 
 // ReleaseNodeId 释放节点id
 func (s *nodeIDV1Service) ReleaseNodeId(ctx context.Context, req *resourcev1.ReleaseNodeIdReq) (*resourcev1.ReleaseNodeIdResp, error) {
-	return &resourcev1.ReleaseNodeIdResp{}, nil
+	param := dto.NodeIDDto.ToBoReleaseNodeIdParam(req)
+	dataModel, err := s.nodeIDBiz.ReleaseNodeId(ctx, param)
+	if err != nil {
+		return nil, err
+	}
+	return &resourcev1.ReleaseNodeIdResp{
+		Data: dto.NodeIDDto.ToPbReleaseNodeIdRespData(dataModel),
+	}, nil
 }

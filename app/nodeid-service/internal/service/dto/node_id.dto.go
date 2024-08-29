@@ -79,3 +79,21 @@ func (s *nodeIDDto) ToPbRenewalNodeIdRespData(dataModel *po.NodeId) *resourcev1.
 	}
 	return res
 }
+
+func (s *nodeIDDto) ToBoReleaseNodeIdParam(req *resourcev1.ReleaseNodeIdReq) *bo.ReleaseNodeIdParam {
+	res := &bo.ReleaseNodeIdParam{
+		ID:         req.GetId(),
+		InstanceId: req.GetInstanceId(),
+		NodeID:     req.GetNodeId(),
+	}
+
+	return res
+}
+
+func (s *nodeIDDto) ToPbReleaseNodeIdRespData(dataModel *po.NodeId) *resourcev1.ReleaseNodeIdRespData {
+	res := &resourcev1.ReleaseNodeIdRespData{
+		Status:    dataModel.NodeIdStatus,
+		ExpiredAt: timestamppb.New(dataModel.ExpiredAt),
+	}
+	return res
+}
