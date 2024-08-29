@@ -4,14 +4,12 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
 	setuputil "github.com/go-micro-saas/service-kit/setup"
-	"gorm.io/gorm"
 	stdlog "log"
 	"os"
 	"testing"
 )
 
 var (
-	dbConnection     *gorm.DB
 	nodeIDBizHandler *nodeIDBiz
 )
 
@@ -22,6 +20,7 @@ func mockConfig() *bo.NodeIDConfig {
 		IdleDuration:      0,
 		HeartbeatInterval: 0,
 	}
+	res.Initialization()
 	return res
 }
 
@@ -45,7 +44,6 @@ func TestMain(m *testing.M) {
 		return
 	}
 
-	dbConnection = db
 	nodeIDData := data.NewNodeIdData(logger, db)
 	nodeSerialIDData := data.NewNodeSerialData(logger, db)
 

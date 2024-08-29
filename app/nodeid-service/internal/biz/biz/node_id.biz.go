@@ -64,8 +64,10 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 	defer func() {
 		commitErr := tx.CommitAndErrRollback(ctx, err)
 		if commitErr != nil {
-			e := errorpkg.ErrorInternalError("")
-			err = errorpkg.Wrap(e, commitErr)
+			s.log.WithContext(ctx).Errorw(
+				"mgs", "GetNodeId tx.CommitAndErrRollback failed!",
+				"err", commitErr,
+			)
 		}
 	}()
 	// 锁行：排队获取；覆盖变量：serialModel
