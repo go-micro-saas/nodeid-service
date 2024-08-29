@@ -5,6 +5,7 @@ package errorv1
 import (
 	fmt "fmt"
 	errors "github.com/go-kratos/kratos/v2/errors"
+	strconv "strconv"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,7 +23,9 @@ func IsUnknown(err error) bool {
 
 // 未知错误
 func ErrorUnknown(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, ERROR_UNKNOWN.String(), fmt.Sprintf(format, args...))
+	e := errors.New(500, ERROR_UNKNOWN.String(), fmt.Sprintf(format, args...))
+	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_UNKNOWN.Number()))}
+	return e
 }
 
 // 没有可用的节点ID
@@ -36,7 +39,9 @@ func IsS102NoAvailableId(err error) bool {
 
 // 没有可用的节点ID
 func ErrorS102NoAvailableId(format string, args ...interface{}) *errors.Error {
-	return errors.New(400, ERROR_S102_NO_AVAILABLE_ID.String(), fmt.Sprintf(format, args...))
+	e := errors.New(400, ERROR_S102_NO_AVAILABLE_ID.String(), fmt.Sprintf(format, args...))
+	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_S102_NO_AVAILABLE_ID.Number()))}
+	return e
 }
 
 // 节点ID不存在
@@ -50,7 +55,9 @@ func IsS102RecordNotFount(err error) bool {
 
 // 节点ID不存在
 func ErrorS102RecordNotFount(format string, args ...interface{}) *errors.Error {
-	return errors.New(400, ERROR_S102_RECORD_NOT_FOUNT.String(), fmt.Sprintf(format, args...))
+	e := errors.New(400, ERROR_S102_RECORD_NOT_FOUNT.String(), fmt.Sprintf(format, args...))
+	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_S102_RECORD_NOT_FOUNT.Number()))}
+	return e
 }
 
 // 节点ID已被使用
@@ -64,7 +71,9 @@ func IsS102RecordAlreadyExist(err error) bool {
 
 // 节点ID已被使用
 func ErrorS102RecordAlreadyExist(format string, args ...interface{}) *errors.Error {
-	return errors.New(400, ERROR_S102_RECORD_ALREADY_EXIST.String(), fmt.Sprintf(format, args...))
+	e := errors.New(400, ERROR_S102_RECORD_ALREADY_EXIST.String(), fmt.Sprintf(format, args...))
+	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_S102_RECORD_ALREADY_EXIST.Number()))}
+	return e
 }
 
 // 节点ID已被使用
@@ -78,7 +87,9 @@ func IsS102HasBeenUsed(err error) bool {
 
 // 节点ID已被使用
 func ErrorS102HasBeenUsed(format string, args ...interface{}) *errors.Error {
-	return errors.New(400, ERROR_S102_HAS_BEEN_USED.String(), fmt.Sprintf(format, args...))
+	e := errors.New(400, ERROR_S102_HAS_BEEN_USED.String(), fmt.Sprintf(format, args...))
+	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_S102_HAS_BEEN_USED.Number()))}
+	return e
 }
 
 // 节点ID续订失败
@@ -92,5 +103,23 @@ func IsS102NodeIdRenewalFailed(err error) bool {
 
 // 节点ID续订失败
 func ErrorS102NodeIdRenewalFailed(format string, args ...interface{}) *errors.Error {
-	return errors.New(400, ERROR_S102_NODE_ID_RENEWAL_FAILED.String(), fmt.Sprintf(format, args...))
+	e := errors.New(400, ERROR_S102_NODE_ID_RENEWAL_FAILED.String(), fmt.Sprintf(format, args...))
+	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_S102_NODE_ID_RENEWAL_FAILED.Number()))}
+	return e
+}
+
+// 节点ID信息不正确
+func IsS102NodeIdIncorrect(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ERROR_S102_NODE_ID_INCORRECT.String() && e.Code == 400
+}
+
+// 节点ID信息不正确
+func ErrorS102NodeIdIncorrect(format string, args ...interface{}) *errors.Error {
+	e := errors.New(400, ERROR_S102_NODE_ID_INCORRECT.String(), fmt.Sprintf(format, args...))
+	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_S102_NODE_ID_INCORRECT.Number()))}
+	return e
 }

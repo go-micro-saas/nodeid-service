@@ -56,7 +56,14 @@ func (s *nodeIDV1Service) GetNodeId(ctx context.Context, req *resourcev1.GetNode
 
 // RenewalNodeId 续订节点id
 func (s *nodeIDV1Service) RenewalNodeId(ctx context.Context, req *resourcev1.RenewalNodeIdReq) (*resourcev1.RenewalNodeIdResp, error) {
-	return &resourcev1.RenewalNodeIdResp{}, nil
+	param := dto.NodeIDDto.ToBoRenewalNodeIdParam(req)
+	dataModel, err := s.nodeIDBiz.RenewalNodeId(ctx, param)
+	if err != nil {
+		return nil, err
+	}
+	return &resourcev1.RenewalNodeIdResp{
+		Data: dto.NodeIDDto.ToPbRenewalNodeIdRespData(dataModel),
+	}, nil
 }
 
 // ReleaseNodeId 释放节点id

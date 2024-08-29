@@ -20,7 +20,8 @@ type NodeIdDataRepo interface {
 	Insert(ctx context.Context, dataModels []*po.NodeId) error
 	Update(ctx context.Context, dataModel *po.NodeId) error
 	ExistUpdate(ctx context.Context, dataModel *po.NodeId) (anotherModel *po.NodeId, isNotFound bool, err error)
-	QueryOneById(ctx context.Context, id interface{}) (dataModel *po.NodeId, isNotFound bool, err error)
+	RenewalNodeID(ctx context.Context, dataModel *po.NodeId) (err error)
+	QueryOneById(ctx context.Context, id uint64) (dataModel *po.NodeId, isNotFound bool, err error)
 	QueryOneIdleNodeIdByInstanceId(ctx context.Context, instanceID string) (dataModel *po.NodeId, isNotFound bool, err error)
 	QueryOneExpiredNodeIdByInstanceId(ctx context.Context, instanceID string, expiredTime time.Time) (dataModel *po.NodeId, isNotFound bool, err error)
 	QueryOneByConditions(ctx context.Context, conditions map[string]interface{}) (dataModel *po.NodeId, isNotFound bool, err error)

@@ -186,10 +186,26 @@ func (s *nodeIdData) ExistUpdateWithDBConn(ctx context.Context, dbConn *gorm.DB,
 	return s.existUpdate(ctx, dbConn, dataModel)
 }
 
+func (s *nodeIdData) RenewalNodeID(ctx context.Context, dataModel *po.NodeId) (err error) {
+	updates := map[string]interface{}{
+		schemas.FieldUpdatedTime: dataModel.UpdatedTime,
+		schemas.FieldExpiredAt:   dataModel.ExpiredAt,
+	}
+	err = s.dbConn.WithContext(ctx).
+		Table(s.NodeIdSchema.TableName()).
+		Where(schemas.FieldId+" = ?", dataModel.Id).
+		UpdateColumns(updates).Error
+	if err != nil {
+		e := errorpkg.ErrorInternalServer("")
+		return errorpkg.Wrap(e, err)
+	}
+	return
+}
+
 // =============== query one : 查一个 ===============
 
 // queryOneById query one by id
-func (s *nodeIdData) queryOneById(ctx context.Context, dbConn *gorm.DB, id interface{}) (dataModel *po.NodeId, isNotFound bool, err error) {
+func (s *nodeIdData) queryOneById(ctx context.Context, dbConn *gorm.DB, id uint64) (dataModel *po.NodeId, isNotFound bool, err error) {
 	dataModel = new(po.NodeId)
 	err = dbConn.WithContext(ctx).
 		Table(s.NodeIdSchema.TableName()).
@@ -209,12 +225,12 @@ func (s *nodeIdData) queryOneById(ctx context.Context, dbConn *gorm.DB, id inter
 }
 
 // QueryOneById query one by id
-func (s *nodeIdData) QueryOneById(ctx context.Context, id interface{}) (dataModel *po.NodeId, isNotFound bool, err error) {
+func (s *nodeIdData) QueryOneById(ctx context.Context, id uint64) (dataModel *po.NodeId, isNotFound bool, err error) {
 	return s.queryOneById(ctx, s.dbConn, id)
 }
 
 // QueryOneByIdWithDBConn query one by id
-func (s *nodeIdData) QueryOneByIdWithDBConn(ctx context.Context, dbConn *gorm.DB, id interface{}) (dataModel *po.NodeId, isNotFound bool, err error) {
+func (s *nodeIdData) QueryOneByIdWithDBConn(ctx context.Context, dbConn *gorm.DB, id uint64) (dataModel *po.NodeId, isNotFound bool, err error) {
 	return s.queryOneById(ctx, dbConn, id)
 }
 

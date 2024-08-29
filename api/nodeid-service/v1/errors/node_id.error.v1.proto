@@ -19,4 +19,5 @@ enum ERROR {
   S102_RECORD_ALREADY_EXIST   = 102000003 [(errors.code) = 400];  // 节点ID已被使用
   S102_HAS_BEEN_USED          = 102000004 [(errors.code) = 400];  // 节点ID已被使用
   S102_NODE_ID_RENEWAL_FAILED = 102000005 [(errors.code) = 400];  // 节点ID续订失败
+  S102_NODE_ID_INCORRECT      = 102000006 [(errors.code) = 400];  // 节点ID信息不正确
 }

@@ -15,7 +15,7 @@ var (
 
 type nodeIDDto struct{}
 
-func (s *nodeIDDto) ToBoNodeIDConfig(cfg *conf.BusinessConfig) *bo.NodeIDConfig {
+func (s *nodeIDDto) ToBoNodeIDConfig(cfg *conf.ServiceConfig) *bo.NodeIDConfig {
 	res := &bo.NodeIDConfig{}
 	if cfg.GetBusiness() == nil {
 		return res
@@ -58,6 +58,24 @@ func (s *nodeIDDto) ToPbGetNodeIdRespData(cfg *bo.NodeIDConfig, dataModel *po.No
 		Status:            dataModel.NodeIdStatus,
 		ExpiredAt:         timestamppb.New(dataModel.ExpiredAt),
 		HeartbeatInterval: durationpb.New(cfg.HeartbeatInterval),
+	}
+	return res
+}
+
+func (s *nodeIDDto) ToBoRenewalNodeIdParam(req *resourcev1.RenewalNodeIdReq) *bo.RenewalNodeIdParam {
+	res := &bo.RenewalNodeIdParam{
+		ID:         req.GetId(),
+		InstanceId: req.GetInstanceId(),
+		NodeID:     req.GetNodeId(),
+	}
+
+	return res
+}
+
+func (s *nodeIDDto) ToPbRenewalNodeIdRespData(dataModel *po.NodeId) *resourcev1.RenewalNodeIdRespData {
+	res := &resourcev1.RenewalNodeIdRespData{
+		Status:    dataModel.NodeIdStatus,
+		ExpiredAt: timestamppb.New(dataModel.ExpiredAt),
 	}
 	return res
 }

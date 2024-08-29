@@ -144,3 +144,28 @@ func (s *nodeIDBiz) GenerateNextID(serialModel *po.NodeSerial, param *bo.GetNode
 	dataModel.InstanceMetadata = metadataBuf
 	return dataModel, nil
 }
+
+func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdParam) (*po.NodeId, error) {
+	dataModel, isNotFound, err := s.nodeIDData.QueryOneById(ctx, param.ID)
+	if err != nil {
+		return nil, err
+	}
+	if isNotFound {
+		e := errorv1.DefaultErrorS102RecordNotFount()
+		return nil, errorpkg.WithStack(e)
+	}
+	if dataModel.InstanceId != param.InstanceId || dataModel.NodeId != param.NodeID {
+		e := errorv1.DefaultErrorS102NodeIdIncorrect()
+		errorpkg.Kvs(e, "cause", "Incorrect instance ID or incorrect node ID")
+		return nil, errorpkg.WithStack(e)
+	}
+	// 更新
+	now := time.Now()
+	dataModel.UpdatedTime = now
+	dataModel.ExpiredAt = s.conf.NextExpireTime(now)
+	err = s.nodeIDData.RenewalNodeID(ctx, dataModel)
+	if err != nil {
+		return nil, err
+	}
+	return dataModel, nil
+}

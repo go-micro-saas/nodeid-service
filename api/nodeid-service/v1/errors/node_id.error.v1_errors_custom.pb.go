@@ -15,6 +15,7 @@ var ERROR_http_code = map[string]int{
 	"S102_RECORD_ALREADY_EXIST":   400,
 	"S102_HAS_BEEN_USED":          400,
 	"S102_NODE_ID_RENEWAL_FAILED": 400,
+	"S102_NODE_ID_INCORRECT":      400,
 }
 
 func (x ERROR) HTTPCode() int {
@@ -63,5 +64,12 @@ func DefaultErrorS102HasBeenUsed() *errors.Error {
 func DefaultErrorS102NodeIdRenewalFailed() *errors.Error {
 	e := errors.New(400, ERROR_S102_NODE_ID_RENEWAL_FAILED.String(), "节点ID续订失败")
 	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_S102_NODE_ID_RENEWAL_FAILED.Number()))}
+	return e
+}
+
+// 节点ID信息不正确
+func DefaultErrorS102NodeIdIncorrect() *errors.Error {
+	e := errors.New(400, ERROR_S102_NODE_ID_INCORRECT.String(), "节点ID信息不正确")
+	e.Metadata = map[string]string{"reason": strconv.Itoa(int(ERROR_S102_NODE_ID_INCORRECT.Number()))}
 	return e
 }

@@ -62,3 +62,9 @@ type GetNodeIdParam struct {
 	InstanceName string            // 实例名称
 	Metadata     map[string]string // 实例元数据
 }
+
+type RenewalNodeIdParam struct {
+	ID         uint64
+	InstanceId string
+	NodeID     int64
+}
