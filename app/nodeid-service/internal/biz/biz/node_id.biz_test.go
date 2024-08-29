@@ -96,3 +96,48 @@ func Test_nodeIDBiz_RenewalNodeId(t *testing.T) {
 		})
 	}
 }
+
+// go test -v -count=1 ./app/nodeid-service/internal/biz/biz -test.run=Test_nodeIDBiz_ReleaseNodeId
+func Test_nodeIDBiz_ReleaseNodeId(t *testing.T) {
+
+	type args struct {
+		ctx   context.Context
+		param *bo.ReleaseNodeIdParam
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *po.NodeId
+		wantErr bool
+	}{
+		{
+			name: "#RenewalNodeId",
+			args: args{
+				ctx: context.Background(),
+				param: &bo.ReleaseNodeIdParam{
+					ID:         2,
+					InstanceId: "testdata",
+					NodeID:     2,
+				},
+			},
+			want:    nil,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := nodeIDBizHandler.ReleaseNodeId(tt.args.ctx, tt.args.param)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ReleaseNodeId() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			//if !reflect.DeepEqual(got, tt.want) {
+			//	t.Errorf("RenewalNodeId() got = %v, want %v", got, tt.want)
+			//}
+			t.Logf("==> got: %#v\n", got)
+			t.Logf("==> got.NodeIdStatus: %v\n", got.NodeIdStatus)
+			t.Logf("==> got.ExpiredAt: %v\n", got.ExpiredAt)
+			t.Logf("==> got.UpdatedTime: %v\n", got.UpdatedTime)
+		})
+	}
+}

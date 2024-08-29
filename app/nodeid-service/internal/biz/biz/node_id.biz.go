@@ -154,18 +154,52 @@ func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdPa
 		e := errorv1.DefaultErrorS102RecordNotFount()
 		return nil, errorpkg.WithStack(e)
 	}
-	if dataModel.InstanceId != param.InstanceId || dataModel.NodeId != param.NodeID {
-		e := errorv1.DefaultErrorS102NodeIdIncorrect()
-		errorpkg.Kvs(e, "cause", "Incorrect instance ID or incorrect node ID")
-		return nil, errorpkg.WithStack(e)
+	err = s.checkIsWantNodeId(dataModel, param.InstanceId, param.NodeID)
+	if err != nil {
+		return nil, err
 	}
 	// 更新
 	now := time.Now()
 	dataModel.UpdatedTime = now
+	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_USING
 	dataModel.ExpiredAt = s.conf.NextExpireTime(now)
 	err = s.nodeIDData.RenewalNodeID(ctx, dataModel)
 	if err != nil {
 		return nil, err
 	}
 	return dataModel, nil
+}
+
+func (s *nodeIDBiz) ReleaseNodeId(ctx context.Context, param *bo.ReleaseNodeIdParam) (*po.NodeId, error) {
+	dataModel, isNotFound, err := s.nodeIDData.QueryOneById(ctx, param.ID)
+	if err != nil {
+		return nil, err
+	}
+	if isNotFound {
+		e := errorv1.DefaultErrorS102RecordNotFount()
+		return nil, errorpkg.WithStack(e)
+	}
+	err = s.checkIsWantNodeId(dataModel, param.InstanceId, param.NodeID)
+	if err != nil {
+		return nil, err
+	}
+	// 更新
+	now := time.Now()
+	dataModel.UpdatedTime = now
+	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_IDLE
+	dataModel.ExpiredAt = now
+	err = s.nodeIDData.ReleaseNodeID(ctx, dataModel)
+	if err != nil {
+		return nil, err
+	}
+	return dataModel, nil
+}
+
+func (s *nodeIDBiz) checkIsWantNodeId(dataModel *po.NodeId, instanceID string, nodeID int64) error {
+	if dataModel.InstanceId != instanceID || dataModel.NodeId != nodeID {
+		e := errorv1.DefaultErrorS102NodeIdIncorrect()
+		errorpkg.Kvs(e, "cause", "Incorrect instance ID or incorrect node ID")
+		return errorpkg.WithStack(e)
+	}
+	return nil
 }

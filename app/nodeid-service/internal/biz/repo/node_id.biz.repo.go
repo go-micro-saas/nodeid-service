@@ -11,4 +11,5 @@ type NodeIdBizRepo interface {
 	GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (*po.NodeId, error)
 	GenerateNextID(serialModel *po.NodeSerial, param *bo.GetNodeIdParam) (*po.NodeId, error)
 	RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdParam) (*po.NodeId, error)
+	ReleaseNodeId(ctx context.Context, param *bo.ReleaseNodeIdParam) (*po.NodeId, error)
 }

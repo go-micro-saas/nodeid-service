@@ -187,9 +187,35 @@ func (s *nodeIdData) ExistUpdateWithDBConn(ctx context.Context, dbConn *gorm.DB,
 }
 
 func (s *nodeIdData) RenewalNodeID(ctx context.Context, dataModel *po.NodeId) (err error) {
+	// 在外部设置即可
+	//if dataModel.NodeIdStatus != enumv1.NodeIDStatusEnum_IDLE {
+	//	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_IDLE
+	//}
 	updates := map[string]interface{}{
-		schemas.FieldUpdatedTime: dataModel.UpdatedTime,
-		schemas.FieldExpiredAt:   dataModel.ExpiredAt,
+		schemas.FieldUpdatedTime:  dataModel.UpdatedTime,
+		schemas.FieldNodeIdStatus: dataModel.NodeIdStatus,
+		schemas.FieldExpiredAt:    dataModel.ExpiredAt,
+	}
+	err = s.dbConn.WithContext(ctx).
+		Table(s.NodeIdSchema.TableName()).
+		Where(schemas.FieldId+" = ?", dataModel.Id).
+		UpdateColumns(updates).Error
+	if err != nil {
+		e := errorpkg.ErrorInternalServer("")
+		return errorpkg.Wrap(e, err)
+	}
+	return
+}
+
+func (s *nodeIdData) ReleaseNodeID(ctx context.Context, dataModel *po.NodeId) (err error) {
+	// 在外部设置即可
+	//if dataModel.NodeIdStatus != enumv1.NodeIDStatusEnum_IDLE {
+	//	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_IDLE
+	//}
+	updates := map[string]interface{}{
+		schemas.FieldUpdatedTime:  dataModel.UpdatedTime,
+		schemas.FieldNodeIdStatus: dataModel.NodeIdStatus,
+		schemas.FieldExpiredAt:    dataModel.ExpiredAt,
 	}
 	err = s.dbConn.WithContext(ctx).
 		Table(s.NodeIdSchema.TableName()).

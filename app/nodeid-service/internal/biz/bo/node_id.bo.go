@@ -68,3 +68,9 @@ type RenewalNodeIdParam struct {
 	InstanceId string
 	NodeID     int64
 }
+
+type ReleaseNodeIdParam struct {
+	ID         uint64
+	InstanceId string
+	NodeID     int64
+}
