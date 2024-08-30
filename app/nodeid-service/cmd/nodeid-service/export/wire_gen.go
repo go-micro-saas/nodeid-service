@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package exportservices
+package serviceexporter
 
 import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -20,26 +20,24 @@ import (
 
 // Injectors from wire.go:
 
-func initServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (*serverutil.Services, func(), error) {
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {
 	logger, err := setuputil.GetLogger(launcherManager)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	serviceConfig := conf.GetServiceConfig()
 	nodeIDConfig := dto.ToBoNodeIDConfig(serviceConfig)
 	db, err := setuputil.GetPostgresDBConn(launcherManager)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	nodeIdDataRepo := data.NewNodeIdData(logger, db)
 	nodeSerialDataRepo := data.NewNodeSerialData(logger, db)
 	nodeIdBizRepo := biz.NewNodeIDBiz(logger, nodeIDConfig, nodeIdDataRepo, nodeSerialDataRepo)
 	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo)
-	services, cleanup, err := service.RegisterServices(hs, gs, srvNodeIDV1Server)
+	serviceInterface, err := service.RegisterServices(hs, gs, srvNodeIDV1Server)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return services, func() {
-		cleanup()
-	}, nil
+	return serviceInterface, nil
 }

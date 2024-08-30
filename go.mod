@@ -5,8 +5,9 @@ go 1.21
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/v2 v2.8.0
-	github.com/go-micro-saas/service-kit v0.0.7
-	github.com/ikaiguang/go-srv-kit v0.3.9
+	github.com/go-micro-saas/service-kit v0.0.9
+	github.com/google/wire v0.6.0
+	github.com/ikaiguang/go-srv-kit v0.3.10
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240814211410-ddb44dafa142
 	google.golang.org/grpc v1.65.0
@@ -45,7 +46,6 @@ require (
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/google/wire v0.6.0 // indirect
 	github.com/gorilla/handlers v1.5.2 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.20.0 // indirect

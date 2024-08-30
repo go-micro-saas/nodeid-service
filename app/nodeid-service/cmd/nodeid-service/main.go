@@ -2,9 +2,8 @@ package main
 
 import (
 	"flag"
-	serviceexport "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/nodeid-service/export"
-	runservices "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/nodeid-service/run"
-	configutil "github.com/go-micro-saas/service-kit/config"
+	serviceexporter "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/nodeid-service/export"
+	serverutil "github.com/go-micro-saas/service-kit/server"
 	stdlog "log"
 )
 
@@ -25,20 +24,13 @@ func main() {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
-	opts := []configutil.Option{
-		serviceexport.LoadServiceConfig(),
-	}
-	app, cleanup, err := runservices.GetServerApp(flagconf, opts...)
+	configOpts := serviceexporter.ExportServiceConfig()
+	whitelist := serviceexporter.ExportAuthWhitelist()
+	services := []serverutil.ServiceExporter{serviceexporter.ExportServices}
+
+	app, cleanup, err := serverutil.AllInOneServer(flagconf, configOpts, services, whitelist)
 	if err != nil {
 		stdlog.Fatalf("==> runservices.GetServerApp failed: %+v\n", err)
 	}
-	defer func() {
-		if cleanup != nil {
-			cleanup()
-		}
-	}()
-	// start
-	if err := app.Run(); err != nil {
-		stdlog.Fatalf("==> app.Run failed: %+v\n", err)
-	}
+	serverutil.RunServer(app, cleanup)
 }
