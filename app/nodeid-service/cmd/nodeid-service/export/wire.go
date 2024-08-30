@@ -7,7 +7,9 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/service"
 	serverutil "github.com/go-micro-saas/service-kit/server"
 	setuputil "github.com/go-micro-saas/service-kit/setup"
@@ -20,6 +22,7 @@ func initServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs
 		setuputil.GetLogger,
 		setuputil.GetPostgresDBConn,
 		data.NewNodeIdData, data.NewNodeSerialData,
+		conf.GetServiceConfig, dto.ToBoNodeIDConfig,
 		biz.NewNodeIDBiz,
 		service.NewNodeIDV1Service,
 		// register services

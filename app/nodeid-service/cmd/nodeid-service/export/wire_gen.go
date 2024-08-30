@@ -9,11 +9,13 @@ package exportservices
 import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/service"
 	"github.com/go-micro-saas/service-kit/server"
 	"github.com/go-micro-saas/service-kit/setup"
-	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/biz/biz"
-	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/data/data"
-	"github.com/go-micro-saas/service-kit/testdata/ping-service/internal/service/service"
 )
 
 // Injectors from wire.go:
@@ -23,14 +25,17 @@ func initServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs
 	if err != nil {
 		return nil, nil, err
 	}
-	homeService := service.NewHomeService(logger)
-	websocketBizRepo := biz.NewWebsocketBiz(logger)
-	websocketService := service.NewWebsocketService(logger, websocketBizRepo)
-	pingDataRepo := data.NewPingData(logger)
-	pingBizRepo := biz.NewPingBiz(logger, pingDataRepo)
-	srvPingServer := service.NewPingService(logger, pingBizRepo)
-	srvTestdataServer := service.NewTestdataService(logger, websocketBizRepo)
-	services, cleanup, err := service.RegisterServices(hs, gs, homeService, websocketService, srvPingServer, srvTestdataServer)
+	serviceConfig := conf.GetServiceConfig()
+	nodeIDConfig := dto.ToBoNodeIDConfig(serviceConfig)
+	db, err := setuputil.GetPostgresDBConn(launcherManager)
+	if err != nil {
+		return nil, nil, err
+	}
+	nodeIdDataRepo := data.NewNodeIdData(logger, db)
+	nodeSerialDataRepo := data.NewNodeSerialData(logger, db)
+	nodeIdBizRepo := biz.NewNodeIDBiz(logger, nodeIDConfig, nodeIdDataRepo, nodeSerialDataRepo)
+	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo)
+	services, cleanup, err := service.RegisterServices(hs, gs, srvNodeIDV1Server)
 	if err != nil {
 		return nil, nil, err
 	}
