@@ -46,10 +46,13 @@ func main() {
 		panic(err)
 	}
 
+	if sourceDir == "" {
+		sourceDir = flagconf
+	}
 	if storeDir == "" {
 		storeDir = apputil.Path(bootstrap.GetApp())
 	}
-	err = storeutil.StoreInConsul(consulClient, flagconf, storeDir)
+	err = storeutil.StoreInConsul(consulClient, sourceDir, storeDir)
 	if err != nil {
 		panic(err)
 	}
