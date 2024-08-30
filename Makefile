@@ -95,6 +95,7 @@ include api/test-service/v1/makefile_protoc.mk
 
 # run
 include app/nodeid-service/cmd/makefile_run.mk
+include testdata/all-in-one/makefile_run.mk
 
 # ===== include =====
 # ===== include =====
