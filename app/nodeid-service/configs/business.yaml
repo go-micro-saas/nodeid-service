@@ -1,4 +1,4 @@
-nodeid_service_business:
+nodeid_service:
   # 节点范围；最小节点默认值：1；最大节点默认值：1023；
   min_node_id: 1
   max_node_id: 1023

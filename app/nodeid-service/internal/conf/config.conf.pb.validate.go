@@ -58,11 +58,11 @@ func (m *ServiceConfig) validate(all bool) error {
 	var errors []error
 
 	if all {
-		switch v := interface{}(m.GetBusiness()).(type) {
+		switch v := interface{}(m.GetNodeidService()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, ServiceConfigValidationError{
-					field:  "Business",
+					field:  "NodeidService",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -70,16 +70,16 @@ func (m *ServiceConfig) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, ServiceConfigValidationError{
-					field:  "Business",
+					field:  "NodeidService",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetBusiness()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetNodeidService()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ServiceConfigValidationError{
-				field:  "Business",
+				field:  "NodeidService",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -164,22 +164,22 @@ var _ interface {
 	ErrorName() string
 } = ServiceConfigValidationError{}
 
-// Validate checks the field values on ServiceConfig_Business with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on ServiceConfig_NodeidService with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ServiceConfig_Business) Validate() error {
+func (m *ServiceConfig_NodeidService) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ServiceConfig_Business with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on ServiceConfig_NodeidService with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ServiceConfig_BusinessMultiError, or nil if none found.
-func (m *ServiceConfig_Business) ValidateAll() error {
+// ServiceConfig_NodeidServiceMultiError, or nil if none found.
+func (m *ServiceConfig_NodeidService) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ServiceConfig_Business) validate(all bool) error {
+func (m *ServiceConfig_NodeidService) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -187,7 +187,7 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 	var errors []error
 
 	if m.GetMinNodeId() < 0 {
-		err := ServiceConfig_BusinessValidationError{
+		err := ServiceConfig_NodeidServiceValidationError{
 			field:  "MinNodeId",
 			reason: "value must be greater than or equal to 0",
 		}
@@ -198,7 +198,7 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 	}
 
 	if m.GetMaxNodeId() < 0 {
-		err := ServiceConfig_BusinessValidationError{
+		err := ServiceConfig_NodeidServiceValidationError{
 			field:  "MaxNodeId",
 			reason: "value must be greater than or equal to 0",
 		}
@@ -212,7 +212,7 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 		switch v := interface{}(m.GetIdleDuration()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ServiceConfig_BusinessValidationError{
+				errors = append(errors, ServiceConfig_NodeidServiceValidationError{
 					field:  "IdleDuration",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -220,7 +220,7 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, ServiceConfig_BusinessValidationError{
+				errors = append(errors, ServiceConfig_NodeidServiceValidationError{
 					field:  "IdleDuration",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -229,7 +229,7 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetIdleDuration()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ServiceConfig_BusinessValidationError{
+			return ServiceConfig_NodeidServiceValidationError{
 				field:  "IdleDuration",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -241,7 +241,7 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 		switch v := interface{}(m.GetHeartbeatInterval()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ServiceConfig_BusinessValidationError{
+				errors = append(errors, ServiceConfig_NodeidServiceValidationError{
 					field:  "HeartbeatInterval",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -249,7 +249,7 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, ServiceConfig_BusinessValidationError{
+				errors = append(errors, ServiceConfig_NodeidServiceValidationError{
 					field:  "HeartbeatInterval",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -258,7 +258,7 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetHeartbeatInterval()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ServiceConfig_BusinessValidationError{
+			return ServiceConfig_NodeidServiceValidationError{
 				field:  "HeartbeatInterval",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -267,19 +267,19 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return ServiceConfig_BusinessMultiError(errors)
+		return ServiceConfig_NodeidServiceMultiError(errors)
 	}
 
 	return nil
 }
 
-// ServiceConfig_BusinessMultiError is an error wrapping multiple validation
-// errors returned by ServiceConfig_Business.ValidateAll() if the designated
-// constraints aren't met.
-type ServiceConfig_BusinessMultiError []error
+// ServiceConfig_NodeidServiceMultiError is an error wrapping multiple
+// validation errors returned by ServiceConfig_NodeidService.ValidateAll() if
+// the designated constraints aren't met.
+type ServiceConfig_NodeidServiceMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ServiceConfig_BusinessMultiError) Error() string {
+func (m ServiceConfig_NodeidServiceMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -288,11 +288,12 @@ func (m ServiceConfig_BusinessMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ServiceConfig_BusinessMultiError) AllErrors() []error { return m }
+func (m ServiceConfig_NodeidServiceMultiError) AllErrors() []error { return m }
 
-// ServiceConfig_BusinessValidationError is the validation error returned by
-// ServiceConfig_Business.Validate if the designated constraints aren't met.
-type ServiceConfig_BusinessValidationError struct {
+// ServiceConfig_NodeidServiceValidationError is the validation error returned
+// by ServiceConfig_NodeidService.Validate if the designated constraints
+// aren't met.
+type ServiceConfig_NodeidServiceValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -300,24 +301,24 @@ type ServiceConfig_BusinessValidationError struct {
 }
 
 // Field function returns field value.
-func (e ServiceConfig_BusinessValidationError) Field() string { return e.field }
+func (e ServiceConfig_NodeidServiceValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ServiceConfig_BusinessValidationError) Reason() string { return e.reason }
+func (e ServiceConfig_NodeidServiceValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ServiceConfig_BusinessValidationError) Cause() error { return e.cause }
+func (e ServiceConfig_NodeidServiceValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ServiceConfig_BusinessValidationError) Key() bool { return e.key }
+func (e ServiceConfig_NodeidServiceValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ServiceConfig_BusinessValidationError) ErrorName() string {
-	return "ServiceConfig_BusinessValidationError"
+func (e ServiceConfig_NodeidServiceValidationError) ErrorName() string {
+	return "ServiceConfig_NodeidServiceValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ServiceConfig_BusinessValidationError) Error() string {
+func (e ServiceConfig_NodeidServiceValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -329,14 +330,14 @@ func (e ServiceConfig_BusinessValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sServiceConfig_Business.%s: %s%s",
+		"invalid %sServiceConfig_NodeidService.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ServiceConfig_BusinessValidationError{}
+var _ error = ServiceConfig_NodeidServiceValidationError{}
 
 var _ interface {
 	Field() string
@@ -344,4 +345,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ServiceConfig_BusinessValidationError{}
+} = ServiceConfig_NodeidServiceValidationError{}

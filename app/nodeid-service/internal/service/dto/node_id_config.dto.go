@@ -7,13 +7,13 @@ import (
 
 func ToBoNodeIDConfig(cfg *conf.ServiceConfig) *bo.NodeIDConfig {
 	res := &bo.NodeIDConfig{}
-	if cfg.GetBusiness() == nil {
+	if cfg.GetNodeidService() == nil {
 		return res
 	}
-	businessConfig := cfg.GetBusiness()
-	res.MinNodeID = businessConfig.GetMinNodeId()
-	res.MaxNodeID = businessConfig.GetMaxNodeId()
-	res.IdleDuration = businessConfig.GetIdleDuration().AsDuration()
-	res.HeartbeatInterval = businessConfig.GetHeartbeatInterval().AsDuration()
+	serviceConfig := cfg.GetNodeidService()
+	res.MinNodeID = serviceConfig.GetMinNodeId()
+	res.MaxNodeID = serviceConfig.GetMaxNodeId()
+	res.IdleDuration = serviceConfig.GetIdleDuration().AsDuration()
+	res.HeartbeatInterval = serviceConfig.GetHeartbeatInterval().AsDuration()
 	return res
 }
