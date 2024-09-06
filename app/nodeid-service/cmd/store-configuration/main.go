@@ -50,7 +50,7 @@ func main() {
 		sourceDir = flagconf
 	}
 	if storeDir == "" {
-		storeDir = apputil.Path(bootstrap.GetApp())
+		storeDir = apputil.Path(apputil.ToAppConfig(bootstrap.GetApp()))
 	}
 	err = storeutil.StoreInConsul(consulClient, sourceDir, storeDir)
 	if err != nil {
