@@ -186,7 +186,7 @@ func (s *nodeIdData) ExistUpdateWithDBConn(ctx context.Context, dbConn *gorm.DB,
 	return s.existUpdate(ctx, dbConn, dataModel)
 }
 
-func (s *nodeIdData) RenewalNodeID(ctx context.Context, dataModel *po.NodeId) (err error) {
+func (s *nodeIdData) renewalNodeIDWithDBConn(ctx context.Context, dbConn *gorm.DB, dataModel *po.NodeId) (err error) {
 	// 在外部设置即可
 	//if dataModel.NodeIdStatus != enumv1.NodeIDStatusEnum_IDLE {
 	//	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_IDLE
@@ -196,10 +196,27 @@ func (s *nodeIdData) RenewalNodeID(ctx context.Context, dataModel *po.NodeId) (e
 		schemas.FieldNodeIdStatus: dataModel.NodeIdStatus,
 		schemas.FieldExpiredAt:    dataModel.ExpiredAt,
 	}
-	err = s.dbConn.WithContext(ctx).
+	err = dbConn.WithContext(ctx).
 		Table(s.NodeIdSchema.TableName()).
 		Where(schemas.FieldId+" = ?", dataModel.Id).
 		UpdateColumns(updates).Error
+	if err != nil {
+		e := errorpkg.ErrorInternalServer("")
+		return errorpkg.Wrap(e, err)
+	}
+	return
+}
+
+func (s *nodeIdData) RenewalNodeID(ctx context.Context, dataModel *po.NodeId) (err error) {
+	return s.renewalNodeIDWithDBConn(ctx, s.dbConn, dataModel)
+}
+
+func (s *nodeIdData) RenewalNodeIDWithTransaction(ctx context.Context, tx gormpkg.TransactionInterface, dataModel *po.NodeId) (err error) {
+	// 在外部设置即可
+	fc := func(ctx context.Context, tx *gorm.DB) error {
+		return s.renewalNodeIDWithDBConn(ctx, tx, dataModel)
+	}
+	err = tx.Do(ctx, fc)
 	if err != nil {
 		e := errorpkg.ErrorInternalServer("")
 		return errorpkg.Wrap(e, err)

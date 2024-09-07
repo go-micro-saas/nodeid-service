@@ -90,11 +90,19 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 		return dataModel, err
 	}
 	if !isNotFound && dataModel != nil {
+		s.renewalNodeIdData(dataModel)
+		if err = s.nodeIDData.RenewalNodeIDWithTransaction(ctx, tx, dataModel); err != nil {
+			return dataModel, err
+		}
 		return dataModel, err
 	}
 	// 实例化一个ID
 	dataModel, err = s.GenerateNextID(serialModel, param)
 	if err != nil {
+		s.renewalNodeIdData(dataModel)
+		if err = s.nodeIDData.RenewalNodeIDWithTransaction(ctx, tx, dataModel); err != nil {
+			return dataModel, err
+		}
 		return dataModel, err
 	}
 	// 创建
@@ -159,15 +167,19 @@ func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdPa
 		return nil, err
 	}
 	// 更新
-	now := time.Now()
-	dataModel.UpdatedTime = now
-	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_USING
-	dataModel.ExpiredAt = s.conf.NextExpireTime(now)
+	s.renewalNodeIdData(dataModel)
 	err = s.nodeIDData.RenewalNodeID(ctx, dataModel)
 	if err != nil {
 		return nil, err
 	}
 	return dataModel, nil
+}
+
+func (s *nodeIDBiz) renewalNodeIdData(dataModel *po.NodeId) {
+	now := time.Now()
+	dataModel.UpdatedTime = now
+	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_USING
+	dataModel.ExpiredAt = s.conf.NextExpireTime(now)
 }
 
 func (s *nodeIDBiz) ReleaseNodeId(ctx context.Context, param *bo.ReleaseNodeIdParam) (*po.NodeId, error) {
@@ -184,15 +196,19 @@ func (s *nodeIDBiz) ReleaseNodeId(ctx context.Context, param *bo.ReleaseNodeIdPa
 		return nil, err
 	}
 	// 更新
-	now := time.Now()
-	dataModel.UpdatedTime = now
-	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_IDLE
-	dataModel.ExpiredAt = now
+	s.releaseNodeIdData(dataModel)
 	err = s.nodeIDData.ReleaseNodeID(ctx, dataModel)
 	if err != nil {
 		return nil, err
 	}
 	return dataModel, nil
+}
+
+func (s *nodeIDBiz) releaseNodeIdData(dataModel *po.NodeId) {
+	now := time.Now()
+	dataModel.UpdatedTime = now
+	dataModel.NodeIdStatus = enumv1.NodeIDStatusEnum_IDLE
+	dataModel.ExpiredAt = now
 }
 
 func (s *nodeIDBiz) checkIsWantNodeId(dataModel *po.NodeId, instanceID string, nodeID int64) error {

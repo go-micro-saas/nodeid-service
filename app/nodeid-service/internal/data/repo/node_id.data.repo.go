@@ -21,6 +21,7 @@ type NodeIdDataRepo interface {
 	Update(ctx context.Context, dataModel *po.NodeId) error
 	ExistUpdate(ctx context.Context, dataModel *po.NodeId) (anotherModel *po.NodeId, isNotFound bool, err error)
 	RenewalNodeID(ctx context.Context, dataModel *po.NodeId) (err error)
+	RenewalNodeIDWithTransaction(ctx context.Context, tx gormpkg.TransactionInterface, dataModel *po.NodeId) (err error)
 	ReleaseNodeID(ctx context.Context, dataModel *po.NodeId) (err error)
 	QueryOneById(ctx context.Context, id uint64) (dataModel *po.NodeId, isNotFound bool, err error)
 	QueryOneIdleNodeIdByInstanceId(ctx context.Context, instanceID string) (dataModel *po.NodeId, isNotFound bool, err error)
