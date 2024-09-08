@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/v2 v2.8.0
-	github.com/go-micro-saas/service-kit v0.0.21
+	github.com/go-micro-saas/service-kit v0.0.22
 	github.com/google/wire v0.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/ikaiguang/go-srv-kit v0.3.14
