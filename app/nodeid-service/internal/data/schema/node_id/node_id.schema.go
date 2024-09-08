@@ -46,6 +46,7 @@ type NodeId struct {
 	NodeIdStatus     int32          `gorm:"column:node_id_status;type:int;not null;default:0;comment:节点状态" json:"node_id_status"`
 	InstanceMetadata datatypes.JSON `gorm:"column:instance_metadata;type:json;not null;comment:实例元数据" json:"instance_metadata"`
 	ExpiredAt        time.Time      `gorm:"column:expired_at;index;type:time;not null;comment:失效时间" json:"expired_at"`
+	AccessToken      string         `gorm:"column:access_token;type:string;size:255;not null;default:'';comment:令牌；用于续订和释放ID" json:"access_token"`
 }
 
 // TableName table name
@@ -97,6 +98,35 @@ func (s *NodeId) CreateUniqueIndexForInstanceIDAndNodeID(migrator gorm.Migrator)
 			return nil
 		}
 		return migrator.DropIndex(dataModel, indexName)
+	}
+
+	return migrationpkg.NewAnyMigrator(
+		migrationVersion,
+		migrationIdentifier,
+		migrationUp,
+		migrationDown,
+	)
+}
+
+// AddColumnAccessToken 添加字段
+func (s *NodeId) AddColumnAccessToken(migrator gorm.Migrator) migrationpkg.MigrationInterface {
+	var (
+		dataModel           = &NodeId{}
+		columnName          = "access_token"
+		migrationVersion    = migrationpkg.Version
+		migrationIdentifier = migrationVersion + ":" + s.TableName() + ":add_column:" + columnName
+	)
+	migrationUp := func() error {
+		if migrator.HasColumn(dataModel, columnName) {
+			return nil
+		}
+		return migrator.AddColumn(dataModel, columnName)
+	}
+	migrationDown := func() error {
+		if !migrator.HasColumn(dataModel, columnName) {
+			return nil
+		}
+		return migrator.DropColumn(dataModel, columnName)
 	}
 
 	return migrationpkg.NewAnyMigrator(

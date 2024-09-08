@@ -20,7 +20,7 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 	panic(wire.Build(
 		// service
 		setuputil.GetLogger,
-		setuputil.GetPostgresDBConn,
+		setuputil.GetRecommendDBConn,
 		data.NewNodeIdData, data.NewNodeSerialData,
 		conf.GetServiceConfig, dto.ToBoNodeIDConfig,
 		biz.NewNodeIDBiz,

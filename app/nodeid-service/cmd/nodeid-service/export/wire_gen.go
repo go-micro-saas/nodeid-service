@@ -27,7 +27,7 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 	}
 	serviceConfig := conf.GetServiceConfig()
 	nodeIDConfig := dto.ToBoNodeIDConfig(serviceConfig)
-	db, err := setuputil.GetPostgresDBConn(launcherManager)
+	db, err := setuputil.GetRecommendDBConn(launcherManager)
 	if err != nil {
 		return nil, err
 	}

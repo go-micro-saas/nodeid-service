@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	dbmigrate "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/migrate"
+	dbutil "github.com/go-micro-saas/service-kit/database"
 	setuputil "github.com/go-micro-saas/service-kit/setup"
 	stdlog "log"
 )
@@ -32,5 +33,14 @@ func main() {
 		return
 	}
 
-	dbmigrate.Run(launcher, dbmigrate.WithCloseEngineHandler())
+	// 数据库链接
+	//dbConn, err := setuputil.GetMysqlDBConn(launcherManager)
+	//dbConn, err := setuputil.GetPostgresDBConn(launcher)
+	dbConn, err := setuputil.GetRecommendDBConn(launcher)
+	if err != nil {
+		stdlog.Fatalf("%+v\n", err)
+		return
+	}
+
+	dbmigrate.Run(dbConn, dbutil.WithClose())
 }

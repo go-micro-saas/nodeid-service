@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS nid_node_id
     node_id_status    mediumint       NOT NULL DEFAULT 0 COMMENT '节点状态',
     instance_metadata json            NOT NULL COMMENT '实例元数据',
     expired_at        datetime(3)     NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '失效时间',
+    access_token      varchar(255)    NOT NULL DEFAULT '' COMMENT '令牌；用于续订和释放ID',
     PRIMARY KEY (id),
     UNIQUE INDEX (instance_id, node_id),
     INDEX (expired_at)

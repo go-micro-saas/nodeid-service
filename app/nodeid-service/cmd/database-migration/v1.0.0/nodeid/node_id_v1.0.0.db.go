@@ -48,5 +48,11 @@ func (s *Migrate) Upgrade(ctx context.Context) error {
 		e := errorpkg.ErrorInternalError("")
 		return errorpkg.Wrap(e, err)
 	}
+	// 添加字段
+	mr = nodeidschemas.NodeIdSchema.AddColumnAccessToken(migrator)
+	if err := s.migrateRepo.RunMigratorUp(ctx, mr); err != nil {
+		e := errorpkg.ErrorInternalError("")
+		return errorpkg.Wrap(e, err)
+	}
 	return nil
 }
