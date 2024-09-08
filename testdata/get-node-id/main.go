@@ -7,7 +7,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	resourcev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
-	errorutil "github.com/go-micro-saas/service-kit/error"
+	clientutil "github.com/go-micro-saas/service-kit/cluster_service_api"
 	clientpkg "github.com/ikaiguang/go-srv-kit/kratos/client"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 )
@@ -77,7 +77,7 @@ func (s *getNodeID) GetServiceInfo(grpcClient servicev1.SrvNodeIDV1Client) (*res
 	if err != nil {
 		return nil, errorpkg.FormatError(err)
 	}
-	if e := errorutil.CheckResponseCode(getResp); e != nil {
+	if e := clientutil.CheckResponseCode(getResp); e != nil {
 		return nil, errorpkg.FormatError(e)
 	}
 	return getResp.Data, nil
@@ -93,7 +93,7 @@ func (s *getNodeID) GetNodeId(grpcClient servicev1.SrvNodeIDV1Client) (*resource
 	if err != nil {
 		return nil, errorpkg.FormatError(err)
 	}
-	if e := errorutil.CheckResponseCode(getResp); e != nil {
+	if e := clientutil.CheckResponseCode(getResp); e != nil {
 		return nil, errorpkg.FormatError(e)
 	}
 	return getResp.Data, nil
@@ -109,7 +109,7 @@ func (s *getNodeID) RenewalNodeId(grpcClient servicev1.SrvNodeIDV1Client, dataMo
 	if err != nil {
 		return nil, errorpkg.FormatError(err)
 	}
-	if e := errorutil.CheckResponseCode(getResp); e != nil {
+	if e := clientutil.CheckResponseCode(getResp); e != nil {
 		return nil, errorpkg.FormatError(e)
 	}
 	return getResp.Data, nil
@@ -125,7 +125,7 @@ func (s *getNodeID) ReleaseNodeId(grpcClient servicev1.SrvNodeIDV1Client, dataMo
 	if err != nil {
 		return nil, errorpkg.FormatError(err)
 	}
-	if e := errorutil.CheckResponseCode(getResp); e != nil {
+	if e := clientutil.CheckResponseCode(getResp); e != nil {
 		return nil, errorpkg.FormatError(e)
 	}
 	return getResp.Data, nil
