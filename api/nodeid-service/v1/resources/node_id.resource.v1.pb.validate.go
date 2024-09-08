@@ -1138,7 +1138,7 @@ func (m *GetNodeIdRespData) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for Token
+	// no validation rules for AccessToken
 
 	if len(errors) > 0 {
 		return GetNodeIdRespDataMultiError(errors)
@@ -1264,7 +1264,7 @@ func (m *RenewalNodeIdReq) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for Token
+	// no validation rules for AccessToken
 
 	if len(errors) > 0 {
 		return RenewalNodeIdReqMultiError(errors)
@@ -1660,7 +1660,7 @@ func (m *ReleaseNodeIdReq) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for Token
+	// no validation rules for AccessToken
 
 	if len(errors) > 0 {
 		return ReleaseNodeIdReqMultiError(errors)

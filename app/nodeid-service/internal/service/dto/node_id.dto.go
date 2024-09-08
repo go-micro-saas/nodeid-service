@@ -37,22 +37,21 @@ func (s *nodeIDDto) ToBoGetNodeIdParam(req *resourcev1.GetNodeIdReq) *bo.GetNode
 
 func (s *nodeIDDto) ToPbGetNodeIdRespData(cfg *bo.NodeIDConfig, dataModel *po.NodeId) *resourcev1.GetNodeIdRespData {
 	res := &resourcev1.GetNodeIdRespData{
-		Id:                dataModel.Id,
 		InstanceId:        dataModel.InstanceId,
-		InstanceName:      dataModel.InstanceName,
 		NodeId:            dataModel.NodeId,
 		Status:            dataModel.NodeIdStatus,
 		ExpiredAt:         timestamppb.New(dataModel.ExpiredAt),
 		HeartbeatInterval: durationpb.New(cfg.HeartbeatInterval),
+		AccessToken:       dataModel.AccessToken,
 	}
 	return res
 }
 
 func (s *nodeIDDto) ToBoRenewalNodeIdParam(req *resourcev1.RenewalNodeIdReq) *bo.RenewalNodeIdParam {
 	res := &bo.RenewalNodeIdParam{
-		ID:         req.GetId(),
-		InstanceId: req.GetInstanceId(),
-		NodeID:     req.GetNodeId(),
+		InstanceId:  req.GetInstanceId(),
+		NodeID:      req.GetNodeId(),
+		AccessToken: req.GetAccessToken(),
 	}
 
 	return res
@@ -68,9 +67,9 @@ func (s *nodeIDDto) ToPbRenewalNodeIdRespData(dataModel *po.NodeId) *resourcev1.
 
 func (s *nodeIDDto) ToBoReleaseNodeIdParam(req *resourcev1.ReleaseNodeIdReq) *bo.ReleaseNodeIdParam {
 	res := &bo.ReleaseNodeIdParam{
-		ID:         req.GetId(),
-		InstanceId: req.GetInstanceId(),
-		NodeID:     req.GetNodeId(),
+		InstanceId:  req.GetInstanceId(),
+		NodeID:      req.GetNodeId(),
+		AccessToken: req.GetAccessToken(),
 	}
 
 	return res

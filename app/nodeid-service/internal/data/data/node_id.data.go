@@ -195,6 +195,7 @@ func (s *nodeIdData) renewalNodeIDWithDBConn(ctx context.Context, dbConn *gorm.D
 		schemas.FieldUpdatedTime:  dataModel.UpdatedTime,
 		schemas.FieldNodeIdStatus: dataModel.NodeIdStatus,
 		schemas.FieldExpiredAt:    dataModel.ExpiredAt,
+		schemas.FieldAccessToken:  dataModel.AccessToken,
 	}
 	err = dbConn.WithContext(ctx).
 		Table(s.NodeIdSchema.TableName()).
@@ -275,6 +276,27 @@ func (s *nodeIdData) QueryOneById(ctx context.Context, id uint64) (dataModel *po
 // QueryOneByIdWithDBConn query one by id
 func (s *nodeIdData) QueryOneByIdWithDBConn(ctx context.Context, dbConn *gorm.DB, id uint64) (dataModel *po.NodeId, isNotFound bool, err error) {
 	return s.queryOneById(ctx, dbConn, id)
+}
+
+func (s *nodeIdData) QueryOneByInstanceNodeID(ctx context.Context, instanceID string, nodeID int64) (dataModel *po.NodeId, isNotFound bool, err error) {
+	dataModel = new(po.NodeId)
+	err = s.dbConn.WithContext(ctx).
+		Table(s.NodeIdSchema.TableName()).
+		Where(schemas.FieldInstanceId+" = ?", instanceID).
+		Where(schemas.FieldNodeId+" = ?", nodeID).
+		Order(schemas.FieldId).
+		First(dataModel).Error
+	if err != nil {
+		if gormpkg.IsErrRecordNotFound(err) {
+			err = nil
+			isNotFound = true
+		} else {
+			e := errorpkg.ErrorInternalServer("")
+			err = errorpkg.Wrap(e, err)
+		}
+		return
+	}
+	return
 }
 
 func (s *nodeIdData) QueryOneIdleNodeIdByInstanceId(ctx context.Context, instanceID string) (dataModel *po.NodeId, isNotFound bool, err error) {

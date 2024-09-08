@@ -15,8 +15,8 @@ import (
 var (
 	httpEndpoint = flag.String("http_endpoint", "localhost:10201", "HTTP endpoint")
 	grpcEndpoint = flag.String("grpc_endpoint", "localhost:10202", "gRPC endpoint")
-	instanceID   = flag.String("instance_id", "my_test_instance", "instance id")
-	instanceName = flag.String("instance_name", "my_test_instance", "instance name")
+	instanceID   = flag.String("instance_id", "my_instance_id", "instance id")
+	instanceName = flag.String("instance_name", "my_instance_name", "instance name")
 )
 
 func main() {
@@ -101,9 +101,9 @@ func (s *getNodeID) GetNodeId(grpcClient servicev1.SrvNodeIDV1Client) (*resource
 
 func (s *getNodeID) RenewalNodeId(grpcClient servicev1.SrvNodeIDV1Client, dataModel *resourcev1.GetNodeIdRespData) (*resourcev1.RenewalNodeIdRespData, error) {
 	getReq := &resourcev1.RenewalNodeIdReq{
-		Id:         dataModel.Id,
-		InstanceId: dataModel.InstanceId,
-		NodeId:     dataModel.NodeId,
+		InstanceId:  dataModel.InstanceId,
+		NodeId:      dataModel.NodeId,
+		AccessToken: dataModel.AccessToken,
 	}
 	getResp, err := grpcClient.RenewalNodeId(context.Background(), getReq)
 	if err != nil {
@@ -117,9 +117,9 @@ func (s *getNodeID) RenewalNodeId(grpcClient servicev1.SrvNodeIDV1Client, dataMo
 
 func (s *getNodeID) ReleaseNodeId(grpcClient servicev1.SrvNodeIDV1Client, dataModel *resourcev1.GetNodeIdRespData) (*resourcev1.ReleaseNodeIdRespData, error) {
 	getReq := &resourcev1.ReleaseNodeIdReq{
-		Id:         dataModel.Id,
-		InstanceId: dataModel.InstanceId,
-		NodeId:     dataModel.NodeId,
+		InstanceId:  dataModel.InstanceId,
+		NodeId:      dataModel.NodeId,
+		AccessToken: dataModel.AccessToken,
 	}
 	getResp, err := grpcClient.ReleaseNodeId(context.Background(), getReq)
 	if err != nil {

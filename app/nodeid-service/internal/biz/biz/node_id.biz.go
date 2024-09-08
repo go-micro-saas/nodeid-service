@@ -11,6 +11,7 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	datarepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
+	"github.com/rs/xid"
 	"time"
 )
 
@@ -91,6 +92,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 	}
 	if !isNotFound && dataModel != nil {
 		s.renewalNodeIdData(dataModel)
+		dataModel.AccessToken = s.genAccessToken()
 		if err = s.nodeIDData.RenewalNodeIDWithTransaction(ctx, tx, dataModel); err != nil {
 			return dataModel, err
 		}
@@ -100,6 +102,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 	dataModel, err = s.GenerateNextID(serialModel, param)
 	if err != nil {
 		s.renewalNodeIdData(dataModel)
+		dataModel.AccessToken = s.genAccessToken()
 		if err = s.nodeIDData.RenewalNodeIDWithTransaction(ctx, tx, dataModel); err != nil {
 			return dataModel, err
 		}
@@ -140,6 +143,7 @@ func (s *nodeIDBiz) GenerateNextID(serialModel *po.NodeSerial, param *bo.GetNode
 		NodeIdStatus:     enumv1.NodeIDStatusEnum_USING,
 		InstanceMetadata: nil,
 		ExpiredAt:        s.conf.NextExpireTime(now),
+		AccessToken:      s.genAccessToken(),
 	}
 	if param.Metadata == nil {
 		param.Metadata = make(map[string]string)
@@ -153,8 +157,12 @@ func (s *nodeIDBiz) GenerateNextID(serialModel *po.NodeSerial, param *bo.GetNode
 	return dataModel, nil
 }
 
+func (s *nodeIDBiz) genAccessToken() string {
+	return xid.New().String()
+}
+
 func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdParam) (*po.NodeId, error) {
-	dataModel, isNotFound, err := s.nodeIDData.QueryOneById(ctx, param.ID)
+	dataModel, isNotFound, err := s.nodeIDData.QueryOneByInstanceNodeID(ctx, param.InstanceId, param.NodeID)
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +170,7 @@ func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdPa
 		e := errorv1.DefaultErrorS102RecordNotFount()
 		return nil, errorpkg.WithStack(e)
 	}
-	err = s.checkIsWantNodeId(dataModel, param.InstanceId, param.NodeID)
+	err = s.checkCanUpdateNodeID(dataModel, param.AccessToken)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +191,7 @@ func (s *nodeIDBiz) renewalNodeIdData(dataModel *po.NodeId) {
 }
 
 func (s *nodeIDBiz) ReleaseNodeId(ctx context.Context, param *bo.ReleaseNodeIdParam) (*po.NodeId, error) {
-	dataModel, isNotFound, err := s.nodeIDData.QueryOneById(ctx, param.ID)
+	dataModel, isNotFound, err := s.nodeIDData.QueryOneByInstanceNodeID(ctx, param.InstanceId, param.NodeID)
 	if err != nil {
 		return nil, err
 	}
@@ -191,7 +199,7 @@ func (s *nodeIDBiz) ReleaseNodeId(ctx context.Context, param *bo.ReleaseNodeIdPa
 		e := errorv1.DefaultErrorS102RecordNotFount()
 		return nil, errorpkg.WithStack(e)
 	}
-	err = s.checkIsWantNodeId(dataModel, param.InstanceId, param.NodeID)
+	err = s.checkCanUpdateNodeID(dataModel, param.AccessToken)
 	if err != nil {
 		return nil, err
 	}
@@ -211,10 +219,10 @@ func (s *nodeIDBiz) releaseNodeIdData(dataModel *po.NodeId) {
 	dataModel.ExpiredAt = now
 }
 
-func (s *nodeIDBiz) checkIsWantNodeId(dataModel *po.NodeId, instanceID string, nodeID int64) error {
-	if dataModel.InstanceId != instanceID || dataModel.NodeId != nodeID {
-		e := errorv1.DefaultErrorS102NodeIdIncorrect()
-		errorpkg.Kvs(e, "cause", "Incorrect instance ID or incorrect node ID")
+func (s *nodeIDBiz) checkCanUpdateNodeID(dataModel *po.NodeId, accessToken string) error {
+	if dataModel.AccessToken != accessToken {
+		e := errorv1.DefaultErrorS102AccessTokenIncorrect()
+		errorpkg.Kvs(e, "cause", "access token incorrect")
 		return errorpkg.WithStack(e)
 	}
 	return nil

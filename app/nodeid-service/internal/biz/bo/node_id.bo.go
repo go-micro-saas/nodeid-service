@@ -64,13 +64,13 @@ type GetNodeIdParam struct {
 }
 
 type RenewalNodeIdParam struct {
-	ID         uint64
-	InstanceId string
-	NodeID     int64
+	InstanceId  string
+	NodeID      int64
+	AccessToken string
 }
 
 type ReleaseNodeIdParam struct {
-	ID         uint64
-	InstanceId string
-	NodeID     int64
+	InstanceId  string
+	NodeID      int64
+	AccessToken string
 }

@@ -17,4 +17,5 @@ type NodeId struct {
 	NodeIdStatus     enumv1.NodeIDStatusEnum_Status `gorm:"column:node_id_status" json:"node_id_status"`       // 节点状态
 	InstanceMetadata datatypes.JSON                 `gorm:"column:instance_metadata" json:"instance_metadata"` // 实例元数据
 	ExpiredAt        time.Time                      `gorm:"column:expired_at" json:"expired_at"`               // 失效时间
+	AccessToken      string                         `gorm:"column:access_token" json:"access_token"`           // 令牌；用于续订和释放ID
 }

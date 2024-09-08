@@ -33,6 +33,7 @@ const (
 	FieldNodeIdStatus     = "node_id_status"
 	FieldInstanceMetadata = "instance_metadata"
 	FieldExpiredAt        = "expired_at"
+	FieldAccessToken      = "access_token"
 )
 
 // NodeId ENGINE InnoDB CHARSET utf8mb4 COMMENT '节点'
