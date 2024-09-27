@@ -16,4 +16,5 @@ run-nodeid-service:
 .PHONY: run-service
 # run service :-->: run nodeid-service
 run-service:
-	@$(MAKE) run-nodeid-service
+	#@$(MAKE) run-nodeid-service
+	go run ./app/nodeid-service/cmd/nodeid-service/... -conf=./app/nodeid-service/configs
