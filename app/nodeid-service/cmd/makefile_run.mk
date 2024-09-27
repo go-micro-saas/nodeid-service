@@ -12,3 +12,8 @@ run-database-migration:
 # run service :-->: run nodeid-service
 run-nodeid-service:
 	go run ./app/nodeid-service/cmd/nodeid-service/... -conf=./app/nodeid-service/configs
+
+.PHONY: run-service
+# run service :-->: run nodeid-service
+run-service:
+	@$(MAKE) run-nodeid-service
