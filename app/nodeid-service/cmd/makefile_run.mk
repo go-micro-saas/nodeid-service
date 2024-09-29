@@ -18,3 +18,8 @@ run-nodeid-service:
 run-service:
 	#@$(MAKE) run-nodeid-service
 	go run ./app/nodeid-service/cmd/nodeid-service/... -conf=./app/nodeid-service/configs
+
+.PHONY: testing-service
+# testing service :-->: testing ping-service
+testing-service:
+	go run testdata/get-node-id/main.go

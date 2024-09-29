@@ -35,8 +35,8 @@ func (s *NodeIDConfig) Initialization() {
 	if s.HeartbeatInterval <= time.Second {
 		s.HeartbeatInterval = DefaultHeartbeatDuration
 	}
-	if s.HeartbeatInterval < s.IdleDuration {
-		s.HeartbeatInterval = s.IdleDuration - time.Second/2
+	if s.HeartbeatInterval >= s.IdleDuration {
+		s.HeartbeatInterval = s.IdleDuration / 3
 	}
 }
 

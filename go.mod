@@ -5,10 +5,11 @@ go 1.21
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/v2 v2.8.0
-	github.com/go-micro-saas/service-kit v0.0.22
+	github.com/go-micro-saas/service-kit v0.0.24
 	github.com/google/wire v0.6.0
 	github.com/gorilla/websocket v1.5.3
-	github.com/ikaiguang/go-srv-kit v0.3.14
+	github.com/ikaiguang/go-srv-kit v0.3.16
+	github.com/rs/xid v1.6.0
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240903143218-8af14fe29dc1
 	google.golang.org/grpc v1.66.0
@@ -81,7 +82,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rabbitmq/amqp091-go v1.10.0 // indirect
 	github.com/redis/go-redis/v9 v9.6.1 // indirect
-	github.com/rs/xid v1.6.0 // indirect
 	github.com/tidwall/gjson v1.14.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
