@@ -140,7 +140,7 @@ func (s *nodeIDBiz) GenerateNextID(serialModel *po.NodeSerial, param *bo.GetNode
 		CreatedTime:      now,
 		UpdatedTime:      now,
 		InstanceName:     param.InstanceName,
-		InstanceId:       param.InstanceName,
+		InstanceId:       param.InstanceId,
 		NodeId:           nextID,
 		NodeIdStatus:     enumv1.NodeIDStatusEnum_USING,
 		InstanceMetadata: nil,
