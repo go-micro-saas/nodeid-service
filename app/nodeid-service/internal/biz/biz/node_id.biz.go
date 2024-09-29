@@ -82,6 +82,12 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 		return dataModel, err
 	}
 	if !isNotFound && dataModel != nil {
+		// 续期
+		s.renewalNodeIdData(dataModel)
+		dataModel.AccessToken = s.genAccessToken()
+		if err = s.nodeIDData.RenewalNodeIDWithTransaction(ctx, tx, dataModel); err != nil {
+			return dataModel, err
+		}
 		return dataModel, err
 	}
 	// 获取一个已过期的ID
@@ -91,6 +97,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 		return dataModel, err
 	}
 	if !isNotFound && dataModel != nil {
+		// 续期
 		s.renewalNodeIdData(dataModel)
 		dataModel.AccessToken = s.genAccessToken()
 		if err = s.nodeIDData.RenewalNodeIDWithTransaction(ctx, tx, dataModel); err != nil {
@@ -101,11 +108,6 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 	// 实例化一个ID
 	dataModel, err = s.GenerateNextID(serialModel, param)
 	if err != nil {
-		s.renewalNodeIdData(dataModel)
-		dataModel.AccessToken = s.genAccessToken()
-		if err = s.nodeIDData.RenewalNodeIDWithTransaction(ctx, tx, dataModel); err != nil {
-			return dataModel, err
-		}
 		return dataModel, err
 	}
 	// 创建
@@ -170,7 +172,12 @@ func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdPa
 		e := errorv1.DefaultErrorS102RecordNotFount()
 		return nil, errorpkg.WithStack(e)
 	}
-	err = s.checkCanUpdateNodeID(dataModel, param.AccessToken)
+	if !dataModel.IsInUse() {
+		e := errorv1.DefaultErrorS102NodeIdStatusIncorrect()
+		errorpkg.WithKvs(e, "NodeIdStatus", dataModel.NodeIdStatus.String())
+		return nil, errorpkg.WithStack(e)
+	}
+	err = s.checkUpdateAccessToken(dataModel, param.AccessToken)
 	if err != nil {
 		return nil, err
 	}
@@ -199,7 +206,12 @@ func (s *nodeIDBiz) ReleaseNodeId(ctx context.Context, param *bo.ReleaseNodeIdPa
 		e := errorv1.DefaultErrorS102RecordNotFount()
 		return nil, errorpkg.WithStack(e)
 	}
-	err = s.checkCanUpdateNodeID(dataModel, param.AccessToken)
+	if !dataModel.IsInUse() {
+		e := errorv1.DefaultErrorS102NodeIdStatusIncorrect()
+		errorpkg.WithKvs(e, "NodeIdStatus", dataModel.NodeIdStatus.String())
+		return nil, errorpkg.WithStack(e)
+	}
+	err = s.checkUpdateAccessToken(dataModel, param.AccessToken)
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +231,7 @@ func (s *nodeIDBiz) releaseNodeIdData(dataModel *po.NodeId) {
 	dataModel.ExpiredAt = now
 }
 
-func (s *nodeIDBiz) checkCanUpdateNodeID(dataModel *po.NodeId, accessToken string) error {
+func (s *nodeIDBiz) checkUpdateAccessToken(dataModel *po.NodeId, accessToken string) error {
 	if dataModel.AccessToken != accessToken {
 		e := errorv1.DefaultErrorS102AccessTokenIncorrect()
 		errorpkg.Kvs(e, "cause", "access token incorrect")

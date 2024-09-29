@@ -19,3 +19,7 @@ type NodeId struct {
 	ExpiredAt        time.Time                      `gorm:"column:expired_at" json:"expired_at"`               // 失效时间
 	AccessToken      string                         `gorm:"column:access_token" json:"access_token"`           // 令牌；用于续订和释放ID
 }
+
+func (s *NodeId) IsInUse() bool {
+	return s.NodeIdStatus == enumv1.NodeIDStatusEnum_USING
+}
