@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  my-consul:
+    image: consul:1.15
+    container_name: my-consul
+    command: agent -server -bootstrap -ui -client=0.0.0.0
+    ports:
+      - "8500:8500"
+    networks:
+      - my-network
+    volumes:
+      - my_consul_data:/consul/data
+    environment:
+      TZ: Asia/Shanghai
+      # CONSUL_HTTP_ADDR: "0.0.0.0:8500"
+      # CONSUL_UI_USERNAME: your-username
+      # CONSUL_UI_PASSWORD: your-password
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/status/leader" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+networks:
+  my-network: # 已有的网络的名称
+    external: true  # 标记为外部网络，表示这是已存在的网络
+
+volumes:
+  my_consul_data:
+    driver: local
