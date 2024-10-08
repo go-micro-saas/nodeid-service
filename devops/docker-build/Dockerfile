@@ -38,7 +38,7 @@ ENV TZ=${TZ}
 
 WORKDIR ${WORK_DIR}
 
-COPY . .
+COPY .. .
 
 RUN go mod download && go mod tidy
 

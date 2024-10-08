@@ -1,0 +1,12 @@
+# build
+
+```shell
+docker build \
+    --build-arg BUILD_FROM_IMAGE=golang:1.22.8 \
+    --build-arg RUN_SERVICE_IMAGE=debian:stable-20240926-slim \
+    --build-arg APP_DIR=app \
+    --build-arg SERVICE_NAME=nodeid-service \
+    --build-arg VERSION=latest \
+    -t nodeid-service:latest \
+    -f ./devops/docker-build/Dockerfile .
+```

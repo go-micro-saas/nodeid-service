@@ -12,5 +12,5 @@ build:
 		--build-arg SERVICE_NAME=nodeid-service \
 		--build-arg VERSION=latest \
 		-t nodeid-service:latest \
-		-f ./devops/Dockerfile .
+		-f ./devops/docker-build/Dockerfile .
 
