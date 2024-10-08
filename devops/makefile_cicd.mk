@@ -6,7 +6,7 @@ build:
 	docker build \
 		--build-arg APP_DIR=app \
 		--build-arg SERVICE_NAME=nodeid-service \
-		--build-arg VERSION=v1.0.1 \
-		-t nodeid-service:v1.0.1 \
+		--build-arg VERSION=latest \
+		-t nodeid-service:latest \
 		-f ./devops/Dockerfile .
 
