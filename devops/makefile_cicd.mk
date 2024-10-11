@@ -18,4 +18,4 @@ build:
 .PHONY: deploy-on-docker
 # deploy-on-docker :-->: deploying on docker
 deploy-on-docker:
-	docker-compose -f ./devops/docker-deploy/docker-compose.yaml up
+	docker-compose -f ./devops/docker-deploy/docker-compose.yaml up -d
