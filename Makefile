@@ -90,8 +90,8 @@ generate:
 include api/makefile_protoc.mk
 include api/nodeid-service/makefile_protoc.mk
 include api/nodeid-service/v1/makefile_protoc.mk
-include api/test-service/makefile_protoc.mk
-include api/test-service/v1/makefile_protoc.mk
+include api/uuid-service/makefile_protoc.mk
+include api/uuid-service/v1/makefile_protoc.mk
 
 # run
 include app/nodeid-service/cmd/makefile_run.mk
