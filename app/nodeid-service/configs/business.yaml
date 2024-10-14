@@ -6,3 +6,9 @@ nodeid_service:
   idle_duration: 100s
   # 心跳续订延长的时间；默认：30s。范围：[1, idle_duration]；延长有效期：now()+idle_duration
   heartbeat_interval: 30s
+
+uuid_service:
+  instance_id: uuid-service
+  instance_name: uuid-service
+  metadata:
+    service: uuid-service
