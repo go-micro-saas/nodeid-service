@@ -1,13 +1,23 @@
 package dto
 
-import "google.golang.org/protobuf/types/known/emptypb"
-
-var (
-	TestdataDto testdata
+import (
+	"github.com/go-micro-saas/nodeid-service/app/test-service/internal/biz/bo"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-type testdata struct{}
+var (
+	TestingDto testing
+)
 
-func (s *testdata) ToBoXxx() interface{} {
-	return emptypb.Empty{}
+type testing struct{}
+
+func (s *testing) ToBoXxx() *bo.Testdata {
+	res := &bo.Testdata{}
+	return res
+}
+
+func (s *testing) ToPbXxx() *emptypb.Empty {
+	res := &emptypb.Empty{}
+
+	return res
 }

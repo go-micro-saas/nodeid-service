@@ -43,7 +43,7 @@ func RegisterSrvNodeIDV1HTTPServer(s *http.Server, srv SrvNodeIDV1HTTPServer) {
 	r := s.Route("/")
 	r.GET("/api/v1/nodeid/ping/{message}", _SrvNodeIDV1_Ping0_HTTP_Handler(srv))
 	r.GET("/api/v1/nodeid/get-service-info", _SrvNodeIDV1_GetServiceInfo0_HTTP_Handler(srv))
-	r.GET("/api/v1/nodeid/get-one-node-id", _SrvNodeIDV1_GetNodeId0_HTTP_Handler(srv))
+	r.GET("/api/v1/nodeid/get-node-id", _SrvNodeIDV1_GetNodeId0_HTTP_Handler(srv))
 	r.POST("/api/v1/nodeid/renewal-node-id", _SrvNodeIDV1_RenewalNodeId0_HTTP_Handler(srv))
 	r.PUT("/api/v1/nodeid/release-node-id", _SrvNodeIDV1_ReleaseNodeId0_HTTP_Handler(srv))
 }
@@ -170,7 +170,7 @@ func NewSrvNodeIDV1HTTPClient(client *http.Client) SrvNodeIDV1HTTPClient {
 
 func (c *SrvNodeIDV1HTTPClientImpl) GetNodeId(ctx context.Context, in *resources.GetNodeIdReq, opts ...http.CallOption) (*resources.GetNodeIdResp, error) {
 	var out resources.GetNodeIdResp
-	pattern := "/api/v1/nodeid/get-one-node-id"
+	pattern := "/api/v1/nodeid/get-node-id"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationSrvNodeIDV1GetNodeId))
 	opts = append(opts, http.PathTemplate(pattern))

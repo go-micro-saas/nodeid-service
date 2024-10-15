@@ -29,10 +29,10 @@ type SrvTestV1HTTPServer interface {
 
 func RegisterSrvTestV1HTTPServer(s *http.Server, srv SrvTestV1HTTPServer) {
 	r := s.Route("/")
-	r.GET("/api/v1/nodeid-test/ping/{message}", _SrvTestV1_Ping1_HTTP_Handler(srv))
+	r.GET("/api/v1/nodeid-test/ping/{message}", _SrvTestV1_Ping0_HTTP_Handler(srv))
 }
 
-func _SrvTestV1_Ping1_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
+func _SrvTestV1_Ping0_HTTP_Handler(srv SrvTestV1HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in resources.PingReq
 		if err := ctx.BindQuery(&in); err != nil {

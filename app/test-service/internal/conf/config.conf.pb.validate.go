@@ -58,11 +58,11 @@ func (m *ServiceConfig) validate(all bool) error {
 	var errors []error
 
 	if all {
-		switch v := interface{}(m.GetBusiness()).(type) {
+		switch v := interface{}(m.GetTestService()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, ServiceConfigValidationError{
-					field:  "Business",
+					field:  "TestService",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -70,16 +70,16 @@ func (m *ServiceConfig) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, ServiceConfigValidationError{
-					field:  "Business",
+					field:  "TestService",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetBusiness()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetTestService()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ServiceConfigValidationError{
-				field:  "Business",
+				field:  "TestService",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -164,22 +164,22 @@ var _ interface {
 	ErrorName() string
 } = ServiceConfigValidationError{}
 
-// Validate checks the field values on ServiceConfig_Business with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on ServiceConfig_TestingService with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ServiceConfig_Business) Validate() error {
+func (m *ServiceConfig_TestingService) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ServiceConfig_Business with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on ServiceConfig_TestingService with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ServiceConfig_BusinessMultiError, or nil if none found.
-func (m *ServiceConfig_Business) ValidateAll() error {
+// ServiceConfig_TestingServiceMultiError, or nil if none found.
+func (m *ServiceConfig_TestingService) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ServiceConfig_Business) validate(all bool) error {
+func (m *ServiceConfig_TestingService) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -191,19 +191,19 @@ func (m *ServiceConfig_Business) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return ServiceConfig_BusinessMultiError(errors)
+		return ServiceConfig_TestingServiceMultiError(errors)
 	}
 
 	return nil
 }
 
-// ServiceConfig_BusinessMultiError is an error wrapping multiple validation
-// errors returned by ServiceConfig_Business.ValidateAll() if the designated
-// constraints aren't met.
-type ServiceConfig_BusinessMultiError []error
+// ServiceConfig_TestingServiceMultiError is an error wrapping multiple
+// validation errors returned by ServiceConfig_TestingService.ValidateAll() if
+// the designated constraints aren't met.
+type ServiceConfig_TestingServiceMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ServiceConfig_BusinessMultiError) Error() string {
+func (m ServiceConfig_TestingServiceMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -212,11 +212,12 @@ func (m ServiceConfig_BusinessMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ServiceConfig_BusinessMultiError) AllErrors() []error { return m }
+func (m ServiceConfig_TestingServiceMultiError) AllErrors() []error { return m }
 
-// ServiceConfig_BusinessValidationError is the validation error returned by
-// ServiceConfig_Business.Validate if the designated constraints aren't met.
-type ServiceConfig_BusinessValidationError struct {
+// ServiceConfig_TestingServiceValidationError is the validation error returned
+// by ServiceConfig_TestingService.Validate if the designated constraints
+// aren't met.
+type ServiceConfig_TestingServiceValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -224,24 +225,24 @@ type ServiceConfig_BusinessValidationError struct {
 }
 
 // Field function returns field value.
-func (e ServiceConfig_BusinessValidationError) Field() string { return e.field }
+func (e ServiceConfig_TestingServiceValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ServiceConfig_BusinessValidationError) Reason() string { return e.reason }
+func (e ServiceConfig_TestingServiceValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ServiceConfig_BusinessValidationError) Cause() error { return e.cause }
+func (e ServiceConfig_TestingServiceValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ServiceConfig_BusinessValidationError) Key() bool { return e.key }
+func (e ServiceConfig_TestingServiceValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ServiceConfig_BusinessValidationError) ErrorName() string {
-	return "ServiceConfig_BusinessValidationError"
+func (e ServiceConfig_TestingServiceValidationError) ErrorName() string {
+	return "ServiceConfig_TestingServiceValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ServiceConfig_BusinessValidationError) Error() string {
+func (e ServiceConfig_TestingServiceValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -253,14 +254,14 @@ func (e ServiceConfig_BusinessValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sServiceConfig_Business.%s: %s%s",
+		"invalid %sServiceConfig_TestingService.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ServiceConfig_BusinessValidationError{}
+var _ error = ServiceConfig_TestingServiceValidationError{}
 
 var _ interface {
 	Field() string
@@ -268,4 +269,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ServiceConfig_BusinessValidationError{}
+} = ServiceConfig_TestingServiceValidationError{}

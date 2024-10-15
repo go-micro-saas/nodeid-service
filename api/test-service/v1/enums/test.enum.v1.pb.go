@@ -20,12 +20,10 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// TestInit enum
 type TestInitEnum_TestInit int32
 
 const (
-	// 未指定
-	TestInitEnum_UNSPECIFIED TestInitEnum_TestInit = 0
+	TestInitEnum_UNSPECIFIED TestInitEnum_TestInit = 0 // 未指定
 )
 
 // Enum value maps for TestInitEnum_TestInit.
