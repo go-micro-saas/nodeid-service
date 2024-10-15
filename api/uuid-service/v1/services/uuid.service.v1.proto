@@ -12,8 +12,8 @@ import "api/uuid-service/v1/resources/uuid.resource.v1.proto";
 
 // SrvUuidV1 service
 service SrvUuidV1 {
-  // 释放节点id
-  rpc ReleaseNodeId(saas.api.uuid.resourcev1.NextIDReq) returns (saas.api.uuid.resourcev1.NextIDResp) {
+  // 获取ID
+  rpc NextID(saas.api.uuid.resourcev1.NextIDReq) returns (saas.api.uuid.resourcev1.NextIDResp) {
     option (google.api.http) = {
       put: "/api/v1/uuid/next-id"
       body: "*"

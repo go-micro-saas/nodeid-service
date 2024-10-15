@@ -20,15 +20,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SrvUuidV1_ReleaseNodeId_FullMethodName = "/saas.api.uuid.servicev1.SrvUuidV1/ReleaseNodeId"
+	SrvUuidV1_NextID_FullMethodName = "/saas.api.uuid.servicev1.SrvUuidV1/NextID"
 )
 
 // SrvUuidV1Client is the client API for SrvUuidV1 service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SrvUuidV1Client interface {
-	// 释放节点id
-	ReleaseNodeId(ctx context.Context, in *resources.NextIDReq, opts ...grpc.CallOption) (*resources.NextIDResp, error)
+	// 获取ID
+	NextID(ctx context.Context, in *resources.NextIDReq, opts ...grpc.CallOption) (*resources.NextIDResp, error)
 }
 
 type srvUuidV1Client struct {
@@ -39,9 +39,9 @@ func NewSrvUuidV1Client(cc grpc.ClientConnInterface) SrvUuidV1Client {
 	return &srvUuidV1Client{cc}
 }
 
-func (c *srvUuidV1Client) ReleaseNodeId(ctx context.Context, in *resources.NextIDReq, opts ...grpc.CallOption) (*resources.NextIDResp, error) {
+func (c *srvUuidV1Client) NextID(ctx context.Context, in *resources.NextIDReq, opts ...grpc.CallOption) (*resources.NextIDResp, error) {
 	out := new(resources.NextIDResp)
-	err := c.cc.Invoke(ctx, SrvUuidV1_ReleaseNodeId_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, SrvUuidV1_NextID_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +52,8 @@ func (c *srvUuidV1Client) ReleaseNodeId(ctx context.Context, in *resources.NextI
 // All implementations must embed UnimplementedSrvUuidV1Server
 // for forward compatibility
 type SrvUuidV1Server interface {
-	// 释放节点id
-	ReleaseNodeId(context.Context, *resources.NextIDReq) (*resources.NextIDResp, error)
+	// 获取ID
+	NextID(context.Context, *resources.NextIDReq) (*resources.NextIDResp, error)
 	mustEmbedUnimplementedSrvUuidV1Server()
 }
 
@@ -61,8 +61,8 @@ type SrvUuidV1Server interface {
 type UnimplementedSrvUuidV1Server struct {
 }
 
-func (UnimplementedSrvUuidV1Server) ReleaseNodeId(context.Context, *resources.NextIDReq) (*resources.NextIDResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReleaseNodeId not implemented")
+func (UnimplementedSrvUuidV1Server) NextID(context.Context, *resources.NextIDReq) (*resources.NextIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NextID not implemented")
 }
 func (UnimplementedSrvUuidV1Server) mustEmbedUnimplementedSrvUuidV1Server() {}
 
@@ -77,20 +77,20 @@ func RegisterSrvUuidV1Server(s grpc.ServiceRegistrar, srv SrvUuidV1Server) {
 	s.RegisterService(&SrvUuidV1_ServiceDesc, srv)
 }
 
-func _SrvUuidV1_ReleaseNodeId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SrvUuidV1_NextID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(resources.NextIDReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SrvUuidV1Server).ReleaseNodeId(ctx, in)
+		return srv.(SrvUuidV1Server).NextID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SrvUuidV1_ReleaseNodeId_FullMethodName,
+		FullMethod: SrvUuidV1_NextID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SrvUuidV1Server).ReleaseNodeId(ctx, req.(*resources.NextIDReq))
+		return srv.(SrvUuidV1Server).NextID(ctx, req.(*resources.NextIDReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -103,8 +103,8 @@ var SrvUuidV1_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SrvUuidV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ReleaseNodeId",
-			Handler:    _SrvUuidV1_ReleaseNodeId_Handler,
+			MethodName: "NextID",
+			Handler:    _SrvUuidV1_NextID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

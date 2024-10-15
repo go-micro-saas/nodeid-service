@@ -20,19 +20,19 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationSrvUuidV1ReleaseNodeId = "/saas.api.uuid.servicev1.SrvUuidV1/ReleaseNodeId"
+const OperationSrvUuidV1NextID = "/saas.api.uuid.servicev1.SrvUuidV1/NextID"
 
 type SrvUuidV1HTTPServer interface {
-	// ReleaseNodeId 释放节点id
-	ReleaseNodeId(context.Context, *resources.NextIDReq) (*resources.NextIDResp, error)
+	// NextID 获取ID
+	NextID(context.Context, *resources.NextIDReq) (*resources.NextIDResp, error)
 }
 
 func RegisterSrvUuidV1HTTPServer(s *http.Server, srv SrvUuidV1HTTPServer) {
 	r := s.Route("/")
-	r.PUT("/api/v1/uuid/next-id", _SrvUuidV1_ReleaseNodeId0_HTTP_Handler(srv))
+	r.PUT("/api/v1/uuid/next-id", _SrvUuidV1_NextID0_HTTP_Handler(srv))
 }
 
-func _SrvUuidV1_ReleaseNodeId0_HTTP_Handler(srv SrvUuidV1HTTPServer) func(ctx http.Context) error {
+func _SrvUuidV1_NextID0_HTTP_Handler(srv SrvUuidV1HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in resources.NextIDReq
 		if err := ctx.Bind(&in); err != nil {
@@ -41,9 +41,9 @@ func _SrvUuidV1_ReleaseNodeId0_HTTP_Handler(srv SrvUuidV1HTTPServer) func(ctx ht
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSrvUuidV1ReleaseNodeId)
+		http.SetOperation(ctx, OperationSrvUuidV1NextID)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ReleaseNodeId(ctx, req.(*resources.NextIDReq))
+			return srv.NextID(ctx, req.(*resources.NextIDReq))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -55,7 +55,7 @@ func _SrvUuidV1_ReleaseNodeId0_HTTP_Handler(srv SrvUuidV1HTTPServer) func(ctx ht
 }
 
 type SrvUuidV1HTTPClient interface {
-	ReleaseNodeId(ctx context.Context, req *resources.NextIDReq, opts ...http.CallOption) (rsp *resources.NextIDResp, err error)
+	NextID(ctx context.Context, req *resources.NextIDReq, opts ...http.CallOption) (rsp *resources.NextIDResp, err error)
 }
 
 type SrvUuidV1HTTPClientImpl struct {
@@ -66,11 +66,11 @@ func NewSrvUuidV1HTTPClient(client *http.Client) SrvUuidV1HTTPClient {
 	return &SrvUuidV1HTTPClientImpl{client}
 }
 
-func (c *SrvUuidV1HTTPClientImpl) ReleaseNodeId(ctx context.Context, in *resources.NextIDReq, opts ...http.CallOption) (*resources.NextIDResp, error) {
+func (c *SrvUuidV1HTTPClientImpl) NextID(ctx context.Context, in *resources.NextIDReq, opts ...http.CallOption) (*resources.NextIDResp, error) {
 	var out resources.NextIDResp
 	pattern := "/api/v1/uuid/next-id"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationSrvUuidV1ReleaseNodeId))
+	opts = append(opts, http.Operation(OperationSrvUuidV1NextID))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
