@@ -6,6 +6,7 @@ import (
 	resourcev1 "github.com/go-micro-saas/nodeid-service/api/uuid-service/v1/resources"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/uuid-service/v1/services"
 	bizrepos "github.com/go-micro-saas/nodeid-service/app/uuid-service/internal/biz/repo"
+	"github.com/go-micro-saas/nodeid-service/app/uuid-service/internal/service/dto"
 )
 
 type uuidV1Service struct {
@@ -24,5 +25,11 @@ func NewUuidV1Service(logger log.Logger, uuidBiz bizrepos.UuidBizRepo) servicev1
 }
 
 func (s *uuidV1Service) NextID(ctx context.Context, req *resourcev1.NextIDReq) (*resourcev1.NextIDResp, error) {
-	return s.UnimplementedSrvUuidV1Server.NextID(ctx, req)
+	id, err := s.uuidBiz.NextID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &resourcev1.NextIDResp{
+		Data: dto.UuidDto.ToPbNextIDRespData(id),
+	}, nil
 }
