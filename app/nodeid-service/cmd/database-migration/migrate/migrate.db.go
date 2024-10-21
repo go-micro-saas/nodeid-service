@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	dbv1_0_0 "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/v1.0.0"
-	dbutil "github.com/go-micro-saas/service-kit/database"
 	migrationpkg "github.com/ikaiguang/go-srv-kit/data/migration"
+	dbutil "github.com/ikaiguang/go-srv-kit/service/database"
 	"gorm.io/gorm"
 )
 

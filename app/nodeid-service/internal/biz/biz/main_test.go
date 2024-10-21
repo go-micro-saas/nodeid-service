@@ -3,7 +3,7 @@ package biz
 import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
+	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 	stdlog "log"
 	"os"
 	"testing"

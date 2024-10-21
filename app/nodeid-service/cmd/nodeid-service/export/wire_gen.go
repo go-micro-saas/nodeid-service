@@ -14,8 +14,8 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/service"
-	"github.com/go-micro-saas/service-kit/server"
-	"github.com/go-micro-saas/service-kit/setup"
+	"github.com/ikaiguang/go-srv-kit/service/server"
+	"github.com/ikaiguang/go-srv-kit/service/setup"
 )
 
 // Injectors from wire.go:

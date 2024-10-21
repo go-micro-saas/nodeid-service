@@ -1,7 +1,7 @@
 package conf
 
 import (
-	configutil "github.com/go-micro-saas/service-kit/config"
+	configutil "github.com/ikaiguang/go-srv-kit/service/config"
 )
 
 var (

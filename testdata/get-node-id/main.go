@@ -7,9 +7,9 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	resourcev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
-	clientutil "github.com/go-micro-saas/service-kit/cluster_service_api"
 	clientpkg "github.com/ikaiguang/go-srv-kit/kratos/client"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
+	clientutil "github.com/ikaiguang/go-srv-kit/service/cluster_service_api"
 )
 
 var (

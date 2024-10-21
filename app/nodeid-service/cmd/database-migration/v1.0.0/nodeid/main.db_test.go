@@ -1,8 +1,8 @@
 package dbv1_0_0_nodeid
 
 import (
-	setuputil "github.com/go-micro-saas/service-kit/setup"
 	migrationpkg "github.com/ikaiguang/go-srv-kit/data/migration"
+	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 
 	stdlog "log"
 	"os"

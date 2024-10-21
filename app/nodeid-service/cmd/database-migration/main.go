@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	dbmigrate "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/migrate"
-	dbutil "github.com/go-micro-saas/service-kit/database"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
+	dbutil "github.com/ikaiguang/go-srv-kit/service/database"
+	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 	stdlog "log"
 )
 

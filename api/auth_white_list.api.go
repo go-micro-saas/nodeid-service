@@ -2,8 +2,8 @@ package nodeidapi
 
 import (
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
-	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
 	_ "github.com/gorilla/websocket"
+	middlewareutil "github.com/ikaiguang/go-srv-kit/service/middleware"
 )
 
 // GetAuthWhiteList 验证白名单

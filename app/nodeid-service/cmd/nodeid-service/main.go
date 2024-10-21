@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	serviceexporter "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/nodeid-service/export"
-	serverutil "github.com/go-micro-saas/service-kit/server"
+	serverutil "github.com/ikaiguang/go-srv-kit/service/server"
 	stdlog "log"
 )
 

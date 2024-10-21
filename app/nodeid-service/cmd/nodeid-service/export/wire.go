@@ -11,9 +11,9 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/service"
-	serverutil "github.com/go-micro-saas/service-kit/server"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
 	"github.com/google/wire"
+	serverutil "github.com/ikaiguang/go-srv-kit/service/server"
+	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 )
 
 func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {

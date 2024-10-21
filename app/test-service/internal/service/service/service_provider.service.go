@@ -4,7 +4,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/test-service/v1/services"
-	serverutil "github.com/go-micro-saas/service-kit/server"
+	serverutil "github.com/ikaiguang/go-srv-kit/service/server"
 	stdlog "log"
 )
 

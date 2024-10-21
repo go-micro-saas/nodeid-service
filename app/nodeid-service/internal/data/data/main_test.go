@@ -1,7 +1,7 @@
 package data
 
 import (
-	setuputil "github.com/go-micro-saas/service-kit/setup"
+	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 	"gorm.io/gorm"
 	stdlog "log"
 	"os"

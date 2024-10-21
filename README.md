@@ -2,7 +2,7 @@
 
 **启动服务；启动请检查配置文件；如果使用配置中心，请跳过执行，先阅读`服务配置`部分**
 
-参考配置文件：[config_all.yaml](https://github.com/go-micro-saas/service-kit/blob/main/testdata/configs/configs/config_all.yaml)
+参考配置文件：[config_all.yaml](https://github.com/ikaiguang/go-srv-kit/blob/main/testdata/configs/configs/config_all.yaml)
 
 ```shell
 # 运行服务

@@ -10,7 +10,7 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
-	resources "github.com/go-micro-saas/uuid-service/api/uuid-service/v1/resources"
+	resources "github.com/go-micro-saas/nodeid-service/api/uuid-service/v1/resources"
 )
 
 // This is a compile-time assertion to ensure that this generated file

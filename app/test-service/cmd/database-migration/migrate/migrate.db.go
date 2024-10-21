@@ -2,9 +2,9 @@ package dbmigrate
 
 import (
 	"context"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
 	migrationpkg "github.com/ikaiguang/go-srv-kit/data/migration"
 	logpkg "github.com/ikaiguang/go-srv-kit/kratos/log"
+	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 	stdlog "log"
 )
 

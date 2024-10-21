@@ -4,11 +4,11 @@ import (
 	nodeidapi "github.com/go-micro-saas/nodeid-service/api"
 	dbmigrate "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/migrate"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
-	configutil "github.com/go-micro-saas/service-kit/config"
-	dbutil "github.com/go-micro-saas/service-kit/database"
-	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
-	serverutil "github.com/go-micro-saas/service-kit/server"
-	setuputil "github.com/go-micro-saas/service-kit/setup"
+	configutil "github.com/ikaiguang/go-srv-kit/service/config"
+	dbutil "github.com/ikaiguang/go-srv-kit/service/database"
+	middlewareutil "github.com/ikaiguang/go-srv-kit/service/middleware"
+	serverutil "github.com/ikaiguang/go-srv-kit/service/server"
+	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 )
 
 func ExportServiceConfig() []configutil.Option {

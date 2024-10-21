@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	serviceexporter "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/nodeid-service/export"
-	configutil "github.com/go-micro-saas/service-kit/config"
-	middlewareutil "github.com/go-micro-saas/service-kit/middleware"
-	serverutil "github.com/go-micro-saas/service-kit/server"
-	pingserviceexporter "github.com/go-micro-saas/service-kit/testdata/ping-service/cmd/ping-service/export"
+	configutil "github.com/ikaiguang/go-srv-kit/service/config"
+	middlewareutil "github.com/ikaiguang/go-srv-kit/service/middleware"
+	serverutil "github.com/ikaiguang/go-srv-kit/service/server"
+	pingserviceexporter "github.com/ikaiguang/go-srv-kit/testdata/ping-service/cmd/ping-service/export"
 	stdlog "log"
 )
 
