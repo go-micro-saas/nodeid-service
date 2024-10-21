@@ -9,24 +9,24 @@ import (
 )
 
 type uuidBiz struct {
-	log  *log.Helper
-	node idpkg.Snowflake
+	log         *log.Helper
+	idGenerator idpkg.Snowflake
 }
 
 func NewUuidBiz(
 	logger log.Logger,
-	node idpkg.Snowflake,
+	idGenerator idpkg.Snowflake,
 ) bizrepos.UuidBizRepo {
 	logHelper := log.NewHelper(log.With(logger, "module", "uuid-service/biz/biz"))
 
 	return &uuidBiz{
-		log:  logHelper,
-		node: node,
+		log:         logHelper,
+		idGenerator: idGenerator,
 	}
 }
 
 func (s *uuidBiz) NextID(ctx context.Context) (uint64, error) {
-	id, err := s.node.NextID()
+	id, err := s.idGenerator.NextID()
 	if err != nil {
 		e := errorpkg.ErrorInternalError(err.Error())
 		return 0, errorpkg.WithStack(e)
