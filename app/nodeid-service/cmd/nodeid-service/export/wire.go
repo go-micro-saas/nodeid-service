@@ -6,6 +6,7 @@ package serviceexporter
 import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
@@ -16,7 +17,7 @@ import (
 	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 )
 
-func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {
+func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
 	panic(wire.Build(
 		// service
 		setuputil.GetLogger,
@@ -25,6 +26,14 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 		conf.GetServiceConfig, dto.ToBoNodeIDConfig,
 		biz.NewNodeIDBiz,
 		service.NewNodeIDV1Service,
+	))
+	return nil, nil
+}
+
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {
+	panic(wire.Build(
+		// service
+		exportNodeIDV1Service,
 		// register services
 		service.RegisterServices,
 	))

@@ -9,6 +9,7 @@ package serviceexporter
 import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
@@ -20,7 +21,7 @@ import (
 
 // Injectors from wire.go:
 
-func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {
+func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
 	logger, err := setuputil.GetLogger(launcherManager)
 	if err != nil {
 		return nil, err
@@ -35,6 +36,14 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 	nodeSerialDataRepo := data.NewNodeSerialData(logger, db)
 	nodeIdBizRepo := biz.NewNodeIDBiz(logger, nodeIDConfig, nodeIdDataRepo, nodeSerialDataRepo)
 	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo)
+	return srvNodeIDV1Server, nil
+}
+
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {
+	srvNodeIDV1Server, err := exportNodeIDV1Service(launcherManager)
+	if err != nil {
+		return nil, err
+	}
 	serviceInterface, err := service.RegisterServices(hs, gs, srvNodeIDV1Server)
 	if err != nil {
 		return nil, err

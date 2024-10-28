@@ -2,6 +2,7 @@ package serviceexporter
 
 import (
 	nodeidapi "github.com/go-micro-saas/nodeid-service/api"
+	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	dbmigrate "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/migrate"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	configutil "github.com/ikaiguang/go-srv-kit/service/config"
@@ -54,4 +55,8 @@ func ExportDatabaseMigration() []dbutil.MigrationFunc {
 	return []dbutil.MigrationFunc{
 		dbmigrate.Run,
 	}
+}
+
+func ExportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
+	return exportNodeIDV1Service(launcherManager)
 }
