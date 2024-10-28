@@ -13,6 +13,7 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/service"
 	"github.com/ikaiguang/go-srv-kit/service/server"
@@ -21,6 +22,32 @@ import (
 
 // Injectors from wire.go:
 
+func exportNodeIdData(launcherManager setuputil.LauncherManager) (datarepos.NodeIdDataRepo, error) {
+	logger, err := setuputil.GetLogger(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	db, err := setuputil.GetRecommendDBConn(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	nodeIdDataRepo := data.NewNodeIdData(logger, db)
+	return nodeIdDataRepo, nil
+}
+
+func exportNodeSerialData(launcherManager setuputil.LauncherManager) (datarepos.NodeSerialDataRepo, error) {
+	logger, err := setuputil.GetLogger(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	db, err := setuputil.GetRecommendDBConn(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	nodeSerialDataRepo := data.NewNodeSerialData(logger, db)
+	return nodeSerialDataRepo, nil
+}
+
 func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
 	logger, err := setuputil.GetLogger(launcherManager)
 	if err != nil {
@@ -28,12 +55,14 @@ func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1
 	}
 	serviceConfig := conf.GetServiceConfig()
 	nodeIDConfig := dto.ToBoNodeIDConfig(serviceConfig)
-	db, err := setuputil.GetRecommendDBConn(launcherManager)
+	nodeIdDataRepo, err := exportNodeIdData(launcherManager)
 	if err != nil {
 		return nil, err
 	}
-	nodeIdDataRepo := data.NewNodeIdData(logger, db)
-	nodeSerialDataRepo := data.NewNodeSerialData(logger, db)
+	nodeSerialDataRepo, err := exportNodeSerialData(launcherManager)
+	if err != nil {
+		return nil, err
+	}
 	nodeIdBizRepo := biz.NewNodeIDBiz(logger, nodeIDConfig, nodeIdDataRepo, nodeSerialDataRepo)
 	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo)
 	return srvNodeIDV1Server, nil

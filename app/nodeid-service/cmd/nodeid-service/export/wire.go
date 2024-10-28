@@ -10,6 +10,7 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
+	datarepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/service"
 	"github.com/google/wire"
@@ -17,12 +18,30 @@ import (
 	setuputil "github.com/ikaiguang/go-srv-kit/service/setup"
 )
 
+func exportNodeIdData(launcherManager setuputil.LauncherManager) (datarepos.NodeIdDataRepo, error) {
+	panic(wire.Build(
+		// data
+		setuputil.GetLogger,
+		setuputil.GetRecommendDBConn, data.NewNodeIdData,
+	))
+	return nil, nil
+}
+
+func exportNodeSerialData(launcherManager setuputil.LauncherManager) (datarepos.NodeSerialDataRepo, error) {
+	panic(wire.Build(
+		// data
+		setuputil.GetLogger,
+		setuputil.GetRecommendDBConn, data.NewNodeSerialData,
+	))
+	return nil, nil
+}
+
 func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
 	panic(wire.Build(
-		// service
 		setuputil.GetLogger,
-		setuputil.GetRecommendDBConn,
-		data.NewNodeIdData, data.NewNodeSerialData,
+		// data
+		exportNodeIdData, exportNodeSerialData,
+		// service
 		conf.GetServiceConfig, dto.ToBoNodeIDConfig,
 		biz.NewNodeIDBiz,
 		service.NewNodeIDV1Service,
