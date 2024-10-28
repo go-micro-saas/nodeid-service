@@ -79,8 +79,8 @@ init:
 # generate
 generate:
 	#go mod tidy
+	#wire ./app/nodeid-service/cmd/nodeid-service/export
 	go generate ./...
-	wire ./app/nodeid-service/cmd/nodeid-service/export
 
 # ===== include =====
 # ===== include =====
