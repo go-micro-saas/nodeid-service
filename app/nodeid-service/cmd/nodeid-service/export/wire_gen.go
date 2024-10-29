@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
@@ -48,7 +49,7 @@ func exportNodeSerialData(launcherManager setuputil.LauncherManager) (datarepos.
 	return nodeSerialDataRepo, nil
 }
 
-func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
+func exportNodeIdBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.NodeIdBizRepo, error) {
 	logger, err := setuputil.GetLogger(launcherManager)
 	if err != nil {
 		return nil, err
@@ -64,6 +65,18 @@ func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1
 		return nil, err
 	}
 	nodeIdBizRepo := biz.NewNodeIDBiz(logger, nodeIDConfig, nodeIdDataRepo, nodeSerialDataRepo)
+	return nodeIdBizRepo, nil
+}
+
+func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
+	logger, err := setuputil.GetLogger(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	nodeIdBizRepo, err := exportNodeIdBizRepo(launcherManager)
+	if err != nil {
+		return nil, err
+	}
 	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo)
 	return srvNodeIDV1Server, nil
 }

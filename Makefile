@@ -80,6 +80,7 @@ init:
 generate:
 	#go mod tidy
 	#wire ./app/nodeid-service/cmd/nodeid-service/export
+	#wire ./app/uuid-service/cmd/uuid-service/export
 	go generate ./...
 
 # ===== include =====

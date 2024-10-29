@@ -8,6 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
+	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
 	datarepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
@@ -20,8 +21,8 @@ import (
 
 func exportNodeIdData(launcherManager setuputil.LauncherManager) (datarepos.NodeIdDataRepo, error) {
 	panic(wire.Build(
-		// data
 		setuputil.GetLogger,
+		// data
 		setuputil.GetRecommendDBConn, data.NewNodeIdData,
 	))
 	return nil, nil
@@ -29,9 +30,20 @@ func exportNodeIdData(launcherManager setuputil.LauncherManager) (datarepos.Node
 
 func exportNodeSerialData(launcherManager setuputil.LauncherManager) (datarepos.NodeSerialDataRepo, error) {
 	panic(wire.Build(
-		// data
 		setuputil.GetLogger,
+		// data
 		setuputil.GetRecommendDBConn, data.NewNodeSerialData,
+	))
+	return nil, nil
+}
+
+func exportNodeIdBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.NodeIdBizRepo, error) {
+	panic(wire.Build(
+		setuputil.GetLogger,
+		// data
+		exportNodeIdData, exportNodeSerialData,
+		// biz
+		conf.GetServiceConfig, dto.ToBoNodeIDConfig, biz.NewNodeIDBiz,
 	))
 	return nil, nil
 }
@@ -39,11 +51,9 @@ func exportNodeSerialData(launcherManager setuputil.LauncherManager) (datarepos.
 func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
 	panic(wire.Build(
 		setuputil.GetLogger,
-		// data
-		exportNodeIdData, exportNodeSerialData,
+		// biz
+		exportNodeIdBizRepo,
 		// service
-		conf.GetServiceConfig, dto.ToBoNodeIDConfig,
-		biz.NewNodeIDBiz,
 		service.NewNodeIDV1Service,
 	))
 	return nil, nil

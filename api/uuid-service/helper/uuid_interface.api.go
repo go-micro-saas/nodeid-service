@@ -14,6 +14,6 @@ func GetContext() context.Context {
 	return context.Background()
 }
 
-func GetSnowflakeNode(ctx context.Context, helper uuidHelper, req *nodeidresourcev1.GetNodeIdReq) (idpkg.Snowflake, func(), error) {
+func GetSnowflakeNode(ctx context.Context, helper UuidHelper, req *nodeidresourcev1.GetNodeIdReq) (idpkg.Snowflake, func(), error) {
 	return helper.GetSnowflakeNode(ctx, req)
 }
