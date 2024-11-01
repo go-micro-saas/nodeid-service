@@ -20,7 +20,7 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/uuid-service/internal/service/dto"
 	"github.com/go-micro-saas/nodeid-service/app/uuid-service/internal/service/service"
 	"github.com/ikaiguang/go-srv-kit/kit/id"
-	"github.com/ikaiguang/go-srv-kit/service/server"
+	"github.com/ikaiguang/go-srv-kit/service/cleanup"
 	"github.com/ikaiguang/go-srv-kit/service/setup"
 )
 
@@ -100,17 +100,17 @@ func exportUuidV1Service(launcherManager setuputil.LauncherManager) (servicev1.S
 	}, nil
 }
 
-func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, func(), error) {
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (cleanuputil.CleanupManager, func(), error) {
 	srvUuidV1Server, cleanup, err := exportUuidV1Service(launcherManager)
 	if err != nil {
 		return nil, nil, err
 	}
-	serviceInterface, err := service.RegisterServices(hs, gs, srvUuidV1Server)
+	cleanupManager, err := service.RegisterServices(hs, gs, srvUuidV1Server)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	return serviceInterface, func() {
+	return cleanupManager, func() {
 		cleanup()
 	}, nil
 }

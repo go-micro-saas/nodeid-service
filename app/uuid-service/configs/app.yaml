@@ -1,7 +1,7 @@
 # app 程序
 app:
   project_name: go-micro-saas
-  server_name: nodeid-service
+  server_name: uuid-service
   # 开发环境；值：develop、testing、preview、production
   server_env: develop
   server_version: v1.0.0

@@ -5,6 +5,7 @@ import (
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	dbmigrate "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/migrate"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
+	cleanuputil "github.com/ikaiguang/go-srv-kit/service/cleanup"
 	configutil "github.com/ikaiguang/go-srv-kit/service/config"
 	dbutil "github.com/ikaiguang/go-srv-kit/service/database"
 	middlewareutil "github.com/ikaiguang/go-srv-kit/service/middleware"
@@ -22,7 +23,7 @@ func ExportAuthWhitelist() []map[string]middlewareutil.TransportServiceKind {
 	}
 }
 
-func ExportServices(launcherManager setuputil.LauncherManager, serverManager serverutil.ServerManager) (serverutil.ServiceInterface, error) {
+func ExportServices(launcherManager setuputil.LauncherManager, serverManager serverutil.ServerManager) (cleanuputil.CleanupManager, error) {
 	hs, err := serverManager.GetHTTPServer()
 	if err != nil {
 		return nil, err
@@ -32,9 +33,10 @@ func ExportServices(launcherManager setuputil.LauncherManager, serverManager ser
 		return nil, err
 	}
 	return exportServices(launcherManager, hs, gs)
+	//return serverutil.MergeCleanup(exportServices(launcherManager, hs, gs))
 }
 
-func ExportServicesWithDatabaseMigration(launcherManager setuputil.LauncherManager, serverManager serverutil.ServerManager) (serverutil.ServiceInterface, error) {
+func ExportServicesWithDatabaseMigration(launcherManager setuputil.LauncherManager, serverManager serverutil.ServerManager) (cleanuputil.CleanupManager, error) {
 	settingConfig := launcherManager.GetConfig().GetSetting()
 
 	if settingConfig.GetEnableMigrateDb() {

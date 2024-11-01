@@ -4,6 +4,7 @@ import (
 	nodeidapi "github.com/go-micro-saas/nodeid-service/api"
 	dbmigrate "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/migrate"
 	"github.com/go-micro-saas/nodeid-service/app/uuid-service/internal/conf"
+	cleanuputil "github.com/ikaiguang/go-srv-kit/service/cleanup"
 	configutil "github.com/ikaiguang/go-srv-kit/service/config"
 	dbutil "github.com/ikaiguang/go-srv-kit/service/database"
 	middlewareutil "github.com/ikaiguang/go-srv-kit/service/middleware"
@@ -21,29 +22,30 @@ func ExportAuthWhitelist() []map[string]middlewareutil.TransportServiceKind {
 	}
 }
 
-func ExportServices(launcherManager setuputil.LauncherManager, serverManager serverutil.ServerManager) (serverutil.ServiceInterface, func(), error) {
+func ExportServices(launcherManager setuputil.LauncherManager, serverManager serverutil.ServerManager) (cleanuputil.CleanupManager, error) {
 	hs, err := serverManager.GetHTTPServer()
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	gs, err := serverManager.GetGRPCServer()
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return exportServices(launcherManager, hs, gs)
+	//return exportServices(launcherManager, hs, gs)
+	return serverutil.MergeCleanup(exportServices(launcherManager, hs, gs))
 }
 
-func ExportServicesWithDatabaseMigration(launcherManager setuputil.LauncherManager, serverManager serverutil.ServerManager) (serverutil.ServiceInterface, func(), error) {
+func ExportServicesWithDatabaseMigration(launcherManager setuputil.LauncherManager, serverManager serverutil.ServerManager) (cleanuputil.CleanupManager, error) {
 	settingConfig := launcherManager.GetConfig().GetSetting()
 
 	if settingConfig.GetEnableMigrateDb() {
 		dbConn, err := setuputil.GetRecommendDBConn(launcherManager)
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 		logger, err := setuputil.GetLogger(launcherManager)
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 		dbmigrate.Run(dbConn, dbutil.WithLogger(logger))
 	}

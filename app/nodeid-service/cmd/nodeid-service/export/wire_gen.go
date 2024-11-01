@@ -17,7 +17,7 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/service"
-	"github.com/ikaiguang/go-srv-kit/service/server"
+	"github.com/ikaiguang/go-srv-kit/service/cleanup"
 	"github.com/ikaiguang/go-srv-kit/service/setup"
 )
 
@@ -81,14 +81,14 @@ func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1
 	return srvNodeIDV1Server, nil
 }
 
-func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (serverutil.ServiceInterface, error) {
+func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (cleanuputil.CleanupManager, error) {
 	srvNodeIDV1Server, err := exportNodeIDV1Service(launcherManager)
 	if err != nil {
 		return nil, err
 	}
-	serviceInterface, err := service.RegisterServices(hs, gs, srvNodeIDV1Server)
+	cleanupManager, err := service.RegisterServices(hs, gs, srvNodeIDV1Server)
 	if err != nil {
 		return nil, err
 	}
-	return serviceInterface, nil
+	return cleanupManager, nil
 }
