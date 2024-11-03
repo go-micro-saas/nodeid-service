@@ -1,7 +1,7 @@
 package serviceexporter
 
 import (
-	nodeidapi "github.com/go-micro-saas/nodeid-service/api"
+	uuidapi "github.com/go-micro-saas/nodeid-service/api/uuid-service"
 	dbmigrate "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/migrate"
 	"github.com/go-micro-saas/nodeid-service/app/uuid-service/internal/conf"
 	cleanuputil "github.com/ikaiguang/go-srv-kit/service/cleanup"
@@ -18,7 +18,7 @@ func ExportServiceConfig() []configutil.Option {
 
 func ExportAuthWhitelist() []map[string]middlewareutil.TransportServiceKind {
 	return []map[string]middlewareutil.TransportServiceKind{
-		nodeidapi.GetAuthWhiteList(),
+		uuidapi.GetAuthWhiteList(),
 	}
 }
 

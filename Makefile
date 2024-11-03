@@ -97,7 +97,7 @@ include api/uuid-service/v1/makefile_protoc.mk
 # run
 include app/nodeid-service/cmd/makefile_run.mk
 include app/uuid-service/cmd/makefile_run.mk
-include testdata/all-in-one/makefile_run.mk
+include app/all-in-one/makefile_run.mk
 
 # build
 include devops/makefile_cicd.mk

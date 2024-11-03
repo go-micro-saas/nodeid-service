@@ -1,4 +1,4 @@
-package nodeidapi
+package uuidapi
 
 import (
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/uuid-service/v1/services"

@@ -1,7 +1,7 @@
 package serviceexporter
 
 import (
-	nodeidapi "github.com/go-micro-saas/nodeid-service/api"
+	nodeidapi "github.com/go-micro-saas/nodeid-service/api/nodeid-service"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	dbmigrate "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/database-migration/migrate"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"

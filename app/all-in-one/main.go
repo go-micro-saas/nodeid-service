@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	serviceexporter "github.com/go-micro-saas/nodeid-service/app/nodeid-service/cmd/nodeid-service/export"
+	uuidserviceexporter "github.com/go-micro-saas/nodeid-service/app/uuid-service/cmd/uuid-service/export"
 	configutil "github.com/ikaiguang/go-srv-kit/service/config"
 	middlewareutil "github.com/ikaiguang/go-srv-kit/service/middleware"
 	serverutil "github.com/ikaiguang/go-srv-kit/service/server"
@@ -34,19 +35,24 @@ func main() {
 		services   []serverutil.ServiceExporter
 	)
 
-	// ping-service
-	configOpts = append(configOpts, pingserviceexporter.ExportServiceConfig()...)
-	whitelist = append(whitelist, pingserviceexporter.ExportAuthWhitelist()...)
-	services = append(services, pingserviceexporter.ExportServices)
-
 	// nodeid-service
 	configOpts = append(configOpts, serviceexporter.ExportServiceConfig()...)
 	whitelist = append(whitelist, serviceexporter.ExportAuthWhitelist()...)
 	services = append(services, serviceexporter.ExportServices)
 
+	// ping-service
+	configOpts = append(configOpts, pingserviceexporter.ExportServiceConfig()...)
+	whitelist = append(whitelist, pingserviceexporter.ExportAuthWhitelist()...)
+	services = append(services, pingserviceexporter.ExportServices)
+
+	// uuid-service
+	configOpts = append(configOpts, uuidserviceexporter.ExportServiceConfig()...)
+	whitelist = append(whitelist, uuidserviceexporter.ExportAuthWhitelist()...)
+	services = append(services, uuidserviceexporter.ExportServices)
+
 	app, cleanup, err := serverutil.AllInOneServer(flagconf, configOpts, services, whitelist)
 	if err != nil {
-		stdlog.Fatalf("==> runservices.GetServerApp failed: %+v\n", err)
+		stdlog.Fatalf("==> serverutil.AllInOneServer failed: %+v\n", err)
 	}
 	serverutil.RunServer(app, cleanup)
 }
