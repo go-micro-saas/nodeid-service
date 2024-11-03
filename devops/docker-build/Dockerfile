@@ -45,7 +45,15 @@ RUN go mod download && go mod tidy
 # go build -ldflags="-s -w -X 'main.Version=1.0.0' -extldflags '-static'"
 RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
     -o ./bin/main \
-    ./${APP_DIR}/${SERVICE_NAME}/cmd/${SERVICE_NAME}/main.go
+    ./${APP_DIR}/${SERVICE_NAME}/cmd/${SERVICE_NAME}/main.go \
+# uuid
+RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
+    -o ./bin/uuid-service \
+    ./${APP_DIR}/uuid-service/cmd/uuid-service/main.go
+# all-in-one
+RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
+    -o ./bin/all-in-one \
+    ./${APP_DIR}/all-in-one/main.go
 
 FROM ${RUN_SERVICE_IMAGE}
 
@@ -72,6 +80,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder ${WORK_DIR}/bin/main ./main
+COPY --from=builder ${WORK_DIR}/bin/uuid-service ./uuid-service
+COPY --from=builder ${WORK_DIR}/bin/all-in-one ./all-in-one
 #COPY --from=builder ${WORK_DIR}/${APP_DIR}/${SERVICE_NAME}/configs ./configs
 
 # http 8080 8081
@@ -79,4 +89,6 @@ EXPOSE 8080
 # grpc 50051 50052
 EXPOSE 50051
 
-ENTRYPOINT ["./main", "-conf=./configs"]
+#ENTRYPOINT ["./main", "-conf=./configs"]
+#ENTRYPOINT ["./uuid-service", "-conf=./configs"]
+ENTRYPOINT ["./all-in-one", "-conf=./configs"]
