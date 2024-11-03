@@ -5,10 +5,21 @@
 参考配置文件：[config_all.yaml](https://github.com/ikaiguang/go-srv-kit/blob/main/testdata/configs/configs/config_all.yaml)
 
 ```shell
+
+# 查看帮助
+make help
+
 # 运行服务
-make make run-nodeid-service
+make run-service
+# or
+make run-nodeid-service
 # or
 go run ./app/nodeid-service/cmd/nodeid-service/... -conf=./app/nodeid-service/configs
+
+# 测试服务
+make testing-service
+# or
+make testing-nodeid-service
 ```
 
 ## 服务配置
