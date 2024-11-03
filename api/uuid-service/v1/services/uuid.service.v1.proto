@@ -15,8 +15,8 @@ service SrvUuidV1 {
   // 获取ID
   rpc NextID(saas.api.uuid.resourcev1.NextIDReq) returns (saas.api.uuid.resourcev1.NextIDResp) {
     option (google.api.http) = {
-      put: "/api/v1/uuid/next-id"
-      body: "*"
+      get: "/api/v1/uuid/next-id"
+      // body: "*"
     };
   }
 }

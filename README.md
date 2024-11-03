@@ -35,8 +35,12 @@ make store-configuration
 #* `source_dir`： 被存储的配置文件所在文件夹
 #* `store_dir`： 存储到配置中心位置
 go run ./app/nodeid-service/cmd/store-configuration/... -conf=./app/nodeid-service/configs \
--source_dir=./app/nodeid-service/configs
--store_dir=
+-source_dir=./app/nodeid-service/configs \
+-store_dir=go-micro-saas/nodeid-service/develop/v1.0.0
+
+go run ./app/nodeid-service/cmd/store-configuration/... -conf=./app/nodeid-service/configs \
+-source_dir=./app/uuid-service/configs \
+-store_dir=go-micro-saas/uuid-service/develop/v1.0.0
 ```
 
 ## 文档

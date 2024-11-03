@@ -1,7 +1,7 @@
 package nodeidapi
 
 import (
-	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
+	servicev1 "github.com/go-micro-saas/nodeid-service/api/uuid-service/v1/services"
 	_ "github.com/gorilla/websocket"
 	middlewareutil "github.com/ikaiguang/go-srv-kit/service/middleware"
 )
@@ -12,11 +12,7 @@ func GetAuthWhiteList() map[string]middlewareutil.TransportServiceKind {
 	whiteList := make(map[string]middlewareutil.TransportServiceKind)
 
 	// 测试
-	whiteList[servicev1.OperationSrvNodeIDV1Ping] = middlewareutil.TransportServiceKindALL
-	whiteList[servicev1.OperationSrvNodeIDV1GetServiceInfo] = middlewareutil.TransportServiceKindALL
-	whiteList[servicev1.OperationSrvNodeIDV1GetNodeId] = middlewareutil.TransportServiceKindALL
-	whiteList[servicev1.OperationSrvNodeIDV1RenewalNodeId] = middlewareutil.TransportServiceKindALL
-	whiteList[servicev1.OperationSrvNodeIDV1ReleaseNodeId] = middlewareutil.TransportServiceKindALL
+	whiteList[servicev1.OperationSrvUuidV1NextID] = middlewareutil.TransportServiceKindALL
 
 	return whiteList
 }
