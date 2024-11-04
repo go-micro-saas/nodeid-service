@@ -45,7 +45,7 @@ RUN go mod download && go mod tidy
 # go build -ldflags="-s -w -X 'main.Version=1.0.0' -extldflags '-static'"
 RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
     -o ./bin/main \
-    ./${APP_DIR}/${SERVICE_NAME}/cmd/${SERVICE_NAME}/main.go \
+    ./${APP_DIR}/${SERVICE_NAME}/cmd/${SERVICE_NAME}/main.go
 # uuid
 RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
     -o ./bin/uuid-service \
