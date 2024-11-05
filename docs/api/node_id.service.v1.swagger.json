@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/nodeid/get-one-node-id": {
+    "/api/v1/nodeid/get-node-id": {
       "get": {
         "summary": "获取节点id",
         "operationId": "SrvNodeIDV1_GetNodeId",
@@ -106,7 +106,6 @@
         "parameters": [
           {
             "name": "message",
-            "description": "message",
             "in": "path",
             "required": true,
             "type": "string"
@@ -251,18 +250,9 @@
     "resourcev1GetNodeIdRespData": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "uint64",
-          "title": "ID"
-        },
         "instance_id": {
           "type": "string",
           "title": "实例ID"
-        },
-        "instance_name": {
-          "type": "string",
-          "title": "实例名称"
         },
         "node_id": {
           "type": "string",
@@ -281,6 +271,10 @@
         "heartbeat_interval": {
           "type": "string",
           "title": "心跳续订间隔时间；默认：30s"
+        },
+        "access_token": {
+          "type": "string",
+          "title": "令牌；用于续订和释放ID"
         }
       }
     },
@@ -366,11 +360,6 @@
     "resourcev1ReleaseNodeIdReq": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "uint64",
-          "title": "ID；用于验证指定ID节点"
-        },
         "instance_id": {
           "type": "string",
           "title": "实例ID"
@@ -379,6 +368,10 @@
           "type": "string",
           "format": "int64",
           "title": "节点id"
+        },
+        "access_token": {
+          "type": "string",
+          "title": "令牌；用于续订和释放ID"
         }
       }
     },
@@ -423,11 +416,6 @@
     "resourcev1RenewalNodeIdReq": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "uint64",
-          "title": "ID；用于验证指定ID节点"
-        },
         "instance_id": {
           "type": "string",
           "title": "实例ID"
@@ -436,6 +424,10 @@
           "type": "string",
           "format": "int64",
           "title": "节点id"
+        },
+        "access_token": {
+          "type": "string",
+          "title": "令牌；用于续订和释放ID"
         }
       }
     },
