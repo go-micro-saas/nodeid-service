@@ -56,6 +56,8 @@ go run ./app/nodeid-service/cmd/store-configuration/... -conf=./app/nodeid-servi
 
 ## 文档
 
+> 生成文档：`make protoc-api-protobuf`
+
 * api文档swagger [node_id.service.v1.swagger.json](docs/api/node_id.service.v1.swagger.json)
 
 ## 流程图
