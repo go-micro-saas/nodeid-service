@@ -34,6 +34,7 @@ func exportNodeIDHelper(launcherManager setuputil.LauncherManager) (nodeidapi.No
 		// nodeid helper
 		initNodeIDHelperOptions, nodeidapi.NewNodeIDHelper,
 	))
+	return nil, nil
 }
 
 func exportUuidHelper(launcherManager setuputil.LauncherManager) (uuidapi.UuidHelper, error) {
@@ -44,6 +45,7 @@ func exportUuidHelper(launcherManager setuputil.LauncherManager) (uuidapi.UuidHe
 		// uuid helper
 		uuidapi.NewUuidHelper,
 	))
+	return nil, nil
 }
 
 func exportSnowflakeNode(launcherManager setuputil.LauncherManager) (idpkg.Snowflake, func(), error) {
@@ -53,6 +55,7 @@ func exportSnowflakeNode(launcherManager setuputil.LauncherManager) (idpkg.Snowf
 		// snowflake
 		uuidapi.GetContext, conf.GetServiceConfig, dto.ToPbGetNodeIdReq, uuidapi.GetSnowflakeNode,
 	))
+	return nil, nil, nil
 }
 
 func exportUuidBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.UuidBizRepo, func(), error) {
@@ -63,6 +66,7 @@ func exportUuidBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.Uuid
 		// biz
 		biz.NewUuidBiz,
 	))
+	return nil, nil, nil
 }
 
 func exportUuidV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvUuidV1Server, func(), error) {
@@ -73,6 +77,7 @@ func exportUuidV1Service(launcherManager setuputil.LauncherManager) (servicev1.S
 		// service
 		service.NewUuidV1Service,
 	))
+	return nil, nil, nil
 }
 
 func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (cleanuputil.CleanupManager, func(), error) {
@@ -82,4 +87,5 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 		// register services
 		service.RegisterServices,
 	))
+	return nil, nil, nil
 }

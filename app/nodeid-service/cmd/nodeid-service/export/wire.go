@@ -25,6 +25,7 @@ func exportNodeIdData(launcherManager setuputil.LauncherManager) (datarepos.Node
 		// data
 		setuputil.GetRecommendDBConn, data.NewNodeIdData,
 	))
+	return nil, nil
 }
 
 func exportNodeSerialData(launcherManager setuputil.LauncherManager) (datarepos.NodeSerialDataRepo, error) {
@@ -33,6 +34,7 @@ func exportNodeSerialData(launcherManager setuputil.LauncherManager) (datarepos.
 		// data
 		setuputil.GetRecommendDBConn, data.NewNodeSerialData,
 	))
+	return nil, nil
 }
 
 func exportNodeIdBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.NodeIdBizRepo, error) {
@@ -43,6 +45,7 @@ func exportNodeIdBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.No
 		// biz
 		conf.GetServiceConfig, dto.ToBoNodeIDConfig, biz.NewNodeIDBiz,
 	))
+	return nil, nil
 }
 
 func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
@@ -53,6 +56,7 @@ func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1
 		// service
 		service.NewNodeIDV1Service,
 	))
+	return nil, nil
 }
 
 func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, gs *grpc.Server) (cleanuputil.CleanupManager, error) {
@@ -62,4 +66,5 @@ func exportServices(launcherManager setuputil.LauncherManager, hs *http.Server, 
 		// register services
 		service.RegisterServices,
 	))
+	return nil, nil
 }
