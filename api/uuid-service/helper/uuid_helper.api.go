@@ -7,7 +7,6 @@ import (
 	nodeidresourcev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	idpkg "github.com/ikaiguang/go-srv-kit/kit/id"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
-	cleanuputil "github.com/ikaiguang/go-srv-kit/service/cleanup"
 )
 
 type uuidHelper struct {
@@ -49,9 +48,4 @@ func (s *uuidHelper) GetSnowflakeNode(ctx context.Context, req *nodeidresourcev1
 		}
 	}
 	return node, cleanup, nil
-}
-
-func Cleanup(cleanupManager cleanuputil.CleanupManager, cleanup func()) (cleanuputil.CleanupManager, error) {
-	cleanupManager.Append(cleanup)
-	return cleanupManager, nil
 }
