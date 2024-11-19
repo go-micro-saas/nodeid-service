@@ -1,7 +1,12 @@
 # build-image
+.PHONY: build-base-image
+build-base-image:
+	@echo "build :-->: build base image"
+
+# build-image
 .PHONY: build
-# build :-->: build service image
 build:
+	@echo "build :-->: build service image"
 	#docker build -t nodeid-service:v1.0.0 -f ./devops/Dockerfile .
 	#docker pull golang:1.22.8
 	#docker pull debian:stable-20240926-slim
@@ -20,6 +25,6 @@ build:
 
 # deploy-image on docker
 .PHONY: deploy-on-docker
-# deploy-on-docker :-->: deploying on docker
 deploy-on-docker:
+	@echo "deploy-on-docker :-->: deploying on docker"
 	docker-compose -f ./devops/docker-deploy/docker-compose.yaml up -d

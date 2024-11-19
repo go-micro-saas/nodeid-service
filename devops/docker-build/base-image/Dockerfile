@@ -1,0 +1,47 @@
+# service arg
+ARG BUILD_FROM_IMAGE=golang:1.22.8
+ARG APP_DIR=app
+ARG SERVICE_NAME=nodeid-service
+ARG VERSION=v1.0.0
+
+# system arg
+ARG GOPATH=/myworkspace/golang
+ARG GOPROXY=https://goproxy.io,direct
+ARG GOPRIVATE=gitlab.uufff.com
+ARG GOMODCACHE=/myworkspace/golang/pkg/mod
+ARG GOCACHE=/myworkspace/golang/build_cache
+ARG WORK_DIR=/myworkspace/golang/src/workspace
+ARG TZ=Asia/Shanghai
+
+FROM ${BUILD_FROM_IMAGE} AS builder
+
+# service arg
+ARG APP_DIR
+ARG SERVICE_NAME
+ARG VERSION
+
+# golang arg
+ARG GOPATH
+ARG GOPROXY
+ARG GOPRIVATE
+ARG GOMODCACHE
+ARG GOCACHE
+ARG WORK_DIR
+ARG TZ
+
+# golang env
+ENV GO111MODULE=on
+ENV GOPATH=${GOPATH}
+ENV GOPROXY=${GOPROXY}
+ENV GOPRIVATE=${GOPRIVATE}
+ENV GOMODCACHE=${GOMODCACHE}
+ENV GOCACHE=${GOCACHE}
+ENV TZ=${TZ}
+
+WORKDIR ${WORK_DIR}
+
+COPY . .
+
+RUN go mod download && go mod tidy
+
+RUN rm -rf ./*
