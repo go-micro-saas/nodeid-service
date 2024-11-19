@@ -14,6 +14,10 @@ build:
 		-t nodeid-service:latest \
 		-f ./devops/docker-build/Dockerfile .
 
+# general config
+# service config
+# database migration
+
 # deploy-image on docker
 .PHONY: deploy-on-docker
 # deploy-on-docker :-->: deploying on docker

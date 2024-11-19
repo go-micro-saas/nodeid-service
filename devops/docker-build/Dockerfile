@@ -8,6 +8,7 @@ ARG VERSION=v1.0.0
 # system arg
 ARG GOPATH=/myworkspace/golang
 ARG GOPROXY=https://goproxy.io,direct
+ARG GOPRIVATE=gitlab.uufff.com
 ARG GOMODCACHE=/myworkspace/golang/pkg/mod
 ARG GOCACHE=/myworkspace/golang/build_cache
 ARG WORK_DIR=/myworkspace/golang/src/workspace
@@ -23,6 +24,7 @@ ARG VERSION
 # golang arg
 ARG GOPATH
 ARG GOPROXY
+ARG GOPRIVATE
 ARG GOMODCACHE
 ARG GOCACHE
 ARG WORK_DIR
@@ -32,6 +34,7 @@ ARG TZ
 ENV GO111MODULE=on
 ENV GOPATH=${GOPATH}
 ENV GOPROXY=${GOPROXY}
+ENV GOPRIVATE=${GOPRIVATE}
 ENV GOMODCACHE=${GOMODCACHE}
 ENV GOCACHE=${GOCACHE}
 ENV TZ=${TZ}
@@ -44,8 +47,14 @@ RUN go mod download && go mod tidy
 
 # go build -ldflags="-s -w -X 'main.Version=1.0.0' -extldflags '-static'"
 RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
-    -o ./bin/main \
-    ./${APP_DIR}/${SERVICE_NAME}/cmd/${SERVICE_NAME}/main.go
+    -o ./bin/nodeid-service \
+    ./${APP_DIR}/${SERVICE_NAME}/cmd/nodeid-service/main.go
+RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
+    -o ./bin/database-migration \
+    ./${APP_DIR}/${SERVICE_NAME}/cmd/database-migration/main.go
+RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
+    -o ./bin/store-configuration \
+    ./${APP_DIR}/${SERVICE_NAME}/cmd/store-configuration/main.go
 # uuid
 RUN go build -ldflags="-s -w -X 'main.Version=${VERSION}' -extldflags '-static'" \
     -o ./bin/uuid-service \
@@ -79,7 +88,9 @@ RUN apt-get update && \
     apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder ${WORK_DIR}/bin/main ./main
+COPY --from=builder ${WORK_DIR}/bin/nodeid-service ./nodeid-service
+COPY --from=builder ${WORK_DIR}/bin/database-migration ./database-migration
+COPY --from=builder ${WORK_DIR}/bin/store-configuration ./store-configuration
 COPY --from=builder ${WORK_DIR}/bin/uuid-service ./uuid-service
 COPY --from=builder ${WORK_DIR}/bin/all-in-one ./all-in-one
 #COPY --from=builder ${WORK_DIR}/${APP_DIR}/${SERVICE_NAME}/configs ./configs
@@ -89,6 +100,6 @@ EXPOSE 8080
 # grpc 50051 50052
 EXPOSE 50051
 
-#ENTRYPOINT ["./main", "-conf=./configs"]
+#ENTRYPOINT ["./nodeid-service", "-conf=./configs"]
 #ENTRYPOINT ["./uuid-service", "-conf=./configs"]
 ENTRYPOINT ["./all-in-one", "-conf=./configs"]
