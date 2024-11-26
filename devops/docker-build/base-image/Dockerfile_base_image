@@ -13,7 +13,7 @@ ARG GOCACHE=/myworkspace/golang/build_cache
 ARG WORK_DIR=/myworkspace/golang/src/workspace
 ARG TZ=Asia/Shanghai
 
-FROM ${BUILD_FROM_IMAGE} AS builder
+FROM ${BUILD_FROM_IMAGE}
 
 # service arg
 ARG APP_DIR
@@ -42,6 +42,6 @@ WORKDIR ${WORK_DIR}
 
 COPY go.mod go.mod
 
-RUN go mod download && go mod tidy
+RUN go mod download
 
-RUN rm -rf ./*
+RUN rm -rf go.mod
