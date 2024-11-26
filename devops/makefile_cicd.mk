@@ -1,7 +1,9 @@
 # build-image
-.PHONY: build-base-image
-build-base-image:
+.PHONY: build-golang-base-image
+build-golang-base-image:
 	@echo "build :-->: build base image"
+	chmod a+x ./devops/docker-build/base-image/build.sh
+	./devops/docker-build/base-image/build.sh
 
 # build-image
 .PHONY: build

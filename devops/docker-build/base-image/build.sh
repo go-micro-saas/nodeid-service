@@ -8,3 +8,4 @@ if [ "${IS_EXIST_BASE_IMAGE}" -eq 1 ]; then
   export FROM_IMAGE_NAME=${BASE_IMAGE_NAME}
 fi
 echo "==> FROM_IMAGE_NAME : $FROM_IMAGE_NAME"
+
