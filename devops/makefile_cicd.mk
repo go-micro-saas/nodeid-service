@@ -9,7 +9,9 @@ build-base-image:
 .PHONY: build-service-image
 build-service-image:
 	@echo "build :-->: build service image"
-	$(MAKE) build-base-image
+	#$(MAKE) build-base-image
+	/bin/sh ./devops/docker-build/service-image/build_base_image.sh
+	/bin/sh ./devops/docker-build/service-image/build_release_image.sh
 	/bin/sh ./devops/docker-build/service-image/build_service_image.sh
 
 # build-image

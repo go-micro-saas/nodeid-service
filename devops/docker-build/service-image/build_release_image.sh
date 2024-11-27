@@ -17,4 +17,4 @@ echo "==> build release image : ${BASE_IMAGE_NAME}"
 docker build \
 		--build-arg BUILD_FROM_IMAGE=${FROM_IMAGE_NAME} \
 		-t ${BASE_IMAGE_NAME} \
-		-f ./devops/docker-build/base-image/Dockerfile_release_image .
+		-f ./devops/docker-build/service-image/Dockerfile_release_image .
