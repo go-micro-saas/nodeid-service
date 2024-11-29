@@ -37,8 +37,28 @@ build:
 		-f ./devops/docker-build/Dockerfile .
 
 # general config
+.PHONY: deploy-general-config
+deploy-general-config:
+	@echo "deploy :-->: general config"
+	go run ./app/nodeid-service/cmd/store-configuration/... \
+      -conf=./app/nodeid-service/configs \
+      -source_dir ./devops/docker-deploy/general-configs \
+      -store_dir go-micro-saas/general-configs/testing
+
 # service config
+.PHONY: deploy-service-config
+deploy-service-config:
+	@echo "deploy :-->: service config"
+	go run ./app/nodeid-service/cmd/store-configuration/... \
+      -conf=./app/nodeid-service/configs \
+      -source_dir ./devops/docker-deploy/service-configs \
+      -store_dir go-micro-saas/nodeid-service/testing/v1.0.0
+
 # database migration
+.PHONY: deploy-database-migration
+deploy-database-migration:
+	@echo "deploy :-->: database migration"
+	$(MAKE) run-database-migration
 
 # deploy-image on docker
 .PHONY: deploy-on-docker
