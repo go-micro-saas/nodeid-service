@@ -1,27 +1,27 @@
-# rm none:none images
 .PHONY: rm-none-image
+# rm none:none images
 rm-none-image:
 	@echo "rm :-->: rm none images"
 	/bin/sh ./devops/docker-build/service-image/rm_none_images.sh
 
-# build-image
 .PHONY: build-base-image
+# build :-->: base image
 build-base-image:
 	@echo "build :-->: build base image"
 	/bin/sh ./devops/docker-build/service-image/build_base_image.sh
 	/bin/sh ./devops/docker-build/service-image/build_release_image.sh
 	$(MAKE) rm-none-image
 
-# build-image
 .PHONY: build-service-image
+# build :-->: service image
 build-service-image:
 	@echo "build :-->: build service image"
 	$(MAKE) build-base-image
 	/bin/sh ./devops/docker-build/service-image/build_service_image.sh
 	$(MAKE) rm-none-image
 
-# build-image
 .PHONY: build
+# build :-->: service image
 build:
 	@echo "build :-->: build service image"
 	#docker build -t nodeid-service:v1.0.0 -f ./devops/Dockerfile .
@@ -36,8 +36,8 @@ build:
 		-t nodeid-service:latest \
 		-f ./devops/docker-build/Dockerfile .
 
-# general config
 .PHONY: deploy-general-config
+# deploy :-->: store general config
 deploy-general-config:
 	@echo "deploy :-->: general config"
 	go run ./app/nodeid-service/cmd/store-configuration/... \
@@ -45,8 +45,8 @@ deploy-general-config:
       -source_dir ./devops/docker-deploy/general-configs \
       -store_dir go-micro-saas/general-configs/testing
 
-# service config
 .PHONY: deploy-service-config
+# deploy :-->: store service config
 deploy-service-config:
 	@echo "deploy :-->: service config"
 	go run ./app/nodeid-service/cmd/store-configuration/... \
@@ -54,14 +54,14 @@ deploy-service-config:
       -source_dir ./devops/docker-deploy/service-configs \
       -store_dir go-micro-saas/nodeid-service/testing/v1.0.0
 
-# database migration
 .PHONY: deploy-database-migration
+# deploy :-->: database migration
 deploy-database-migration:
 	@echo "deploy :-->: database migration"
 	$(MAKE) run-database-migration
 
-# deploy-image on docker
 .PHONY: deploy-on-docker
+# deploy :-->: image on docker
 deploy-on-docker:
 	@echo "deploy-on-docker :-->: deploying on docker"
 	docker-compose -f ./devops/docker-deploy/docker-compose.yaml up -d
