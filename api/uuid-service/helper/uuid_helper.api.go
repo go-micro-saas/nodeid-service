@@ -30,7 +30,9 @@ func (s *uuidHelper) GetSnowflakeNode(ctx context.Context, req *nodeidresourcev1
 	if err != nil {
 		return nil, nil, err
 	}
-	//idpkg.DefaultEpoch = ""
+	if nodeID.GetNodeEpoch().GetSeconds() > 0 {
+		idpkg.DefaultEpoch = nodeID.GetNodeEpoch().AsTime()
+	}
 	node, err := idpkg.NewBwmarrinSnowflake(nodeID.NodeId)
 	if err != nil {
 		_ = renewal.Stop(ctx)
