@@ -21,6 +21,9 @@ func (s *nodeIDDto) ToPbGetServiceInfoRespData(dataModel *bo.NodeIDConfig) *reso
 		IdleDuration:      durationpb.New(dataModel.IdleDuration),
 		HeartbeatInterval: durationpb.New(dataModel.HeartbeatInterval),
 	}
+	if !dataModel.NodeEpoch.IsZero() {
+		res.NodeEpoch = timestamppb.New(dataModel.NodeEpoch)
+	}
 
 	return res
 }
@@ -43,6 +46,9 @@ func (s *nodeIDDto) ToPbGetNodeIdRespData(cfg *bo.NodeIDConfig, dataModel *po.No
 		ExpiredAt:         timestamppb.New(dataModel.ExpiredAt),
 		HeartbeatInterval: durationpb.New(cfg.HeartbeatInterval),
 		AccessToken:       dataModel.AccessToken,
+	}
+	if !cfg.NodeEpoch.IsZero() {
+		res.NodeEpoch = timestamppb.New(cfg.NodeEpoch)
 	}
 	return res
 }

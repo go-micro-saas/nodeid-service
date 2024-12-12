@@ -67,9 +67,9 @@ func Test_nodeIDBiz_RenewalNodeId(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				param: &bo.RenewalNodeIdParam{
-					ID:         2,
-					InstanceId: "testdata",
-					NodeID:     2,
+					InstanceId:  "testdata",
+					NodeID:      2,
+					AccessToken: "",
 				},
 			},
 			want:    nil,
@@ -115,9 +115,9 @@ func Test_nodeIDBiz_ReleaseNodeId(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				param: &bo.ReleaseNodeIdParam{
-					ID:         2,
-					InstanceId: "testdata",
-					NodeID:     2,
+					InstanceId:  "testdata",
+					NodeID:      2,
+					AccessToken: "",
 				},
 			},
 			want:    nil,

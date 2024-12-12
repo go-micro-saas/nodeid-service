@@ -14,6 +14,7 @@ const (
 type NodeIDConfig struct {
 	MinNodeID         int64
 	MaxNodeID         int64
+	NodeEpoch         time.Time
 	IdleDuration      time.Duration
 	HeartbeatInterval time.Duration
 }
