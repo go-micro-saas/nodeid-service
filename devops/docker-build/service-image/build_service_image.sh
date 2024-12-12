@@ -1,5 +1,10 @@
 # /bin/sh
 
+CURRENT_FILE_PATH=$(realpath "$0")
+CURRENT_FILE_DIR=$(dirname "${CURRENT_FILE_PATH}")
+echo "==> The currently executed script file: ${CURRENT_FILE_PATH}"
+echo "==> The currently executed script path: ${CURRENT_FILE_DIR}"
+
 # service image
 export BUILD_FROM_IMAGE=go-micro-saas/golang-base-image:latest
 export RUN_SERVICE_IMAGE=go-micro-saas/golang-release-image:latest
@@ -12,4 +17,4 @@ docker build \
     --build-arg SERVICE_NAME=nodeid-service \
     --build-arg VERSION=latest \
     -t nodeid-service:latest \
-    -f ./devops/docker-build/service-image/Dockerfile_service_image .
+    -f ${CURRENT_FILE_DIR}/Dockerfile_service_image .
