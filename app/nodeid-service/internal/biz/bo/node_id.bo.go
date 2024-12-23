@@ -1,6 +1,8 @@
 package bo
 
 import (
+	"encoding/json"
+	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"time"
 )
 
@@ -65,9 +67,25 @@ type GetNodeIdParam struct {
 }
 
 type RenewalNodeIdParam struct {
-	InstanceId  string
-	NodeID      int64
-	AccessToken string
+	InstanceId  string `json:"instance_id"`
+	NodeID      int64  `json:"node_id"`
+	AccessToken string `json:"access_token"`
+}
+
+func (s *RenewalNodeIdParam) MarshalToJSON() ([]byte, error) {
+	buf, err := json.Marshal(s)
+	if err != nil {
+		return nil, errorpkg.WithStack(errorpkg.ErrorInternalServer(err.Error()))
+	}
+	return buf, nil
+}
+
+func (s *RenewalNodeIdParam) UnmarshalFromJSON(buf []byte) error {
+	err := json.Unmarshal(buf, s)
+	if err != nil {
+		return errorpkg.WithStack(errorpkg.ErrorInternalServer(err.Error()))
+	}
+	return nil
 }
 
 type ReleaseNodeIdParam struct {
