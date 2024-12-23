@@ -43,7 +43,7 @@ func (s *nodeIDBiz) GetConfig() *bo.NodeIDConfig {
 	return s.conf.Clone()
 }
 
-func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (dataModel *po.NodeId, err error) {
+func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (*po.NodeId, error) {
 	var (
 		now             = time.Now()
 		initSerialModel = &po.NodeSerial{
@@ -57,7 +57,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 
 	serialModel, err := s.nodeSerialData.FirstOrCreate(ctx, initSerialModel)
 	if err != nil {
-		return dataModel, err
+		return nil, err
 	}
 
 	// 线程
@@ -74,7 +74,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 	// 锁行：排队获取；覆盖变量：serialModel
 	serialModel, err = s.nodeSerialData.QueryOneByIdForUpdate(ctx, tx, serialModel.Id)
 	if err != nil {
-		return dataModel, err
+		return nil, err
 	}
 	// 获取一个已释放的闲置ID
 	dataModel, isNotFound, err := s.nodeIDData.QueryOneIdleNodeIdByInstanceId(ctx, serialModel.InstanceId)
@@ -90,6 +90,27 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 		}
 		return dataModel, err
 	}
+
+	// 实例化一个ID
+	dataModel, err = s.GenerateNextID(serialModel, param)
+	if err != nil {
+		s.log.WithContext(ctx).Warnw("msg", "GenerateNextID failed!", "err", err)
+	} else {
+		// 创建
+		err = s.nodeIDData.CreateWithTransaction(ctx, tx, dataModel)
+		if err != nil {
+			return dataModel, err
+		}
+		// 更新当前ID
+		serialModel.CurrentNodeId = dataModel.NodeId
+		serialModel.UpdatedTime = now
+		err = s.nodeSerialData.UpdateNodeIDWithTransaction(ctx, tx, serialModel)
+		if err != nil {
+			return dataModel, err
+		}
+		return dataModel, err
+	}
+
 	// 获取一个已过期的ID
 	expiredTime := s.conf.PreviousExpiredTime(now)
 	dataModel, isNotFound, err = s.nodeIDData.QueryOneExpiredNodeIdByInstanceId(ctx, serialModel.InstanceId, expiredTime)
@@ -105,24 +126,10 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 		}
 		return dataModel, err
 	}
-	// 实例化一个ID
-	dataModel, err = s.GenerateNextID(serialModel, param)
-	if err != nil {
-		return dataModel, err
-	}
-	// 创建
-	err = s.nodeIDData.CreateWithTransaction(ctx, tx, dataModel)
-	if err != nil {
-		return dataModel, err
-	}
-	// 更新当前ID
-	serialModel.CurrentNodeId = dataModel.NodeId
-	serialModel.UpdatedTime = now
-	err = s.nodeSerialData.UpdateNodeIDWithTransaction(ctx, tx, serialModel)
-	if err != nil {
-		return dataModel, err
-	}
-	return dataModel, err
+
+	// not available id
+	e := errorv1.DefaultErrorS102NoAvailableId()
+	return nil, errorpkg.WithStack(e)
 }
 
 func (s *nodeIDBiz) GenerateNextID(serialModel *po.NodeSerial, param *bo.GetNodeIdParam) (*po.NodeId, error) {
