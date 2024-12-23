@@ -43,7 +43,7 @@ func (s *nodeIDBiz) GetConfig() *bo.NodeIDConfig {
 	return s.conf.Clone()
 }
 
-func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (*po.NodeId, error) {
+func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (dataModel *po.NodeId, err error) {
 	var (
 		now             = time.Now()
 		initSerialModel = &po.NodeSerial{
@@ -57,7 +57,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (*p
 
 	serialModel, err := s.nodeSerialData.FirstOrCreate(ctx, initSerialModel)
 	if err != nil {
-		return nil, err
+		return dataModel, err
 	}
 
 	// 线程
@@ -74,7 +74,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (*p
 	// 锁行：排队获取；覆盖变量：serialModel
 	serialModel, err = s.nodeSerialData.QueryOneByIdForUpdate(ctx, tx, serialModel.Id)
 	if err != nil {
-		return nil, err
+		return dataModel, err
 	}
 	// 获取一个已释放的闲置ID
 	dataModel, isNotFound, err := s.nodeIDData.QueryOneIdleNodeIdByInstanceId(ctx, serialModel.InstanceId)
@@ -129,7 +129,8 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (*p
 
 	// not available id
 	e := errorv1.DefaultErrorS102NoAvailableId()
-	return nil, errorpkg.WithStack(e)
+	err = errorpkg.WithStack(e)
+	return dataModel, err
 }
 
 func (s *nodeIDBiz) GenerateNextID(serialModel *po.NodeSerial, param *bo.GetNodeIdParam) (*po.NodeId, error) {
