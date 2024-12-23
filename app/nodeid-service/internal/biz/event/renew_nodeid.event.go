@@ -30,8 +30,9 @@ type renewNodeIDEvent struct {
 	pub            message.Publisher  // 使用 getPublisherSubscriber
 	sub            message.Subscriber // 使用 getPublisherSubscriber
 
-	ctx     context.Context // context
-	closing chan struct{}
+	ctx            context.Context // context
+	closing        chan struct{}
+	receiveCounter uint64
 }
 
 func NewRenewNodeIDEventRepo(
@@ -96,6 +97,7 @@ func (s *renewNodeIDEvent) Receive(ctx context.Context, handler bizrepos.RenewNo
 	for {
 		select {
 		case msg := <-m:
+			s.receiveCounter++
 			{
 				param := &bo.RenewalNodeIdParam{}
 				err := param.UnmarshalFromJSON(msg.Payload)

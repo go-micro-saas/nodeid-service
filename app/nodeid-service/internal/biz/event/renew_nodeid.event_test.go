@@ -1,0 +1,72 @@
+package events
+
+import (
+	"context"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
+	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
+	threadpkg "github.com/ikaiguang/go-srv-kit/kratos/thread"
+	"github.com/stretchr/testify/require"
+	"testing"
+	"time"
+)
+
+// go test -v -count=1 ./app/nodeid-service/internal/biz/event -test.run=Test_renewNodeIDEvent_Receive
+func Test_renewNodeIDEvent_Receive(t *testing.T) {
+	type args struct {
+		ctx            context.Context
+		handler        bizrepos.RenewNodeIDHandler
+		sendMessageNum int
+	}
+	sendMessageNum := 3
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "#Test_renewNodeIDEvent_Receive",
+			args: args{
+				ctx:            context.Background(),
+				handler:        handler.Process,
+				sendMessageNum: sendMessageNum,
+			},
+			wantErr: false,
+		},
+	}
+
+	threadpkg.GoSafe(func() {
+		t.Logf("==> start renewNodeIDEvent_Receive\n")
+		defer func() { t.Logf("==> end renewNodeIDEvent_Receive\n") }()
+		err := handler.Receive(context.Background(), handler.Process)
+		require.Nil(t, err)
+	})
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			//if err := handler.Receive(tt.args.ctx, tt.args.handler); (err != nil) != tt.wantErr {
+			//	t.Errorf("Receive() error = %v, wantErr %v", err, tt.wantErr)
+			//}
+			param := &bo.RenewalNodeIdParam{
+				InstanceId:  "",
+				NodeID:      0,
+				AccessToken: "",
+			}
+			for i := 1; i <= tt.args.sendMessageNum; i++ {
+				t.Logf("==> renewNodeIDEvent_Send; num:%d\n", i)
+				err := handler.Send(tt.args.ctx, param)
+				require.Nil(t, err)
+			}
+		})
+	}
+
+	for {
+		time.Sleep(time.Second)
+		t.Logf("==> time.Second; receiveCounter:%d\n", handler.receiveCounter)
+		if handler.receiveCounter >= uint64(sendMessageNum) {
+			t.Logf("==> Test_renewNodeIDEvent_Receive : sendMessageNum : %d\n", sendMessageNum)
+			err := handler.Close(context.Background())
+			require.Nil(t, err)
+			return
+		}
+	}
+}
