@@ -94,7 +94,7 @@ func (s *renewNodeIDEvent) Consume(ctx context.Context, handler bizrepos.RenewNo
 		case msg := <-m:
 			s.receiveCounter++
 			{
-				s.log.WithContext(ctx).Infow("msg", "RenewNodeIDEvent.Consume Received message", "counter", s.receiveCounter, "msg.payload", string(msg.Payload))
+				s.log.WithContext(ctx).Infow("msg", "RenewNodeIDEvent.Consume Received message", "receiveCounter", s.receiveCounter, "msg.payload", string(msg.Payload))
 				param := &bo.RenewalNodeIdParam{}
 				err := param.UnmarshalFromJSON(msg.Payload)
 				if err != nil {
