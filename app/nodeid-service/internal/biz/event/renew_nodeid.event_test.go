@@ -47,9 +47,9 @@ func Test_renewNodeIDEvent_Receive(t *testing.T) {
 			//	t.Errorf("Receive() error = %v, wantErr %v", err, tt.wantErr)
 			//}
 			param := &bo.RenewalNodeIdParam{
-				InstanceId:  "",
-				NodeID:      0,
-				AccessToken: "",
+				InstanceId:  "testdata",
+				NodeID:      1,
+				AccessToken: "ctikq3cfegt0l8m10rgg",
 			}
 			for i := 1; i <= tt.args.sendMessageNum; i++ {
 				t.Logf("==> renewNodeIDEvent_Send; num:%d\n", i)
@@ -68,5 +68,51 @@ func Test_renewNodeIDEvent_Receive(t *testing.T) {
 			require.Nil(t, err)
 			return
 		}
+	}
+}
+
+// go test -v -count=1 ./app/nodeid-service/internal/biz/event -test.run=Test_renewNodeIDEvent_Send
+func Test_renewNodeIDEvent_Send(t *testing.T) {
+
+	type args struct {
+		ctx   context.Context
+		param *bo.RenewalNodeIdParam
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "#Test_renewNodeIDEvent_Send",
+			args: args{
+				ctx: context.Background(),
+				param: &bo.RenewalNodeIdParam{
+					InstanceId:  "testdata1",
+					NodeID:      1,
+					AccessToken: "xxx",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "#Test_renewNodeIDEvent_Send",
+			args: args{
+				ctx: context.Background(),
+				param: &bo.RenewalNodeIdParam{
+					InstanceId:  "testdata2",
+					NodeID:      2,
+					AccessToken: "xxx",
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := handler.Send(tt.args.ctx, tt.args.param); (err != nil) != tt.wantErr {
+				t.Errorf("Send() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
 }

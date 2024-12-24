@@ -30,7 +30,6 @@ type renewNodeIDEvent struct {
 	pub            message.Publisher  // 使用 getPublisherSubscriber
 	sub            message.Subscriber // 使用 getPublisherSubscriber
 
-	ctx            context.Context // context
 	closing        chan struct{}
 	receiveCounter uint64
 }
@@ -47,7 +46,6 @@ func NewRenewNodeIDEventRepo(
 		mqConn:        mqConn,
 		nodeidBizRepo: nodeidBizRepo,
 		topic:         po.Key(RenewNodeIDEventTopic),
-		ctx:           context.Background(),
 		closing:       make(chan struct{}),
 	}
 }
@@ -78,7 +76,7 @@ func (s *renewNodeIDEvent) Send(ctx context.Context, param *bo.RenewalNodeIdPara
 	}
 	msg := message.NewMessage(uuidpkg.New(), payload)
 	msg.SetContext(ctx)
-	err = publisher.Publish(s.topic)
+	err = publisher.Publish(s.topic, msg)
 	if err != nil {
 		return errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
 	}
@@ -90,7 +88,7 @@ func (s *renewNodeIDEvent) Receive(ctx context.Context, handler bizrepos.RenewNo
 	if err != nil {
 		return err
 	}
-	m, err := subscriber.Subscribe(s.ctx, s.topic)
+	m, err := subscriber.Subscribe(context.Background(), s.topic)
 	if err != nil {
 		return errorpkg.WithStack(errorpkg.ErrorInternalError(err.Error()))
 	}
@@ -102,12 +100,16 @@ func (s *renewNodeIDEvent) Receive(ctx context.Context, handler bizrepos.RenewNo
 				param := &bo.RenewalNodeIdParam{}
 				err := param.UnmarshalFromJSON(msg.Payload)
 				if err != nil {
-					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Receive RenewalNodeIdParam UnmarshalFromJSON failed", "err", err)
+					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Receive RenewalNodeIdParam UnmarshalFromJSON failed",
+						"err", err, "payload", string(msg.Payload))
+					msg.Ack()
 					continue
 				}
-				err = s.Process(s.ctx, param)
+				err = s.Process(context.Background(), param)
 				if err != nil {
-					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Receive Process failed", "err", err)
+					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Receive Process failed",
+						"err", err, "payload", string(msg.Payload))
+					msg.Ack()
 					continue
 				}
 				msg.Ack()
