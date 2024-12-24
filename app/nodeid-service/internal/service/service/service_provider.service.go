@@ -1,9 +1,12 @@
 package service
 
 import (
+	"context"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	resourcev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
+	logpkg "github.com/ikaiguang/go-srv-kit/kratos/log"
 	cleanuputil "github.com/ikaiguang/go-srv-kit/service/cleanup"
 	stdlog "log"
 )
@@ -36,6 +39,20 @@ func RegisterServices(
 
 		//cleanupManager.Append(cleanup)
 	}
+
+	// event
+	stdlog.Println("|*** REGISTER_EVENT：SUBSCRIBE : RenewalNodeIdEvent")
+	_, err := nodeIDV1Service.SubscribeRenewalNodeIdEvent(context.Background(), &resourcev1.SubscribeRenewalNodeIdEventReq{})
+	if err != nil {
+		return nil, err
+	}
+	cleanupManager.Append(func() {
+		logpkg.Infow("msg", "StopRenewalNodeIdEvent ...")
+		_, err := nodeIDV1Service.StopRenewalNodeIdEvent(context.Background(), &resourcev1.StopRenewalNodeIdEventReq{})
+		if err != nil {
+			logpkg.Warnw("msg", "StopRenewalNodeIdEvent failed", "err", err)
+		}
+	})
 
 	return cleanupManager, nil
 }

@@ -24,8 +24,9 @@ const (
 	SrvNodeIDV1_GetServiceInfo_FullMethodName              = "/saas.api.nodeid.servicev1.SrvNodeIDV1/GetServiceInfo"
 	SrvNodeIDV1_GetNodeId_FullMethodName                   = "/saas.api.nodeid.servicev1.SrvNodeIDV1/GetNodeId"
 	SrvNodeIDV1_RenewalNodeId_FullMethodName               = "/saas.api.nodeid.servicev1.SrvNodeIDV1/RenewalNodeId"
-	SrvNodeIDV1_SubscribeRenewalNodeIdEvent_FullMethodName = "/saas.api.nodeid.servicev1.SrvNodeIDV1/SubscribeRenewalNodeIdEvent"
 	SrvNodeIDV1_ReleaseNodeId_FullMethodName               = "/saas.api.nodeid.servicev1.SrvNodeIDV1/ReleaseNodeId"
+	SrvNodeIDV1_SubscribeRenewalNodeIdEvent_FullMethodName = "/saas.api.nodeid.servicev1.SrvNodeIDV1/SubscribeRenewalNodeIdEvent"
+	SrvNodeIDV1_StopRenewalNodeIdEvent_FullMethodName      = "/saas.api.nodeid.servicev1.SrvNodeIDV1/StopRenewalNodeIdEvent"
 )
 
 // SrvNodeIDV1Client is the client API for SrvNodeIDV1 service.
@@ -40,10 +41,12 @@ type SrvNodeIDV1Client interface {
 	GetNodeId(ctx context.Context, in *resources.GetNodeIdReq, opts ...grpc.CallOption) (*resources.GetNodeIdResp, error)
 	// 节点ID - 续订节点id
 	RenewalNodeId(ctx context.Context, in *resources.RenewalNodeIdReq, opts ...grpc.CallOption) (*resources.RenewalNodeIdResp, error)
-	// 节点ID - 订阅续订节点id事件
-	SubscribeRenewalNodeIdEvent(ctx context.Context, in *resources.SubscribeRenewalNodeIdEventReq, opts ...grpc.CallOption) (*resources.SubscribeRenewalNodeIdEventResp, error)
 	// 节点ID - 释放节点id
 	ReleaseNodeId(ctx context.Context, in *resources.ReleaseNodeIdReq, opts ...grpc.CallOption) (*resources.ReleaseNodeIdResp, error)
+	// 节点ID - 订阅续订节点id事件
+	SubscribeRenewalNodeIdEvent(ctx context.Context, in *resources.SubscribeRenewalNodeIdEventReq, opts ...grpc.CallOption) (*resources.SubscribeRenewalNodeIdEventResp, error)
+	// 节点ID - 停止续订节点id事件
+	StopRenewalNodeIdEvent(ctx context.Context, in *resources.StopRenewalNodeIdEventReq, opts ...grpc.CallOption) (*resources.StopRenewalNodeIdEventResp, error)
 }
 
 type srvNodeIDV1Client struct {
@@ -90,6 +93,15 @@ func (c *srvNodeIDV1Client) RenewalNodeId(ctx context.Context, in *resources.Ren
 	return out, nil
 }
 
+func (c *srvNodeIDV1Client) ReleaseNodeId(ctx context.Context, in *resources.ReleaseNodeIdReq, opts ...grpc.CallOption) (*resources.ReleaseNodeIdResp, error) {
+	out := new(resources.ReleaseNodeIdResp)
+	err := c.cc.Invoke(ctx, SrvNodeIDV1_ReleaseNodeId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *srvNodeIDV1Client) SubscribeRenewalNodeIdEvent(ctx context.Context, in *resources.SubscribeRenewalNodeIdEventReq, opts ...grpc.CallOption) (*resources.SubscribeRenewalNodeIdEventResp, error) {
 	out := new(resources.SubscribeRenewalNodeIdEventResp)
 	err := c.cc.Invoke(ctx, SrvNodeIDV1_SubscribeRenewalNodeIdEvent_FullMethodName, in, out, opts...)
@@ -99,9 +111,9 @@ func (c *srvNodeIDV1Client) SubscribeRenewalNodeIdEvent(ctx context.Context, in 
 	return out, nil
 }
 
-func (c *srvNodeIDV1Client) ReleaseNodeId(ctx context.Context, in *resources.ReleaseNodeIdReq, opts ...grpc.CallOption) (*resources.ReleaseNodeIdResp, error) {
-	out := new(resources.ReleaseNodeIdResp)
-	err := c.cc.Invoke(ctx, SrvNodeIDV1_ReleaseNodeId_FullMethodName, in, out, opts...)
+func (c *srvNodeIDV1Client) StopRenewalNodeIdEvent(ctx context.Context, in *resources.StopRenewalNodeIdEventReq, opts ...grpc.CallOption) (*resources.StopRenewalNodeIdEventResp, error) {
+	out := new(resources.StopRenewalNodeIdEventResp)
+	err := c.cc.Invoke(ctx, SrvNodeIDV1_StopRenewalNodeIdEvent_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -120,10 +132,12 @@ type SrvNodeIDV1Server interface {
 	GetNodeId(context.Context, *resources.GetNodeIdReq) (*resources.GetNodeIdResp, error)
 	// 节点ID - 续订节点id
 	RenewalNodeId(context.Context, *resources.RenewalNodeIdReq) (*resources.RenewalNodeIdResp, error)
-	// 节点ID - 订阅续订节点id事件
-	SubscribeRenewalNodeIdEvent(context.Context, *resources.SubscribeRenewalNodeIdEventReq) (*resources.SubscribeRenewalNodeIdEventResp, error)
 	// 节点ID - 释放节点id
 	ReleaseNodeId(context.Context, *resources.ReleaseNodeIdReq) (*resources.ReleaseNodeIdResp, error)
+	// 节点ID - 订阅续订节点id事件
+	SubscribeRenewalNodeIdEvent(context.Context, *resources.SubscribeRenewalNodeIdEventReq) (*resources.SubscribeRenewalNodeIdEventResp, error)
+	// 节点ID - 停止续订节点id事件
+	StopRenewalNodeIdEvent(context.Context, *resources.StopRenewalNodeIdEventReq) (*resources.StopRenewalNodeIdEventResp, error)
 	mustEmbedUnimplementedSrvNodeIDV1Server()
 }
 
@@ -143,11 +157,14 @@ func (UnimplementedSrvNodeIDV1Server) GetNodeId(context.Context, *resources.GetN
 func (UnimplementedSrvNodeIDV1Server) RenewalNodeId(context.Context, *resources.RenewalNodeIdReq) (*resources.RenewalNodeIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RenewalNodeId not implemented")
 }
+func (UnimplementedSrvNodeIDV1Server) ReleaseNodeId(context.Context, *resources.ReleaseNodeIdReq) (*resources.ReleaseNodeIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReleaseNodeId not implemented")
+}
 func (UnimplementedSrvNodeIDV1Server) SubscribeRenewalNodeIdEvent(context.Context, *resources.SubscribeRenewalNodeIdEventReq) (*resources.SubscribeRenewalNodeIdEventResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubscribeRenewalNodeIdEvent not implemented")
 }
-func (UnimplementedSrvNodeIDV1Server) ReleaseNodeId(context.Context, *resources.ReleaseNodeIdReq) (*resources.ReleaseNodeIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReleaseNodeId not implemented")
+func (UnimplementedSrvNodeIDV1Server) StopRenewalNodeIdEvent(context.Context, *resources.StopRenewalNodeIdEventReq) (*resources.StopRenewalNodeIdEventResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StopRenewalNodeIdEvent not implemented")
 }
 func (UnimplementedSrvNodeIDV1Server) mustEmbedUnimplementedSrvNodeIDV1Server() {}
 
@@ -234,6 +251,24 @@ func _SrvNodeIDV1_RenewalNodeId_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SrvNodeIDV1_ReleaseNodeId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(resources.ReleaseNodeIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvNodeIDV1Server).ReleaseNodeId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SrvNodeIDV1_ReleaseNodeId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvNodeIDV1Server).ReleaseNodeId(ctx, req.(*resources.ReleaseNodeIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SrvNodeIDV1_SubscribeRenewalNodeIdEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(resources.SubscribeRenewalNodeIdEventReq)
 	if err := dec(in); err != nil {
@@ -252,20 +287,20 @@ func _SrvNodeIDV1_SubscribeRenewalNodeIdEvent_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SrvNodeIDV1_ReleaseNodeId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(resources.ReleaseNodeIdReq)
+func _SrvNodeIDV1_StopRenewalNodeIdEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(resources.StopRenewalNodeIdEventReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SrvNodeIDV1Server).ReleaseNodeId(ctx, in)
+		return srv.(SrvNodeIDV1Server).StopRenewalNodeIdEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SrvNodeIDV1_ReleaseNodeId_FullMethodName,
+		FullMethod: SrvNodeIDV1_StopRenewalNodeIdEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SrvNodeIDV1Server).ReleaseNodeId(ctx, req.(*resources.ReleaseNodeIdReq))
+		return srv.(SrvNodeIDV1Server).StopRenewalNodeIdEvent(ctx, req.(*resources.StopRenewalNodeIdEventReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -294,12 +329,16 @@ var SrvNodeIDV1_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SrvNodeIDV1_RenewalNodeId_Handler,
 		},
 		{
+			MethodName: "ReleaseNodeId",
+			Handler:    _SrvNodeIDV1_ReleaseNodeId_Handler,
+		},
+		{
 			MethodName: "SubscribeRenewalNodeIdEvent",
 			Handler:    _SrvNodeIDV1_SubscribeRenewalNodeIdEvent_Handler,
 		},
 		{
-			MethodName: "ReleaseNodeId",
-			Handler:    _SrvNodeIDV1_ReleaseNodeId_Handler,
+			MethodName: "StopRenewalNodeIdEvent",
+			Handler:    _SrvNodeIDV1_StopRenewalNodeIdEvent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

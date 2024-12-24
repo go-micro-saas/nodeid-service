@@ -10,6 +10,7 @@ import (
 	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 	threadpkg "github.com/ikaiguang/go-srv-kit/kratos/thread"
+	"sync/atomic"
 	"time"
 )
 
@@ -19,6 +20,8 @@ type nodeIDV1Service struct {
 	log              *log.Helper
 	nodeIDBiz        bizrepos.NodeIdBizRepo
 	renewNodeIDEvent bizrepos.RenewNodeIDEventRepo
+
+	isConsumingRenewNodeIDEvent atomic.Int64
 }
 
 func NewNodeIDV1Service(
@@ -120,13 +123,33 @@ func (s *nodeIDV1Service) ReleaseNodeId(ctx context.Context, req *resourcev1.Rel
 
 // SubscribeRenewalNodeIdEvent 订阅续订节点id事件
 func (s *nodeIDV1Service) SubscribeRenewalNodeIdEvent(ctx context.Context, req *resourcev1.SubscribeRenewalNodeIdEventReq) (*resourcev1.SubscribeRenewalNodeIdEventResp, error) {
-	threadpkg.GoSafe(func() {
-		err := s.renewNodeIDEvent.Consume(ctx, s.nodeIDBiz.RenewalNodeId)
-		if err != nil {
-			s.log.WithContext(ctx).Errorw("msg", "run RenewalNodeIdConsumer failed!", "err", err)
-		}
-	})
+	if s.isConsumingRenewNodeIDEvent.Load() < 1 {
+		threadpkg.GoSafe(func() {
+			s.isConsumingRenewNodeIDEvent.Add(1)
+			defer func() { s.isConsumingRenewNodeIDEvent.Add(-1) }()
+			err := s.renewNodeIDEvent.Consume(ctx, s.nodeIDBiz.RenewalNodeId)
+			if err != nil {
+				s.log.WithContext(ctx).Errorw("msg", "SubscribeRenewalNodeIdEvent failed!", "err", err)
+			}
+		})
+	}
 	return &resourcev1.SubscribeRenewalNodeIdEventResp{
-		Data: &resourcev1.SubscribeRenewalNodeIdEventRespData{},
+		Data: &resourcev1.SubscribeRenewalNodeIdEventRespData{
+			ConsumerCounter: s.isConsumingRenewNodeIDEvent.Load(),
+		},
+	}, nil
+}
+
+// StopRenewalNodeIdEvent 停止续订节点id事件
+func (s *nodeIDV1Service) StopRenewalNodeIdEvent(ctx context.Context, req *resourcev1.StopRenewalNodeIdEventReq) (*resourcev1.StopRenewalNodeIdEventResp, error) {
+	err := s.renewNodeIDEvent.Close(ctx)
+	if err != nil {
+		s.log.WithContext(ctx).Errorw("msg", "run StopRenewalNodeIdEvent failed!", "err", err)
+		return nil, err
+	}
+	return &resourcev1.StopRenewalNodeIdEventResp{
+		Data: &resourcev1.StopRenewalNodeIdEventRespData{
+			ConsumerCounter: s.isConsumingRenewNodeIDEvent.Load(),
+		},
 	}, nil
 }

@@ -1147,7 +1147,7 @@ type SubscribeRenewalNodeIdEventRespData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	IsConsuming bool `protobuf:"varint,1,opt,name=is_consuming,json=isConsuming,proto3" json:"is_consuming,omitempty"`
+	ConsumerCounter int64 `protobuf:"varint,1,opt,name=consumer_counter,json=consumerCounter,proto3" json:"consumer_counter,omitempty"`
 }
 
 func (x *SubscribeRenewalNodeIdEventRespData) Reset() {
@@ -1182,11 +1182,175 @@ func (*SubscribeRenewalNodeIdEventRespData) Descriptor() ([]byte, []int) {
 	return file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_rawDescGZIP(), []int{17}
 }
 
-func (x *SubscribeRenewalNodeIdEventRespData) GetIsConsuming() bool {
+func (x *SubscribeRenewalNodeIdEventRespData) GetConsumerCounter() int64 {
 	if x != nil {
-		return x.IsConsuming
+		return x.ConsumerCounter
 	}
-	return false
+	return 0
+}
+
+type StopRenewalNodeIdEventReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *StopRenewalNodeIdEventReq) Reset() {
+	*x = StopRenewalNodeIdEventReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StopRenewalNodeIdEventReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StopRenewalNodeIdEventReq) ProtoMessage() {}
+
+func (x *StopRenewalNodeIdEventReq) ProtoReflect() protoreflect.Message {
+	mi := &file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StopRenewalNodeIdEventReq.ProtoReflect.Descriptor instead.
+func (*StopRenewalNodeIdEventReq) Descriptor() ([]byte, []int) {
+	return file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_rawDescGZIP(), []int{18}
+}
+
+type StopRenewalNodeIdEventResp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code     int32                           `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Reason   string                          `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
+	Message  string                          `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
+	Metadata map[string]string               `protobuf:"bytes,4,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Data     *StopRenewalNodeIdEventRespData `protobuf:"bytes,100,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *StopRenewalNodeIdEventResp) Reset() {
+	*x = StopRenewalNodeIdEventResp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StopRenewalNodeIdEventResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StopRenewalNodeIdEventResp) ProtoMessage() {}
+
+func (x *StopRenewalNodeIdEventResp) ProtoReflect() protoreflect.Message {
+	mi := &file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StopRenewalNodeIdEventResp.ProtoReflect.Descriptor instead.
+func (*StopRenewalNodeIdEventResp) Descriptor() ([]byte, []int) {
+	return file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *StopRenewalNodeIdEventResp) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *StopRenewalNodeIdEventResp) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *StopRenewalNodeIdEventResp) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *StopRenewalNodeIdEventResp) GetMetadata() map[string]string {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *StopRenewalNodeIdEventResp) GetData() *StopRenewalNodeIdEventRespData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type StopRenewalNodeIdEventRespData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ConsumerCounter int64 `protobuf:"varint,1,opt,name=consumer_counter,json=consumerCounter,proto3" json:"consumer_counter,omitempty"`
+}
+
+func (x *StopRenewalNodeIdEventRespData) Reset() {
+	*x = StopRenewalNodeIdEventRespData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StopRenewalNodeIdEventRespData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StopRenewalNodeIdEventRespData) ProtoMessage() {}
+
+func (x *StopRenewalNodeIdEventRespData) ProtoReflect() protoreflect.Message {
+	mi := &file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StopRenewalNodeIdEventRespData.ProtoReflect.Descriptor instead.
+func (*StopRenewalNodeIdEventRespData) Descriptor() ([]byte, []int) {
+	return file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *StopRenewalNodeIdEventRespData) GetConsumerCounter() int64 {
+	if x != nil {
+		return x.ConsumerCounter
+	}
+	return 0
 }
 
 var File_api_nodeid_service_v1_resources_node_id_resource_v1_proto protoreflect.FileDescriptor
@@ -1430,21 +1594,49 @@ var file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_rawDesc = []b
 	0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75,
 	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02,
-	0x38, 0x01, 0x22, 0x48, 0x0a, 0x23, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x52,
+	0x38, 0x01, 0x22, 0x50, 0x0a, 0x23, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x52,
 	0x65, 0x6e, 0x65, 0x77, 0x61, 0x6c, 0x4e, 0x6f, 0x64, 0x65, 0x49, 0x64, 0x45, 0x76, 0x65, 0x6e,
-	0x74, 0x52, 0x65, 0x73, 0x70, 0x44, 0x61, 0x74, 0x61, 0x12, 0x21, 0x0a, 0x0c, 0x69, 0x73, 0x5f,
-	0x63, 0x6f, 0x6e, 0x73, 0x75, 0x6d, 0x69, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52,
-	0x0b, 0x69, 0x73, 0x43, 0x6f, 0x6e, 0x73, 0x75, 0x6d, 0x69, 0x6e, 0x67, 0x42, 0x8b, 0x01, 0x0a,
-	0x1a, 0x73, 0x61, 0x61, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x6e, 0x6f, 0x64, 0x65, 0x69, 0x64,
-	0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x76, 0x31, 0x42, 0x17, 0x53, 0x61, 0x61,
-	0x73, 0x41, 0x70, 0x69, 0x4e, 0x6f, 0x64, 0x65, 0x69, 0x64, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x56, 0x31, 0x50, 0x01, 0x5a, 0x52, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
-	0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x2d, 0x6d, 0x69, 0x63, 0x72, 0x6f, 0x2d, 0x73, 0x61, 0x61, 0x73,
-	0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x69, 0x64, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x69, 0x64, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x2f, 0x76, 0x31, 0x2f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x3b,
-	0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x74, 0x52, 0x65, 0x73, 0x70, 0x44, 0x61, 0x74, 0x61, 0x12, 0x29, 0x0a, 0x10, 0x63, 0x6f, 0x6e,
+	0x73, 0x75, 0x6d, 0x65, 0x72, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x03, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x73, 0x75, 0x6d, 0x65, 0x72, 0x43, 0x6f, 0x75,
+	0x6e, 0x74, 0x65, 0x72, 0x22, 0x1b, 0x0a, 0x19, 0x53, 0x74, 0x6f, 0x70, 0x52, 0x65, 0x6e, 0x65,
+	0x77, 0x61, 0x6c, 0x4e, 0x6f, 0x64, 0x65, 0x49, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65,
+	0x71, 0x22, 0xd1, 0x02, 0x0a, 0x1a, 0x53, 0x74, 0x6f, 0x70, 0x52, 0x65, 0x6e, 0x65, 0x77, 0x61,
+	0x6c, 0x4e, 0x6f, 0x64, 0x65, 0x49, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70,
+	0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04,
+	0x63, 0x6f, 0x64, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07,
+	0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x60, 0x0a, 0x08, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x44, 0x2e, 0x73, 0x61, 0x61, 0x73, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x6e, 0x6f, 0x64, 0x65, 0x69, 0x64, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x70, 0x52, 0x65, 0x6e, 0x65, 0x77, 0x61,
+	0x6c, 0x4e, 0x6f, 0x64, 0x65, 0x49, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70,
+	0x2e, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x08,
+	0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12, 0x4e, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61,
+	0x18, 0x64, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x3a, 0x2e, 0x73, 0x61, 0x61, 0x73, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x6e, 0x6f, 0x64, 0x65, 0x69, 0x64, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x70, 0x52, 0x65, 0x6e, 0x65, 0x77, 0x61, 0x6c, 0x4e,
+	0x6f, 0x64, 0x65, 0x49, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x44, 0x61,
+	0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x1a, 0x3b, 0x0a, 0x0d, 0x4d, 0x65, 0x74, 0x61,
+	0x64, 0x61, 0x74, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x4b, 0x0a, 0x1e, 0x53, 0x74, 0x6f, 0x70, 0x52, 0x65, 0x6e,
+	0x65, 0x77, 0x61, 0x6c, 0x4e, 0x6f, 0x64, 0x65, 0x49, 0x64, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52,
+	0x65, 0x73, 0x70, 0x44, 0x61, 0x74, 0x61, 0x12, 0x29, 0x0a, 0x10, 0x63, 0x6f, 0x6e, 0x73, 0x75,
+	0x6d, 0x65, 0x72, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x03, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x73, 0x75, 0x6d, 0x65, 0x72, 0x43, 0x6f, 0x75, 0x6e, 0x74,
+	0x65, 0x72, 0x42, 0x8b, 0x01, 0x0a, 0x1a, 0x73, 0x61, 0x61, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x6e, 0x6f, 0x64, 0x65, 0x69, 0x64, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x76,
+	0x31, 0x42, 0x17, 0x53, 0x61, 0x61, 0x73, 0x41, 0x70, 0x69, 0x4e, 0x6f, 0x64, 0x65, 0x69, 0x64,
+	0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x56, 0x31, 0x50, 0x01, 0x5a, 0x52, 0x67, 0x69,
+	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x2d, 0x6d, 0x69, 0x63, 0x72,
+	0x6f, 0x2d, 0x73, 0x61, 0x61, 0x73, 0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x69, 0x64, 0x2d, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x69, 0x64,
+	0x2d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x76, 0x31, 0x2f, 0x72, 0x65, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x73, 0x3b, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x76, 0x31,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1459,7 +1651,7 @@ func file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_rawDescGZIP(
 	return file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_rawDescData
 }
 
-var file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_goTypes = []any{
 	(*PingReq)(nil),                             // 0: saas.api.nodeid.resourcev1.PingReq
 	(*PingResp)(nil),                            // 1: saas.api.nodeid.resourcev1.PingResp
@@ -1479,47 +1671,53 @@ var file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_goTypes = []a
 	(*SubscribeRenewalNodeIdEventReq)(nil),      // 15: saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventReq
 	(*SubscribeRenewalNodeIdEventResp)(nil),     // 16: saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp
 	(*SubscribeRenewalNodeIdEventRespData)(nil), // 17: saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventRespData
-	nil,                                // 18: saas.api.nodeid.resourcev1.PingResp.MetadataEntry
-	nil,                                // 19: saas.api.nodeid.resourcev1.GetServiceInfoResp.MetadataEntry
-	nil,                                // 20: saas.api.nodeid.resourcev1.GetNodeIdReq.MetadataEntry
-	nil,                                // 21: saas.api.nodeid.resourcev1.GetNodeIdResp.MetadataEntry
-	nil,                                // 22: saas.api.nodeid.resourcev1.RenewalNodeIdResp.MetadataEntry
-	nil,                                // 23: saas.api.nodeid.resourcev1.ReleaseNodeIdResp.MetadataEntry
-	nil,                                // 24: saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp.MetadataEntry
-	(*durationpb.Duration)(nil),        // 25: google.protobuf.Duration
-	(*timestamppb.Timestamp)(nil),      // 26: google.protobuf.Timestamp
-	(enums.NodeIDStatusEnum_Status)(0), // 27: saas.api.nodeid.enumv1.NodeIDStatusEnum.Status
+	(*StopRenewalNodeIdEventReq)(nil),           // 18: saas.api.nodeid.resourcev1.StopRenewalNodeIdEventReq
+	(*StopRenewalNodeIdEventResp)(nil),          // 19: saas.api.nodeid.resourcev1.StopRenewalNodeIdEventResp
+	(*StopRenewalNodeIdEventRespData)(nil),      // 20: saas.api.nodeid.resourcev1.StopRenewalNodeIdEventRespData
+	nil,                                         // 21: saas.api.nodeid.resourcev1.PingResp.MetadataEntry
+	nil,                                         // 22: saas.api.nodeid.resourcev1.GetServiceInfoResp.MetadataEntry
+	nil,                                         // 23: saas.api.nodeid.resourcev1.GetNodeIdReq.MetadataEntry
+	nil,                                         // 24: saas.api.nodeid.resourcev1.GetNodeIdResp.MetadataEntry
+	nil,                                         // 25: saas.api.nodeid.resourcev1.RenewalNodeIdResp.MetadataEntry
+	nil,                                         // 26: saas.api.nodeid.resourcev1.ReleaseNodeIdResp.MetadataEntry
+	nil,                                         // 27: saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp.MetadataEntry
+	nil,                                         // 28: saas.api.nodeid.resourcev1.StopRenewalNodeIdEventResp.MetadataEntry
+	(*durationpb.Duration)(nil),                 // 29: google.protobuf.Duration
+	(*timestamppb.Timestamp)(nil),               // 30: google.protobuf.Timestamp
+	(enums.NodeIDStatusEnum_Status)(0),          // 31: saas.api.nodeid.enumv1.NodeIDStatusEnum.Status
 }
 var file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_depIdxs = []int32{
-	18, // 0: saas.api.nodeid.resourcev1.PingResp.metadata:type_name -> saas.api.nodeid.resourcev1.PingResp.MetadataEntry
+	21, // 0: saas.api.nodeid.resourcev1.PingResp.metadata:type_name -> saas.api.nodeid.resourcev1.PingResp.MetadataEntry
 	2,  // 1: saas.api.nodeid.resourcev1.PingResp.data:type_name -> saas.api.nodeid.resourcev1.PingRespData
-	19, // 2: saas.api.nodeid.resourcev1.GetServiceInfoResp.metadata:type_name -> saas.api.nodeid.resourcev1.GetServiceInfoResp.MetadataEntry
+	22, // 2: saas.api.nodeid.resourcev1.GetServiceInfoResp.metadata:type_name -> saas.api.nodeid.resourcev1.GetServiceInfoResp.MetadataEntry
 	5,  // 3: saas.api.nodeid.resourcev1.GetServiceInfoResp.data:type_name -> saas.api.nodeid.resourcev1.GetServiceInfoRespData
-	25, // 4: saas.api.nodeid.resourcev1.GetServiceInfoRespData.idle_duration:type_name -> google.protobuf.Duration
-	25, // 5: saas.api.nodeid.resourcev1.GetServiceInfoRespData.heartbeat_interval:type_name -> google.protobuf.Duration
-	26, // 6: saas.api.nodeid.resourcev1.GetServiceInfoRespData.node_epoch:type_name -> google.protobuf.Timestamp
-	20, // 7: saas.api.nodeid.resourcev1.GetNodeIdReq.metadata:type_name -> saas.api.nodeid.resourcev1.GetNodeIdReq.MetadataEntry
-	21, // 8: saas.api.nodeid.resourcev1.GetNodeIdResp.metadata:type_name -> saas.api.nodeid.resourcev1.GetNodeIdResp.MetadataEntry
+	29, // 4: saas.api.nodeid.resourcev1.GetServiceInfoRespData.idle_duration:type_name -> google.protobuf.Duration
+	29, // 5: saas.api.nodeid.resourcev1.GetServiceInfoRespData.heartbeat_interval:type_name -> google.protobuf.Duration
+	30, // 6: saas.api.nodeid.resourcev1.GetServiceInfoRespData.node_epoch:type_name -> google.protobuf.Timestamp
+	23, // 7: saas.api.nodeid.resourcev1.GetNodeIdReq.metadata:type_name -> saas.api.nodeid.resourcev1.GetNodeIdReq.MetadataEntry
+	24, // 8: saas.api.nodeid.resourcev1.GetNodeIdResp.metadata:type_name -> saas.api.nodeid.resourcev1.GetNodeIdResp.MetadataEntry
 	8,  // 9: saas.api.nodeid.resourcev1.GetNodeIdResp.data:type_name -> saas.api.nodeid.resourcev1.GetNodeIdRespData
-	27, // 10: saas.api.nodeid.resourcev1.GetNodeIdRespData.status:type_name -> saas.api.nodeid.enumv1.NodeIDStatusEnum.Status
-	26, // 11: saas.api.nodeid.resourcev1.GetNodeIdRespData.expired_at:type_name -> google.protobuf.Timestamp
-	25, // 12: saas.api.nodeid.resourcev1.GetNodeIdRespData.heartbeat_interval:type_name -> google.protobuf.Duration
-	26, // 13: saas.api.nodeid.resourcev1.GetNodeIdRespData.node_epoch:type_name -> google.protobuf.Timestamp
-	22, // 14: saas.api.nodeid.resourcev1.RenewalNodeIdResp.metadata:type_name -> saas.api.nodeid.resourcev1.RenewalNodeIdResp.MetadataEntry
+	31, // 10: saas.api.nodeid.resourcev1.GetNodeIdRespData.status:type_name -> saas.api.nodeid.enumv1.NodeIDStatusEnum.Status
+	30, // 11: saas.api.nodeid.resourcev1.GetNodeIdRespData.expired_at:type_name -> google.protobuf.Timestamp
+	29, // 12: saas.api.nodeid.resourcev1.GetNodeIdRespData.heartbeat_interval:type_name -> google.protobuf.Duration
+	30, // 13: saas.api.nodeid.resourcev1.GetNodeIdRespData.node_epoch:type_name -> google.protobuf.Timestamp
+	25, // 14: saas.api.nodeid.resourcev1.RenewalNodeIdResp.metadata:type_name -> saas.api.nodeid.resourcev1.RenewalNodeIdResp.MetadataEntry
 	11, // 15: saas.api.nodeid.resourcev1.RenewalNodeIdResp.data:type_name -> saas.api.nodeid.resourcev1.RenewalNodeIdRespData
-	27, // 16: saas.api.nodeid.resourcev1.RenewalNodeIdRespData.status:type_name -> saas.api.nodeid.enumv1.NodeIDStatusEnum.Status
-	26, // 17: saas.api.nodeid.resourcev1.RenewalNodeIdRespData.expired_at:type_name -> google.protobuf.Timestamp
-	23, // 18: saas.api.nodeid.resourcev1.ReleaseNodeIdResp.metadata:type_name -> saas.api.nodeid.resourcev1.ReleaseNodeIdResp.MetadataEntry
+	31, // 16: saas.api.nodeid.resourcev1.RenewalNodeIdRespData.status:type_name -> saas.api.nodeid.enumv1.NodeIDStatusEnum.Status
+	30, // 17: saas.api.nodeid.resourcev1.RenewalNodeIdRespData.expired_at:type_name -> google.protobuf.Timestamp
+	26, // 18: saas.api.nodeid.resourcev1.ReleaseNodeIdResp.metadata:type_name -> saas.api.nodeid.resourcev1.ReleaseNodeIdResp.MetadataEntry
 	14, // 19: saas.api.nodeid.resourcev1.ReleaseNodeIdResp.data:type_name -> saas.api.nodeid.resourcev1.ReleaseNodeIdRespData
-	27, // 20: saas.api.nodeid.resourcev1.ReleaseNodeIdRespData.status:type_name -> saas.api.nodeid.enumv1.NodeIDStatusEnum.Status
-	26, // 21: saas.api.nodeid.resourcev1.ReleaseNodeIdRespData.expired_at:type_name -> google.protobuf.Timestamp
-	24, // 22: saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp.metadata:type_name -> saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp.MetadataEntry
+	31, // 20: saas.api.nodeid.resourcev1.ReleaseNodeIdRespData.status:type_name -> saas.api.nodeid.enumv1.NodeIDStatusEnum.Status
+	30, // 21: saas.api.nodeid.resourcev1.ReleaseNodeIdRespData.expired_at:type_name -> google.protobuf.Timestamp
+	27, // 22: saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp.metadata:type_name -> saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp.MetadataEntry
 	17, // 23: saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp.data:type_name -> saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventRespData
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	28, // 24: saas.api.nodeid.resourcev1.StopRenewalNodeIdEventResp.metadata:type_name -> saas.api.nodeid.resourcev1.StopRenewalNodeIdEventResp.MetadataEntry
+	20, // 25: saas.api.nodeid.resourcev1.StopRenewalNodeIdEventResp.data:type_name -> saas.api.nodeid.resourcev1.StopRenewalNodeIdEventRespData
+	26, // [26:26] is the sub-list for method output_type
+	26, // [26:26] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_init() }
@@ -1744,6 +1942,42 @@ func file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_init() {
 				return nil
 			}
 		}
+		file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[18].Exporter = func(v any, i int) any {
+			switch v := v.(*StopRenewalNodeIdEventReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[19].Exporter = func(v any, i int) any {
+			switch v := v.(*StopRenewalNodeIdEventResp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_msgTypes[20].Exporter = func(v any, i int) any {
+			switch v := v.(*StopRenewalNodeIdEventRespData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1751,7 +1985,7 @@ func file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_nodeid_service_v1_resources_node_id_resource_v1_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   25,
+			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
