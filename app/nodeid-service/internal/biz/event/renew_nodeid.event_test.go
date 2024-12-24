@@ -37,14 +37,14 @@ func Test_renewNodeIDEvent_Receive(t *testing.T) {
 	threadpkg.GoSafe(func() {
 		t.Logf("==> start renewNodeIDEvent_Receive\n")
 		defer func() { t.Logf("==> end renewNodeIDEvent_Receive\n") }()
-		err := handler.Receive(context.Background(), handler.Process)
+		err := handler.Consume(context.Background(), handler.Process)
 		require.Nil(t, err)
 	})
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			//if err := handler.Receive(tt.args.ctx, tt.args.handler); (err != nil) != tt.wantErr {
-			//	t.Errorf("Receive() error = %v, wantErr %v", err, tt.wantErr)
+			//if err := handler.Consume(tt.args.ctx, tt.args.handler); (err != nil) != tt.wantErr {
+			//	t.Errorf("Consume() error = %v, wantErr %v", err, tt.wantErr)
 			//}
 			param := &bo.RenewalNodeIdParam{
 				InstanceId:  "testdata",
@@ -53,7 +53,7 @@ func Test_renewNodeIDEvent_Receive(t *testing.T) {
 			}
 			for i := 1; i <= tt.args.sendMessageNum; i++ {
 				t.Logf("==> renewNodeIDEvent_Send; num:%d\n", i)
-				err := handler.Send(tt.args.ctx, param)
+				err := handler.Publish(tt.args.ctx, param)
 				require.Nil(t, err)
 			}
 		})
@@ -110,8 +110,8 @@ func Test_renewNodeIDEvent_Send(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := handler.Send(tt.args.ctx, tt.args.param); (err != nil) != tt.wantErr {
-				t.Errorf("Send() error = %v, wantErr %v", err, tt.wantErr)
+			if err := handler.Publish(tt.args.ctx, tt.args.param); (err != nil) != tt.wantErr {
+				t.Errorf("Publish() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

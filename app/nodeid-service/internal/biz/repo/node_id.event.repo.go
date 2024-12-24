@@ -8,7 +8,7 @@ import (
 type RenewNodeIDHandler func(ctx context.Context, param *bo.RenewalNodeIdParam) error
 
 type RenewNodeIDEventRepo interface {
-	Send(ctx context.Context, param *bo.RenewalNodeIdParam) error
-	Receive(ctx context.Context, handler RenewNodeIDHandler) error
+	Publish(ctx context.Context, param *bo.RenewalNodeIdParam) error
+	Consume(ctx context.Context, handler RenewNodeIDHandler) error
 	Close(ctx context.Context) error
 }

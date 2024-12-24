@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/event"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
@@ -68,6 +69,23 @@ func exportNodeIdBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.No
 	return nodeIdBizRepo, nil
 }
 
+func exportRenewNodeIDEventRepo(launcherManager setuputil.LauncherManager) (bizrepos.RenewNodeIDEventRepo, error) {
+	logger, err := setuputil.GetLogger(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	connectionWrapper, err := setuputil.GetRabbitmqConn(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	nodeIdBizRepo, err := exportNodeIdBizRepo(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	renewNodeIDEventRepo := events.NewRenewNodeIDEventRepo(logger, connectionWrapper, nodeIdBizRepo)
+	return renewNodeIDEventRepo, nil
+}
+
 func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
 	logger, err := setuputil.GetLogger(launcherManager)
 	if err != nil {
@@ -77,7 +95,11 @@ func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1
 	if err != nil {
 		return nil, err
 	}
-	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo)
+	renewNodeIDEventRepo, err := exportRenewNodeIDEventRepo(launcherManager)
+	if err != nil {
+		return nil, err
+	}
+	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo, renewNodeIDEventRepo)
 	return srvNodeIDV1Server, nil
 }
 

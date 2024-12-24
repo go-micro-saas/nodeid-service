@@ -65,7 +65,7 @@ func (s *renewNodeIDEvent) getPublisherSubscriber() (message.Publisher, message.
 	return s.pub, s.sub, nil
 }
 
-func (s *renewNodeIDEvent) Send(ctx context.Context, param *bo.RenewalNodeIdParam) error {
+func (s *renewNodeIDEvent) Publish(ctx context.Context, param *bo.RenewalNodeIdParam) error {
 	publisher, _, err := s.getPublisherSubscriber()
 	if err != nil {
 		return err
@@ -83,7 +83,7 @@ func (s *renewNodeIDEvent) Send(ctx context.Context, param *bo.RenewalNodeIdPara
 	return nil
 }
 
-func (s *renewNodeIDEvent) Receive(ctx context.Context, handler bizrepos.RenewNodeIDHandler) error {
+func (s *renewNodeIDEvent) Consume(ctx context.Context, handler bizrepos.RenewNodeIDHandler) error {
 	_, subscriber, err := s.getPublisherSubscriber()
 	if err != nil {
 		return err
@@ -100,14 +100,14 @@ func (s *renewNodeIDEvent) Receive(ctx context.Context, handler bizrepos.RenewNo
 				param := &bo.RenewalNodeIdParam{}
 				err := param.UnmarshalFromJSON(msg.Payload)
 				if err != nil {
-					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Receive RenewalNodeIdParam UnmarshalFromJSON failed",
+					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Consume RenewalNodeIdParam UnmarshalFromJSON failed",
 						"err", err, "payload", string(msg.Payload))
 					msg.Ack()
 					continue
 				}
 				err = s.Process(context.Background(), param)
 				if err != nil {
-					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Receive Process failed",
+					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Consume Process failed",
 						"err", err, "payload", string(msg.Payload))
 					msg.Ack()
 					continue
@@ -115,7 +115,7 @@ func (s *renewNodeIDEvent) Receive(ctx context.Context, handler bizrepos.RenewNo
 				msg.Ack()
 			}
 		case <-s.closing:
-			s.log.Debugw("msg", "RenewNodeIDEvent.Receive Stopping Receive")
+			s.log.Debugw("msg", "RenewNodeIDEvent.Consume Stopping Consume")
 			return nil
 		}
 	}

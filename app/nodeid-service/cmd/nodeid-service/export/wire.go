@@ -8,6 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
+	events "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/event"
 	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
@@ -48,11 +49,25 @@ func exportNodeIdBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.No
 	return nil, nil
 }
 
+func exportRenewNodeIDEventRepo(launcherManager setuputil.LauncherManager) (bizrepos.RenewNodeIDEventRepo, error) {
+	panic(wire.Build(
+		setuputil.GetLogger,
+		setuputil.GetRabbitmqConn,
+		// biz
+		exportNodeIdBizRepo,
+		// event
+		events.NewRenewNodeIDEventRepo,
+	))
+	return nil, nil
+}
+
 func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
 	panic(wire.Build(
 		setuputil.GetLogger,
 		// biz
 		exportNodeIdBizRepo,
+		// event
+		exportRenewNodeIDEventRepo,
 		// service
 		service.NewNodeIDV1Service,
 	))

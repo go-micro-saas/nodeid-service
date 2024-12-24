@@ -3,24 +3,33 @@ package service
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	enumv1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/enums"
 	resourcev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/resources"
 	servicev1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
 	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
+	"time"
 )
 
 type nodeIDV1Service struct {
 	servicev1.UnimplementedSrvNodeIDV1Server
 
-	log       *log.Helper
-	nodeIDBiz bizrepos.NodeIdBizRepo
+	log              *log.Helper
+	nodeIDBiz        bizrepos.NodeIdBizRepo
+	renewNodeIDEvent bizrepos.RenewNodeIDEventRepo
 }
 
-func NewNodeIDV1Service(logger log.Logger, nodeIDBiz bizrepos.NodeIdBizRepo) servicev1.SrvNodeIDV1Server {
+func NewNodeIDV1Service(
+	logger log.Logger,
+	nodeIDBiz bizrepos.NodeIdBizRepo,
+	renewNodeIDEvent bizrepos.RenewNodeIDEventRepo,
+) servicev1.SrvNodeIDV1Server {
 	logHelper := log.NewHelper(log.With(logger, "module", "nodeid-service/service/service"))
 	return &nodeIDV1Service{
-		log:       logHelper,
-		nodeIDBiz: nodeIDBiz,
+		log:              logHelper,
+		nodeIDBiz:        nodeIDBiz,
+		renewNodeIDEvent: renewNodeIDEvent,
 	}
 }
 
@@ -56,6 +65,31 @@ func (s *nodeIDV1Service) GetNodeId(ctx context.Context, req *resourcev1.GetNode
 
 // RenewalNodeId 续订节点id
 func (s *nodeIDV1Service) RenewalNodeId(ctx context.Context, req *resourcev1.RenewalNodeIdReq) (*resourcev1.RenewalNodeIdResp, error) {
+	// return s.renewalNodeId(ctx, req)
+	return s.renewalNodeIdWithQueue(ctx, req)
+}
+
+// RenewalNodeId 使用队列方式续订节点id
+func (s *nodeIDV1Service) renewalNodeIdWithQueue(ctx context.Context, req *resourcev1.RenewalNodeIdReq) (*resourcev1.RenewalNodeIdResp, error) {
+	var (
+		param    = dto.NodeIDDto.ToBoRenewalNodeIdParam(req)
+		conf     = s.nodeIDBiz.GetConfig()
+		respData = &bo.RenewalNodeIDRespData{
+			Status:    enumv1.NodeIDStatusEnum_USING,
+			ExpiredAt: conf.NextExpireTime(time.Now()),
+		}
+	)
+	err := s.renewNodeIDEvent.Publish(ctx, param)
+	if err != nil {
+		return nil, err
+	}
+	return &resourcev1.RenewalNodeIdResp{
+		Data: dto.NodeIDDto.ToPbRenewalNodeIdRespData2(respData),
+	}, nil
+}
+
+// RenewalNodeId 续订节点id
+func (s *nodeIDV1Service) renewalNodeId(ctx context.Context, req *resourcev1.RenewalNodeIdReq) (*resourcev1.RenewalNodeIdResp, error) {
 	param := dto.NodeIDDto.ToBoRenewalNodeIdParam(req)
 	dataModel, err := s.nodeIDBiz.RenewalNodeId(ctx, param)
 	if err != nil {

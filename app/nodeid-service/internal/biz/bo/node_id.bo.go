@@ -2,6 +2,7 @@ package bo
 
 import (
 	"encoding/json"
+	enumv1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/enums"
 	errorpkg "github.com/ikaiguang/go-srv-kit/kratos/error"
 	"time"
 )
@@ -86,6 +87,11 @@ func (s *RenewalNodeIdParam) UnmarshalFromJSON(buf []byte) error {
 		return errorpkg.WithStack(errorpkg.ErrorInternalServer(err.Error()))
 	}
 	return nil
+}
+
+type RenewalNodeIDRespData struct {
+	Status    enumv1.NodeIDStatusEnum_Status
+	ExpiredAt time.Time
 }
 
 type ReleaseNodeIdParam struct {
