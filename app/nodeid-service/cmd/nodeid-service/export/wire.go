@@ -53,8 +53,6 @@ func exportRenewNodeIDEventRepo(launcherManager setuputil.LauncherManager) (bizr
 	panic(wire.Build(
 		setuputil.GetLogger,
 		setuputil.GetRabbitmqConn,
-		// biz
-		exportNodeIdBizRepo,
 		// event
 		events.NewRenewNodeIDEventRepo,
 	))

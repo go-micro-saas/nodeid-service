@@ -20,10 +20,9 @@ var (
 )
 
 type renewNodeIDEvent struct {
-	logger        log.Logger
-	log           *log.Helper
-	mqConn        *rabbitmqpkg.ConnectionWrapper
-	nodeidBizRepo bizrepos.NodeIdBizRepo
+	logger log.Logger
+	log    *log.Helper
+	mqConn *rabbitmqpkg.ConnectionWrapper
 
 	topic          string             // topic
 	initPubSubOnce sync.Once          // init
@@ -38,16 +37,14 @@ type renewNodeIDEvent struct {
 func NewRenewNodeIDEventRepo(
 	logger log.Logger,
 	mqConn *rabbitmqpkg.ConnectionWrapper,
-	nodeidBizRepo bizrepos.NodeIdBizRepo,
 ) bizrepos.RenewNodeIDEventRepo {
 	logHelper := log.NewHelper(log.With(logger, "module", "nodeid-service/biz/event/renew_nodeid"))
 	return &renewNodeIDEvent{
-		logger:        logger,
-		log:           logHelper,
-		mqConn:        mqConn,
-		nodeidBizRepo: nodeidBizRepo,
-		topic:         po.Key(RenewNodeIDEventTopic),
-		closing:       make(chan struct{}),
+		logger:  logger,
+		log:     logHelper,
+		mqConn:  mqConn,
+		topic:   po.Key(RenewNodeIDEventTopic),
+		closing: make(chan struct{}),
 	}
 }
 
@@ -106,10 +103,10 @@ func (s *renewNodeIDEvent) Consume(ctx context.Context, handler bizrepos.RenewNo
 					msg.Ack()
 					continue
 				}
-				err = handler(context.Background(), param)
+				result, err := handler(context.Background(), param)
 				if err != nil {
 					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Consume Process failed",
-						"err", err, "payload", string(msg.Payload))
+						"err", err, "payload", string(msg.Payload), "result", result)
 					msg.Ack()
 					continue
 				}
@@ -120,14 +117,6 @@ func (s *renewNodeIDEvent) Consume(ctx context.Context, handler bizrepos.RenewNo
 			return nil
 		}
 	}
-}
-
-func (s *renewNodeIDEvent) Handle(ctx context.Context, param *bo.RenewalNodeIdParam) error {
-	_, err := s.nodeidBizRepo.RenewalNodeId(ctx, param)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func (s *renewNodeIDEvent) Close(ctx context.Context) error {

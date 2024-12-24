@@ -9,6 +9,7 @@ import (
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
 	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
+	threadpkg "github.com/ikaiguang/go-srv-kit/kratos/thread"
 	"time"
 )
 
@@ -79,7 +80,7 @@ func (s *nodeIDV1Service) renewalNodeIdWithQueue(ctx context.Context, req *resou
 	var (
 		param    = dto.NodeIDDto.ToBoRenewalNodeIdParam(req)
 		conf     = s.nodeIDBiz.GetConfig()
-		respData = &bo.RenewalNodeIDRespData{
+		respData = &bo.RenewalNodeIDReply{
 			Status:    enumv1.NodeIDStatusEnum_USING,
 			ExpiredAt: conf.NextExpireTime(time.Now()),
 		}
@@ -101,7 +102,7 @@ func (s *nodeIDV1Service) renewalNodeId(ctx context.Context, req *resourcev1.Ren
 		return nil, err
 	}
 	return &resourcev1.RenewalNodeIdResp{
-		Data: dto.NodeIDDto.ToPbRenewalNodeIdRespData(dataModel),
+		Data: dto.NodeIDDto.ToPbRenewalNodeIdRespData2(dataModel),
 	}, nil
 }
 
@@ -119,12 +120,12 @@ func (s *nodeIDV1Service) ReleaseNodeId(ctx context.Context, req *resourcev1.Rel
 
 // SubscribeRenewalNodeIdEvent 订阅续订节点id事件
 func (s *nodeIDV1Service) SubscribeRenewalNodeIdEvent(ctx context.Context, req *resourcev1.SubscribeRenewalNodeIdEventReq) (*resourcev1.SubscribeRenewalNodeIdEventResp, error) {
-	//threadpkg.GoSafe(func() {
-	//	err := s.renewNodeIDEvent.Consume(ctx, s.renewNodeIDEvent.Handle)
-	//	if err != nil {
-	//		s.log.WithContext(ctx).Errorw("msg", "run RenewalNodeIdConsumer failed!", "err", err)
-	//	}
-	//})
+	threadpkg.GoSafe(func() {
+		err := s.renewNodeIDEvent.Consume(ctx, s.nodeIDBiz.RenewalNodeId)
+		if err != nil {
+			s.log.WithContext(ctx).Errorw("msg", "run RenewalNodeIdConsumer failed!", "err", err)
+		}
+	})
 	return &resourcev1.SubscribeRenewalNodeIdEventResp{
 		Data: &resourcev1.SubscribeRenewalNodeIdEventRespData{},
 	}, nil

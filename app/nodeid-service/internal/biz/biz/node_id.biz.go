@@ -171,7 +171,7 @@ func (s *nodeIDBiz) genAccessToken() string {
 	return xid.New().String()
 }
 
-func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdParam) (*po.NodeId, error) {
+func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdParam) (*bo.RenewalNodeIDReply, error) {
 	dataModel, isNotFound, err := s.nodeIDData.QueryOneByInstanceNodeID(ctx, param.InstanceId, param.NodeID)
 	if err != nil {
 		return nil, err
@@ -195,7 +195,10 @@ func (s *nodeIDBiz) RenewalNodeId(ctx context.Context, param *bo.RenewalNodeIdPa
 	if err != nil {
 		return nil, err
 	}
-	return dataModel, nil
+	return &bo.RenewalNodeIDReply{
+		Status:    dataModel.NodeIdStatus,
+		ExpiredAt: dataModel.ExpiredAt,
+	}, nil
 }
 
 func (s *nodeIDBiz) renewalNodeIdData(dataModel *po.NodeId) {

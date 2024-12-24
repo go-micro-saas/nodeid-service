@@ -71,7 +71,7 @@ func (s *nodeIDDto) ToPbRenewalNodeIdRespData(dataModel *po.NodeId) *resourcev1.
 	return res
 }
 
-func (s *nodeIDDto) ToPbRenewalNodeIdRespData2(dataModel *bo.RenewalNodeIDRespData) *resourcev1.RenewalNodeIdRespData {
+func (s *nodeIDDto) ToPbRenewalNodeIdRespData2(dataModel *bo.RenewalNodeIDReply) *resourcev1.RenewalNodeIdRespData {
 	res := &resourcev1.RenewalNodeIdRespData{
 		Status:    dataModel.Status,
 		ExpiredAt: timestamppb.New(dataModel.ExpiredAt),

@@ -78,11 +78,7 @@ func exportRenewNodeIDEventRepo(launcherManager setuputil.LauncherManager) (bizr
 	if err != nil {
 		return nil, err
 	}
-	nodeIdBizRepo, err := exportNodeIdBizRepo(launcherManager)
-	if err != nil {
-		return nil, err
-	}
-	renewNodeIDEventRepo := events.NewRenewNodeIDEventRepo(logger, connectionWrapper, nodeIdBizRepo)
+	renewNodeIDEventRepo := events.NewRenewNodeIDEventRepo(logger, connectionWrapper)
 	return renewNodeIDEventRepo, nil
 }
 

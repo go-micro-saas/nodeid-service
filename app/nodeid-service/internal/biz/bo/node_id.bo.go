@@ -89,7 +89,7 @@ func (s *RenewalNodeIdParam) UnmarshalFromJSON(buf []byte) error {
 	return nil
 }
 
-type RenewalNodeIDRespData struct {
+type RenewalNodeIDReply struct {
 	Status    enumv1.NodeIDStatusEnum_Status
 	ExpiredAt time.Time
 }
