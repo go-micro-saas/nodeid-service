@@ -67,7 +67,7 @@ deploy-on-docker:
 	docker-compose -f ./devops/docker-deploy/docker-compose.yaml up -d
 
 .PHONY: stop-docker-deploy
-# deploy :-->: image on docker
-deploy-on-docker:
+# stop :-->: docker container
+stop-docker-deploy:
 	@echo "deploy-on-docker :-->: deploying on docker"
 	docker-compose -f ./devops/docker-deploy/docker-compose.yaml down
