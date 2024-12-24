@@ -65,8 +65,13 @@ func (s *nodeIDV1Service) GetNodeId(ctx context.Context, req *resourcev1.GetNode
 
 // RenewalNodeId 续订节点id
 func (s *nodeIDV1Service) RenewalNodeId(ctx context.Context, req *resourcev1.RenewalNodeIdReq) (*resourcev1.RenewalNodeIdResp, error) {
-	// return s.renewalNodeId(ctx, req)
-	return s.renewalNodeIdWithQueue(ctx, req)
+	resp, err := s.renewalNodeIdWithQueue(ctx, req)
+	if err != nil {
+		s.log.WithContext(ctx).Errorw("msg", "RenewalNodeIdWithQueue failed!", "err", err)
+	} else {
+		return resp, nil
+	}
+	return s.renewalNodeId(ctx, req)
 }
 
 // RenewalNodeId 使用队列方式续订节点id
@@ -109,5 +114,18 @@ func (s *nodeIDV1Service) ReleaseNodeId(ctx context.Context, req *resourcev1.Rel
 	}
 	return &resourcev1.ReleaseNodeIdResp{
 		Data: dto.NodeIDDto.ToPbReleaseNodeIdRespData(dataModel),
+	}, nil
+}
+
+// SubscribeRenewalNodeIdEvent 订阅续订节点id事件
+func (s *nodeIDV1Service) SubscribeRenewalNodeIdEvent(ctx context.Context, req *resourcev1.SubscribeRenewalNodeIdEventReq) (*resourcev1.SubscribeRenewalNodeIdEventResp, error) {
+	//threadpkg.GoSafe(func() {
+	//	err := s.renewNodeIDEvent.Consume(ctx, s.renewNodeIDEvent.Handle)
+	//	if err != nil {
+	//		s.log.WithContext(ctx).Errorw("msg", "run RenewalNodeIdConsumer failed!", "err", err)
+	//	}
+	//})
+	return &resourcev1.SubscribeRenewalNodeIdEventResp{
+		Data: &resourcev1.SubscribeRenewalNodeIdEventRespData{},
 	}, nil
 }

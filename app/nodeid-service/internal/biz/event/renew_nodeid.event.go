@@ -32,6 +32,7 @@ type renewNodeIDEvent struct {
 
 	closing        chan struct{}
 	receiveCounter uint64
+	isConsuming    bool
 }
 
 func NewRenewNodeIDEventRepo(
@@ -105,7 +106,7 @@ func (s *renewNodeIDEvent) Consume(ctx context.Context, handler bizrepos.RenewNo
 					msg.Ack()
 					continue
 				}
-				err = s.Process(context.Background(), param)
+				err = handler(context.Background(), param)
 				if err != nil {
 					s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Consume Process failed",
 						"err", err, "payload", string(msg.Payload))
@@ -119,10 +120,9 @@ func (s *renewNodeIDEvent) Consume(ctx context.Context, handler bizrepos.RenewNo
 			return nil
 		}
 	}
-	//return nil
 }
 
-func (s *renewNodeIDEvent) Process(ctx context.Context, param *bo.RenewalNodeIdParam) error {
+func (s *renewNodeIDEvent) Handle(ctx context.Context, param *bo.RenewalNodeIdParam) error {
 	_, err := s.nodeidBizRepo.RenewalNodeId(ctx, param)
 	if err != nil {
 		return err

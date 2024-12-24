@@ -18,28 +18,31 @@ service SrvNodeIDV1 {
       get: "/api/v1/nodeid/ping/{message}"
     };
   }
-  // 获取服务信息
+  // 节点ID - 获取服务信息
   rpc GetServiceInfo(saas.api.nodeid.resourcev1.GetServiceInfoReq) returns (saas.api.nodeid.resourcev1.GetServiceInfoResp) {
     option (google.api.http) = {
       get: "/api/v1/nodeid/get-service-info"
       // body : "*"
     };
   }
-  // 获取节点id
+  // 节点ID - 获取节点id
   rpc GetNodeId(saas.api.nodeid.resourcev1.GetNodeIdReq) returns (saas.api.nodeid.resourcev1.GetNodeIdResp) {
     option (google.api.http) = {
       get: "/api/v1/nodeid/get-node-id"
       // body : "*"
     };
   }
-  // 续订节点id
+  // 节点ID - 续订节点id
   rpc RenewalNodeId(saas.api.nodeid.resourcev1.RenewalNodeIdReq) returns (saas.api.nodeid.resourcev1.RenewalNodeIdResp) {
     option (google.api.http) = {
       post: "/api/v1/nodeid/renewal-node-id"
       body: "*"
     };
   }
-  // 释放节点id
+  // 节点ID - 订阅续订节点id事件
+  rpc SubscribeRenewalNodeIdEvent(saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventReq) returns (saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp) {
+  }
+  // 节点ID - 释放节点id
   rpc ReleaseNodeId(saas.api.nodeid.resourcev1.ReleaseNodeIdReq) returns (saas.api.nodeid.resourcev1.ReleaseNodeIdResp) {
     option (google.api.http) = {
       put: "/api/v1/nodeid/release-node-id"

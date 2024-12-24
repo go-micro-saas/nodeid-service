@@ -27,15 +27,15 @@ const OperationSrvNodeIDV1ReleaseNodeId = "/saas.api.nodeid.servicev1.SrvNodeIDV
 const OperationSrvNodeIDV1RenewalNodeId = "/saas.api.nodeid.servicev1.SrvNodeIDV1/RenewalNodeId"
 
 type SrvNodeIDV1HTTPServer interface {
-	// GetNodeId 获取节点id
+	// GetNodeId 节点ID - 获取节点id
 	GetNodeId(context.Context, *resources.GetNodeIdReq) (*resources.GetNodeIdResp, error)
-	// GetServiceInfo 获取服务信息
+	// GetServiceInfo 节点ID - 获取服务信息
 	GetServiceInfo(context.Context, *resources.GetServiceInfoReq) (*resources.GetServiceInfoResp, error)
 	// Ping ping
 	Ping(context.Context, *resources.PingReq) (*resources.PingResp, error)
-	// ReleaseNodeId 释放节点id
+	// ReleaseNodeId 节点ID - 释放节点id
 	ReleaseNodeId(context.Context, *resources.ReleaseNodeIdReq) (*resources.ReleaseNodeIdResp, error)
-	// RenewalNodeId 续订节点id
+	// RenewalNodeId 节点ID - 续订节点id
 	RenewalNodeId(context.Context, *resources.RenewalNodeIdReq) (*resources.RenewalNodeIdResp, error)
 }
 
