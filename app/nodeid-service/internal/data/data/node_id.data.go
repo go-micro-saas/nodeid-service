@@ -219,8 +219,9 @@ func (s *nodeIdData) RenewalNodeIDWithTransaction(ctx context.Context, tx gormpk
 	}
 	err = tx.Do(ctx, fc)
 	if err != nil {
-		e := errorpkg.ErrorInternalServer("")
-		return errorpkg.Wrap(e, err)
+		//e := errorpkg.ErrorInternalServer("")
+		//return errorpkg.Wrap(e, err)
+		return err
 	}
 	return
 }
