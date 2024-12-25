@@ -7,7 +7,7 @@ require (
 	github.com/go-kratos/kratos/v2 v2.8.3
 	github.com/google/wire v0.6.0
 	github.com/gorilla/websocket v1.5.3
-	github.com/ikaiguang/go-srv-kit v0.3.31
+	github.com/ikaiguang/go-srv-kit v0.3.32
 	github.com/rs/xid v1.6.0
 	github.com/stretchr/testify v1.10.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241007155032-5fefd90f89a9
