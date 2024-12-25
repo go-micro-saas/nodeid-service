@@ -3,6 +3,7 @@ module github.com/go-micro-saas/nodeid-service
 go 1.22
 
 require (
+	github.com/ThreeDotsLabs/watermill v1.4.1
 	github.com/envoyproxy/protoc-gen-validate v1.1.0
 	github.com/go-kratos/kratos/v2 v2.8.3
 	github.com/google/wire v0.6.0
@@ -20,7 +21,6 @@ require (
 require (
 	dario.cat/mergo v1.0.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/ThreeDotsLabs/watermill v1.4.1 // indirect
 	github.com/ThreeDotsLabs/watermill-amqp/v3 v3.0.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/bwmarrin/snowflake v0.3.0 // indirect
