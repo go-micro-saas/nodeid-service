@@ -12,10 +12,8 @@ import (
 	"github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/event"
-	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
-	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/service"
 	"github.com/ikaiguang/go-srv-kit/service/cleanup"
@@ -24,77 +22,25 @@ import (
 
 // Injectors from wire.go:
 
-func exportNodeIdData(launcherManager setuputil.LauncherManager) (datarepos.NodeIdDataRepo, error) {
-	logger, err := setuputil.GetLogger(launcherManager)
-	if err != nil {
-		return nil, err
-	}
-	db, err := setuputil.GetRecommendDBConn(launcherManager)
-	if err != nil {
-		return nil, err
-	}
-	nodeIdDataRepo := data.NewNodeIdData(logger, db)
-	return nodeIdDataRepo, nil
-}
-
-func exportNodeSerialData(launcherManager setuputil.LauncherManager) (datarepos.NodeSerialDataRepo, error) {
-	logger, err := setuputil.GetLogger(launcherManager)
-	if err != nil {
-		return nil, err
-	}
-	db, err := setuputil.GetRecommendDBConn(launcherManager)
-	if err != nil {
-		return nil, err
-	}
-	nodeSerialDataRepo := data.NewNodeSerialData(logger, db)
-	return nodeSerialDataRepo, nil
-}
-
-func exportNodeIdBizRepo(launcherManager setuputil.LauncherManager) (bizrepos.NodeIdBizRepo, error) {
+func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
 	logger, err := setuputil.GetLogger(launcherManager)
 	if err != nil {
 		return nil, err
 	}
 	serviceConfig := conf.GetServiceConfig()
 	nodeIDConfig := dto.ToBoNodeIDConfig(serviceConfig)
-	nodeIdDataRepo, err := exportNodeIdData(launcherManager)
+	db, err := setuputil.GetRecommendDBConn(launcherManager)
 	if err != nil {
 		return nil, err
 	}
-	nodeSerialDataRepo, err := exportNodeSerialData(launcherManager)
-	if err != nil {
-		return nil, err
-	}
+	nodeIdDataRepo := data.NewNodeIdData(logger, db)
+	nodeSerialDataRepo := data.NewNodeSerialData(logger, db)
 	nodeIdBizRepo := biz.NewNodeIDBiz(logger, nodeIDConfig, nodeIdDataRepo, nodeSerialDataRepo)
-	return nodeIdBizRepo, nil
-}
-
-func exportRenewNodeIDEventRepo(launcherManager setuputil.LauncherManager) (bizrepos.RenewNodeIDEventRepo, error) {
-	logger, err := setuputil.GetLogger(launcherManager)
-	if err != nil {
-		return nil, err
-	}
 	connectionWrapper, err := setuputil.GetRabbitmqConn(launcherManager)
 	if err != nil {
 		return nil, err
 	}
 	renewNodeIDEventRepo := events.NewRenewNodeIDEventRepo(logger, connectionWrapper)
-	return renewNodeIDEventRepo, nil
-}
-
-func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1.SrvNodeIDV1Server, error) {
-	logger, err := setuputil.GetLogger(launcherManager)
-	if err != nil {
-		return nil, err
-	}
-	nodeIdBizRepo, err := exportNodeIdBizRepo(launcherManager)
-	if err != nil {
-		return nil, err
-	}
-	renewNodeIDEventRepo, err := exportRenewNodeIDEventRepo(launcherManager)
-	if err != nil {
-		return nil, err
-	}
 	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo, renewNodeIDEventRepo)
 	return srvNodeIDV1Server, nil
 }

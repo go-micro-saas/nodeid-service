@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+func DefaultOptions(logger log.Logger) []Option {
+	return []Option{WithLogger(logger)}
+}
+
 type RenewalManager interface {
 	Stop(ctx context.Context) error
 	RenewalResult(ctx context.Context) *RenewalResult
