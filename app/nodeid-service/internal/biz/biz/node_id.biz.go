@@ -60,7 +60,7 @@ func (s *nodeIDBiz) GetNodeId(ctx context.Context, param *bo.GetNodeIdParam) (da
 		return dataModel, err
 	}
 
-	// 线程
+	// 事务
 	tx := s.nodeSerialData.NewTransaction(ctx)
 	defer func() {
 		commitErr := tx.CommitAndErrRollback(ctx, err)
