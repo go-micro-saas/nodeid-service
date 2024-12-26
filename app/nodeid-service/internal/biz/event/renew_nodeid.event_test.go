@@ -12,6 +12,9 @@ import (
 
 // go test -v -count=1 ./app/nodeid-service/internal/biz/event -test.run=Test_renewNodeIDEvent_Receive
 func Test_renewNodeIDEvent_Receive(t *testing.T) {
+	fakeHandler := func(ctx context.Context, param *bo.RenewalNodeIdParam) (*bo.RenewalNodeIDReply, error) {
+		return &bo.RenewalNodeIDReply{}, nil
+	}
 	type args struct {
 		ctx            context.Context
 		handler        bizrepos.RenewNodeIDHandler
@@ -27,7 +30,7 @@ func Test_renewNodeIDEvent_Receive(t *testing.T) {
 			name: "#Test_renewNodeIDEvent_Receive",
 			args: args{
 				ctx:            context.Background(),
-				handler:        handler.Process,
+				handler:        fakeHandler,
 				sendMessageNum: sendMessageNum,
 			},
 			wantErr: false,
@@ -37,7 +40,7 @@ func Test_renewNodeIDEvent_Receive(t *testing.T) {
 	threadpkg.GoSafe(func() {
 		t.Logf("==> start renewNodeIDEvent_Receive\n")
 		defer func() { t.Logf("==> end renewNodeIDEvent_Receive\n") }()
-		err := handler.Consume(context.Background(), handler.Process)
+		err := handler.Consume(context.Background(), fakeHandler)
 		require.Nil(t, err)
 	})
 
