@@ -128,11 +128,13 @@ func (s *renewNodeIDEvent) processMessage(ctx context.Context, handler bizrepos.
 	if err != nil {
 		s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Consume RenewalNodeIdParam UnmarshalFromJSON failed",
 			"err", err, "payload", string(msg.Payload))
+		return err
 	}
 	result, err := handler(context.Background(), param)
 	if err != nil {
 		s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Consume Process failed",
 			"err", err, "payload", string(msg.Payload), "result", result)
+		return err
 	}
 	return err
 }
