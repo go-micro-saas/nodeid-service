@@ -40,7 +40,8 @@ func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1
 	if err != nil {
 		return nil, err
 	}
-	renewNodeIDEventRepo := events.NewRenewNodeIDEventRepo(logger, connectionWrapper)
+	nodeEventHistoryRepo := data.NewNodeEventHistoryRepo(db)
+	renewNodeIDEventRepo := events.NewRenewNodeIDEventRepo(logger, connectionWrapper, nodeEventHistoryRepo)
 	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo, renewNodeIDEventRepo)
 	return srvNodeIDV1Server, nil
 }

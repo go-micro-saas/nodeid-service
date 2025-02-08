@@ -26,6 +26,7 @@ func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1
 		// data
 		data.NewNodeIdData,
 		data.NewNodeSerialData,
+		data.NewNodeEventHistoryRepo,
 		// conf
 		conf.GetServiceConfig,
 		dto.ToBoNodeIDConfig,

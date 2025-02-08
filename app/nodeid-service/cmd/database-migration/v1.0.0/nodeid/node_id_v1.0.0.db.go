@@ -2,6 +2,7 @@ package dbv1_0_0_nodeid
 
 import (
 	"context"
+	nodeeventschemas "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/schema/node_event_history"
 	nodeidschemas "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/schema/node_id"
 	nodeserialschemas "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/schema/node_serial"
 	migrationpkg "github.com/ikaiguang/go-srv-kit/data/migration"
@@ -44,6 +45,12 @@ func (s *Migrate) Upgrade(ctx context.Context) error {
 	}
 	// 创建表
 	mr = nodeserialschemas.NodeSerialSchema.CreateTableMigrator(migrator)
+	if err := s.migrateRepo.RunMigratorUp(ctx, mr); err != nil {
+		e := errorpkg.ErrorInternalError("")
+		return errorpkg.Wrap(e, err)
+	}
+	// 创建表
+	mr = nodeeventschemas.NodeEventHistorySchema.CreateTableMigrator(migrator)
 	if err := s.migrateRepo.RunMigratorUp(ctx, mr); err != nil {
 		e := errorpkg.ErrorInternalError("")
 		return errorpkg.Wrap(e, err)
