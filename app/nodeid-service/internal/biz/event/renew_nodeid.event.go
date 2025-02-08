@@ -116,7 +116,7 @@ func (s *renewNodeIDEvent) processMessage(ctx context.Context, handler bizrepos.
 	defer func() {
 		historyErr := s.saveHistory(ctx, msg, err)
 		if historyErr != nil {
-			s.log.WithContext(ctx).Errorw("msg", "SendEmailCodeEvent.Consume SaveHistory failed",
+			s.log.WithContext(ctx).Errorw("msg", "RenewNodeIDEvent.Consume SaveHistory failed",
 				"err", err, "historyErr", string(msg.Payload))
 			return
 		}
