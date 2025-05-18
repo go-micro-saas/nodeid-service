@@ -52,6 +52,10 @@ go run ./app/nodeid-service/cmd/store-configuration/... -conf=./app/nodeid-servi
 go run ./app/nodeid-service/cmd/store-configuration/... -conf=./app/nodeid-service/configs \
 -source_dir=./app/uuid-service/configs \
 -store_dir=go-micro-saas/uuid-service/develop/v1.0.0
+
+go run ./app/nodeid-service/cmd/store-configuration/... -conf=./app/nodeid-service/configs \
+-source_dir=./app/uuid-service/configs \
+-store_dir=go-micro-saas/uuid-service/testing/latest
 ```
 
 ## 文档
