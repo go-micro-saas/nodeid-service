@@ -64,16 +64,11 @@ func (s *nodeIdData) CreateWithDBConn(ctx context.Context, dbConn *gorm.DB, data
 
 func (s *nodeIdData) CreateWithTransaction(ctx context.Context, tx gormpkg.TransactionInterface, dataModel *po.NodeId) (err error) {
 	fc := func(ctx context.Context, tx *gorm.DB) error {
-		err = tx.WithContext(ctx).
-			Table(s.NodeIdSchema.TableName()).
-			Create(dataModel).Error
-
-		return err
+		return s.create(ctx, tx, dataModel)
 	}
 	err = tx.Do(ctx, fc)
 	if err != nil {
-		e := errorpkg.ErrorInternalServer("")
-		return errorpkg.Wrap(e, err)
+		return err
 	}
 	return
 }

@@ -174,14 +174,17 @@ func (s *nodeSerialData) UpdateNodeIDWithTransaction(ctx context.Context, tx gor
 			Table(s.NodeSerialSchema.TableName()).
 			Where(schemas.FieldInstanceId+" = ?", dataModel.InstanceId).
 			UpdateColumns(updates).Error
+		if err != nil {
+			e := errorpkg.ErrorInternalServer("")
+			return errorpkg.Wrap(e, err)
+		}
 		return err
 	}
 	err = tx.Do(ctx, fc)
 	if err != nil {
-		e := errorpkg.ErrorInternalServer("")
-		return errorpkg.Wrap(e, err)
+		return err
 	}
-	return
+	return err
 }
 
 // existUpdate exist update
