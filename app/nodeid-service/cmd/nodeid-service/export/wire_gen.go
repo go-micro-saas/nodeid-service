@@ -11,7 +11,6 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/biz"
-	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/event"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/conf"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/data"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/service/dto"
@@ -36,13 +35,7 @@ func exportNodeIDV1Service(launcherManager setuputil.LauncherManager) (servicev1
 	nodeIdDataRepo := data.NewNodeIdData(logger, db)
 	nodeSerialDataRepo := data.NewNodeSerialData(logger, db)
 	nodeIdBizRepo := biz.NewNodeIDBiz(logger, nodeIDConfig, nodeIdDataRepo, nodeSerialDataRepo)
-	connectionWrapper, err := setuputil.GetRabbitmqConn(launcherManager)
-	if err != nil {
-		return nil, err
-	}
-	nodeEventHistoryRepo := data.NewNodeEventHistoryRepo(db)
-	renewNodeIDEventRepo := events.NewRenewNodeIDEventRepo(logger, connectionWrapper, nodeEventHistoryRepo)
-	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo, renewNodeIDEventRepo)
+	srvNodeIDV1Server := service.NewNodeIDV1Service(logger, nodeIdBizRepo)
 	return srvNodeIDV1Server, nil
 }
 

@@ -27,13 +27,13 @@ type nodeIDV1Service struct {
 func NewNodeIDV1Service(
 	logger log.Logger,
 	nodeIDBiz bizrepos.NodeIdBizRepo,
-	renewNodeIDEvent bizrepos.RenewNodeIDEventRepo,
+// renewNodeIDEvent bizrepos.RenewNodeIDEventRepo,
 ) servicev1.SrvNodeIDV1Server {
 	logHelper := log.NewHelper(log.With(logger, "module", "nodeid-service/service/service"))
 	return &nodeIDV1Service{
-		log:              logHelper,
-		nodeIDBiz:        nodeIDBiz,
-		renewNodeIDEvent: renewNodeIDEvent,
+		log:       logHelper,
+		nodeIDBiz: nodeIDBiz,
+		//renewNodeIDEvent: renewNodeIDEvent,
 	}
 }
 
@@ -69,12 +69,11 @@ func (s *nodeIDV1Service) GetNodeId(ctx context.Context, req *resourcev1.GetNode
 
 // RenewalNodeId 续订节点id
 func (s *nodeIDV1Service) RenewalNodeId(ctx context.Context, req *resourcev1.RenewalNodeIdReq) (*resourcev1.RenewalNodeIdResp, error) {
-	resp, err := s.renewalNodeIdWithQueue(ctx, req)
-	if err != nil {
-		s.log.WithContext(ctx).Errorw("msg", "RenewalNodeIdWithQueue failed!", "err", err)
-	} else {
-		return resp, nil
-	}
+	//resp, err := s.renewalNodeIdWithQueue(ctx, req)
+	//if err == nil {
+	//	return resp, nil
+	//}
+	//s.log.WithContext(ctx).Errorw("msg", "RenewalNodeIdWithQueue failed!", "err", err)
 	return s.renewalNodeId(ctx, req)
 }
 
