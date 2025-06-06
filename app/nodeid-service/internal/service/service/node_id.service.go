@@ -23,7 +23,7 @@ type nodeIDV1Service struct {
 func NewNodeIDV1Service(
 	logger log.Logger,
 	nodeIDBiz bizrepos.NodeIdBizRepo,
-// renewNodeIDEvent bizrepos.RenewNodeIDEventRepo,
+	// renewNodeIDEvent bizrepos.RenewNodeIDEventRepo,
 ) servicev1.SrvNodeIDV1Server {
 	logHelper := log.NewHelper(log.With(logger, "module", "nodeid-service/service/service"))
 	return &nodeIDV1Service{
