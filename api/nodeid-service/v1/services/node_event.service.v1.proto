@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package saas.api.nodeid.servicev1;
+
+option go_package           = "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/services;servicev1";
+option java_multiple_files  = true;
+option java_package         = "saas.api.nodeid.servicev1";
+option java_outer_classname = "SaasApiNodeidServiceV1";
+
+import "google/api/annotations.proto";
+import "api/nodeid-service/v1/resources/node_id.resource.v1.proto";
+import "api/nodeid-service/v1/resources/node_event.resource.v1.proto";
+
+// SrvNodeEventV1 service
+service SrvNodeEventV1 {
+  // ping
+  rpc Ping(saas.api.nodeid.resourcev1.PingReq) returns (saas.api.nodeid.resourcev1.PingResp) {
+    option (google.api.http) = {
+      get: "/api/v1/nodeid/event/ping/{message}"
+    };
+  }
+  // 节点ID - 订阅续订节点id事件
+  rpc SubscribeRenewalNodeIdEvent(saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventReq) returns (saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp) {
+  }
+  // 节点ID - 停止续订节点id事件
+  rpc StopRenewalNodeIdEvent(saas.api.nodeid.resourcev1.StopRenewalNodeIdEventReq) returns (saas.api.nodeid.resourcev1.StopRenewalNodeIdEventResp) {
+  }
+}

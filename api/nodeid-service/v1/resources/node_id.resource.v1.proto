@@ -115,31 +115,3 @@ message ReleaseNodeIdRespData {
   saas.api.nodeid.enumv1.NodeIDStatusEnum.Status status = 1;  // 节点状态
   google.protobuf.Timestamp expired_at                  = 2;  // 失效时间；默认：now()+100s
 }
-
-message SubscribeRenewalNodeIdEventReq {
-}
-message SubscribeRenewalNodeIdEventResp {
-  int32 code                   = 1;
-  string reason                = 2;
-  string message               = 3;
-  map<string, string> metadata = 4;
-
-  SubscribeRenewalNodeIdEventRespData data = 100;
-}
-message SubscribeRenewalNodeIdEventRespData {
-  int64 consumer_counter = 1;
-}
-
-message StopRenewalNodeIdEventReq {
-}
-message StopRenewalNodeIdEventResp {
-  int32 code                   = 1;
-  string reason                = 2;
-  string message               = 3;
-  map<string, string> metadata = 4;
-
-  StopRenewalNodeIdEventRespData data = 100;
-}
-message StopRenewalNodeIdEventRespData {
-  int64 consumer_counter = 1;
-}

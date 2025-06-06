@@ -46,11 +46,4 @@ service SrvNodeIDV1 {
       body: "*"
     };
   }
-
-  // 节点ID - 订阅续订节点id事件
-  rpc SubscribeRenewalNodeIdEvent(saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventReq) returns (saas.api.nodeid.resourcev1.SubscribeRenewalNodeIdEventResp) {
-  }
-  // 节点ID - 停止续订节点id事件
-  rpc StopRenewalNodeIdEvent(saas.api.nodeid.resourcev1.StopRenewalNodeIdEventReq) returns (saas.api.nodeid.resourcev1.StopRenewalNodeIdEventResp) {
-  }
 }

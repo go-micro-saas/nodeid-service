@@ -15,6 +15,7 @@ import (
 func RegisterServices(
 	hs *http.Server, gs *grpc.Server,
 	nodeIDV1Service servicev1.SrvNodeIDV1Server,
+// nodeEventV1Service servicev1.SrvNodeEventV1Server,
 ) (cleanuputil.CleanupManager, error) {
 	// 先进后出
 	var cleanupManager = cleanuputil.NewCleanupManager()
@@ -39,13 +40,13 @@ func RegisterServices(
 
 	// event
 	//stdlog.Println("|*** REGISTER_EVENT：SUBSCRIBE : RenewalNodeIdEvent")
-	//_, err := nodeIDV1Service.SubscribeRenewalNodeIdEvent(context.Background(), &resourcev1.SubscribeRenewalNodeIdEventReq{})
+	//_, err := nodeEventV1Service.SubscribeRenewalNodeIdEvent(context.Background(), &resourcev1.SubscribeRenewalNodeIdEventReq{})
 	//if err != nil {
 	//	return nil, err
 	//}
 	//cleanupManager.Append(func() {
 	//	logpkg.Infow("msg", "StopRenewalNodeIdEvent ...")
-	//	_, err := nodeIDV1Service.StopRenewalNodeIdEvent(context.Background(), &resourcev1.StopRenewalNodeIdEventReq{})
+	//	_, err := nodeEventV1Service.StopRenewalNodeIdEvent(context.Background(), &resourcev1.StopRenewalNodeIdEventReq{})
 	//	if err != nil {
 	//		logpkg.Warnw("msg", "StopRenewalNodeIdEvent failed", "err", err)
 	//	}
