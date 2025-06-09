@@ -15,7 +15,7 @@ import (
 func RegisterServices(
 	hs *http.Server, gs *grpc.Server,
 	nodeIDV1Service servicev1.SrvNodeIDV1Server,
-// nodeEventV1Service servicev1.SrvNodeEventV1Server,
+	// nodeEventV1Service servicev1.SrvNodeEventV1Server,
 ) (cleanuputil.CleanupManager, error) {
 	// 先进后出
 	var cleanupManager = cleanuputil.NewCleanupManager()
