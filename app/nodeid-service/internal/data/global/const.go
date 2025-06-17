@@ -1,7 +1,7 @@
-package po
+package global
 
 const (
-	KeyPrefix = "nid_"
+	KeyPrefix = "nid_s_"
 )
 
 func Key(k string) string {

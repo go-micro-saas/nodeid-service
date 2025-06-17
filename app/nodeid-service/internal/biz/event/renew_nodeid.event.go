@@ -8,6 +8,7 @@ import (
 	enumv1 "github.com/go-micro-saas/nodeid-service/api/nodeid-service/v1/enums"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/bo"
 	bizrepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/biz/repo"
+	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/global"
 	"github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/po"
 	datarepos "github.com/go-micro-saas/nodeid-service/app/nodeid-service/internal/data/repo"
 	rabbitmqpkg "github.com/ikaiguang/go-srv-kit/data/rabbitmq"
@@ -48,7 +49,7 @@ func NewRenewNodeIDEventRepo(
 		log:              logHelper,
 		mqConn:           mqConn,
 		eventHistoryRepo: eventHistoryRepo,
-		topic:            po.Key(RenewNodeIDEventTopic),
+		topic:            global.Key(RenewNodeIDEventTopic),
 		closing:          make(chan struct{}),
 	}
 }
