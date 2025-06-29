@@ -1,7 +1,7 @@
 package global
 
 const (
-	KeyPrefix = "nid_s_"
+	KeyPrefix = "nodeid_service_"
 )
 
 func Key(k string) string {
