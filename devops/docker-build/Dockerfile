@@ -1,6 +1,6 @@
 # service arg
-ARG BUILD_FROM_IMAGE=golang:1.23.10
-ARG RUN_SERVICE_IMAGE=debian:stable-20250520
+ARG BUILD_FROM_IMAGE=golang:1.24.10
+ARG RUN_SERVICE_IMAGE=debian:stable-20251117
 ARG APP_DIR=app
 ARG SERVICE_NAME=nodeid-service
 ARG VERSION=v1.0.0
@@ -81,12 +81,11 @@ WORKDIR ${WORK_DIR}
 # cat /etc/os-release && echo -e "\n\n\n" && cat /etc/apt/sources.list.d/debian.sources
 #RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends -y tzdata curl less && \
-    ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
-    echo ${TZ} > /etc/timezone && \
-    apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		ca-certificates tzdata net-tools less netbase telnet curl \
+        && ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
+        && echo ${TZ} > /etc/timezone \
+        && apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder ${WORK_DIR}/bin/nodeid-service ./nodeid-service
 COPY --from=builder ${WORK_DIR}/bin/database-migration ./database-migration
